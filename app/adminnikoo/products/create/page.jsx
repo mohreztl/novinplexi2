@@ -11,13 +11,19 @@ import Image from "next/image";
 
 import ImagesList from "@/components/ImagesList";
 
-const Create = () => {
-  const { data: session } = useSession();
+const Page = () => {
+  const { data: session, status } = useSession();
   const router = useRouter();
   const id = session?.user?._id;
   const [imageUrls, setImageUrls] = useState([]);
   const [imagePath, setImagePath] = useState([]);
   const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.replace("/login");
+    }
+  }, [status, router]);
   const [brands, setBrands] = useState([]);
   const [product, setProduct] = useState({
     user: id,
@@ -472,4 +478,4 @@ const Create = () => {
   );
 };
 
-export default Create;
+export default Page;

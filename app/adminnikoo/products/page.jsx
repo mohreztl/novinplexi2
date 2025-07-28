@@ -45,8 +45,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import Image from "next/image";
-import EditProductButton from "@/components/EditProductButton";
-import DeleteConfirmationDialog from "@/components/DeleteConfirmationDialog";
 
 const Page = () => {
   const router = useRouter();
@@ -142,31 +140,7 @@ const Page = () => {
     setDeleteDialogOpen(true);
   };
 
-  const handleCloseDialog = () => {
-    setDeleteDialogOpen(false);
-    setProductToDelete(null);
-  };
-
-  const handleConfirmDelete = async () => {
-    if (!productToDelete) return;
-
-    setIsDeleting(true);
-    try {
-      const res = await axios.delete(`/api/product/${productToDelete}`);
-      if (res.status === 200) {
-        toast.success('Product deleted successfully!');
-        setProducts((prevProducts) =>
-          prevProducts.filter((product) => product.slug !== productToDelete)
-        );
-      }
-    } catch (error) {
-      toast.error('Product could not be deleted');
-    } finally {
-      setIsDeleting(false);
-      setDeleteDialogOpen(false);
-      setProductToDelete(null);
-    }
-  };
+  // All dialog handling is done through onOpenChange
 
   return (
     <div className="p-6">
