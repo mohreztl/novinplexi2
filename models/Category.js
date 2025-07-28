@@ -10,6 +10,11 @@ const categorySchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+  type: {
+    type: String,
+    enum: ['product', 'service'],
+    required: true
+  },
   description: String,
   image: String,
   parent: {
@@ -19,6 +24,10 @@ const categorySchema = new mongoose.Schema({
   isActive: {
     type: Boolean,
     default: true
+  },
+  order: {
+    type: Number,
+    default: 0
   }
 }, {
   timestamps: true
