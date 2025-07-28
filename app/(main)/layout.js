@@ -4,6 +4,7 @@ import "../globals.css";
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import MobileBottomNav from "@/components/MobileBottomNav"
+import AuthProvider from "@/components/AuthProvider";
 
 
 export const metadata = {
@@ -24,15 +25,14 @@ export default function RootLayout({ children }) {
       suppressContentEditableWarning
       suppressHydrationWarning>
      
-        {/* <AuthProvider> */}
-        <Navbar/>
-        <main >
-          
-          {children}
+        <AuthProvider>
+          <Navbar />
+          <main>
+            {children}
           </main>
-          <Footer className="p-0 "/>
-<MobileBottomNav/>
-          {/* </AuthProvider> */}
+          {/* <Footer className="p-0" /> */}
+          <MobileBottomNav />
+        </AuthProvider>
       </body>
   
   );

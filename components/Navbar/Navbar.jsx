@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
+import { Search, Menu, X, ChevronDown, ShoppingBag, User } from "lucide-react";
 import CartIcon from "../CartIcon";
 import CartIconMobile from "../CartIconMobile";
 import SearchDrawer from "./SearchDrawer";
@@ -14,8 +16,25 @@ import MobileMenu from "./MobileMenu";
 import NavbarLinks from "./NavbarLinks";
 import UserSection from "./UserSection";
 import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 import Loader from "../ui/Loader";
 import useMobileMenuStore from "@/store/useMobileMenuStore";
+
+const NavbarLink = ({ href, children, hasDropdown, isOpen, onClick }) => (
+  <Link
+    href={href}
+    className="group relative flex items-center gap-1.5 rounded-full px-4 py-2 transition-all hover:bg-[#31508c]/10"
+    onClick={onClick}
+  >
+    <span className="text-base font-medium text-gray-700 transition-colors group-hover:text-[#31508c]">
+      {children}
+    </span>
+    {hasDropdown && (
+      <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform group-hover:text-[#31508c] ${isOpen ? 'rotate-180' : ''}`} />
+    )}
+    <span className="absolute bottom-1 right-4 h-[2px] w-[calc(100%-2rem)] origin-right scale-x-0 bg-[#ffd700] transition-all duration-500 group-hover:scale-x-100" />
+  </Link>
+);
 
 const Navbar = () => {
   const router = useRouter();
@@ -25,16 +44,16 @@ const Navbar = () => {
   const [adminPanelMob, setAdminPanelMob] = useState(false);
   const [productModile, setProductModile] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const [category, setCategory] = useState("");
   const [searchTerm, setSearchTerm] = useState({ search: "" });
   const [resultArr, setResultArr] = useState([]);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const { isOpen, openMenu, closeMenu } = useMobileMenuStore();
   const firstTwelveItems = resultArr.slice(0, 12);
   const [isSearching, setIsSearching] = useState(false);
   const [activeCategory, setActiveCategory] = useState(null);
   const user = session?.user;
   const [categories, setCategories] = useState([]);
-  const { isOpen, openMenu, closeMenu } = useMobileMenuStore();
 
   // Fetch categories effect
   useEffect(() => {
@@ -61,9 +80,9 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 z-50 w-full transition-all duration-300 \${
+      className={`fixed top-0 z-50 w-full transition-all duration-300 ${
         isScrolled
-          ? "bg-white/90 backdrop-blur-md shadow-md border-b border-blue-100"
+          ? "bg-gradient-to-r from-blue-200/80 to-indigo-200/80 backdrop-blur-md shadow-md"
           : "bg-transparent"
       }`}
     >
@@ -86,11 +105,10 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex md:space-x-6">
             <NavbarLinks
-              categories={categories}
+              session={session}
+              productOpen={productOpen}
               setProductOpen={setProductOpen}
-              setCategory={setCategory}
-              activeCategory={activeCategory}
-              setActiveCategory={setActiveCategory}
+              setAdmin={setAdmin}
             />
           </div>
 
@@ -170,18 +188,26 @@ const Navbar = () => {
       </AnimatePresence>
 
       {/* Drawers */}
+      {/* Search Drawer */}
       <SearchDrawer
         searchOpen={searchOpen}
         setSearchOpen={setSearchOpen}
         searchTerm={searchTerm}
-        resultArr={firstTwelveItems}
+        handleChange={(e) => setSearchTerm({ search: e.target.value })}
+        handleSearchClose={() => setSearchOpen(false)}
+        firstTwelveItems={firstTwelveItems}
+        resultArr={resultArr}
         isSearching={isSearching}
       />
+
+      {/* Product Drawer */}
       <ProductDrawer
-        productOpen={productOpen}
-        setProductOpen={setProductOpen}
+        isOpen={productOpen}
+        setIsOpen={setProductOpen}
         category={category}
       />
+
+      {/* Admin Drawer */}
       <AdminDrawer
         admin={admin}
         setAdmin={setAdmin}

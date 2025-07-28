@@ -1,8 +1,11 @@
+"use client";
+
 import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "../ui/input";
 import Link from "next/link";
 import Image from "next/image";
-import { Star, ChevronLeft, SearchCheckIcon } from "lucide-react";
+import { Star, ChevronLeft, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const SearchDrawer = ({
@@ -14,136 +17,137 @@ const SearchDrawer = ({
   resultArr,
 }) => {
   return (
-    searchOpen && (
-      <div
-        className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[999] flex items-start justify-center pt-20"
-        onClick={handleSearchClose}
-      >
-        <div
-          className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[80vh] overflow-hidden mx-4 border border-[#31508c]/10"
-          onClick={(e) => e.stopPropagation()}
+    <AnimatePresence>
+      {searchOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[999] flex items-start justify-center pt-20"
+          onClick={handleSearchClose}
         >
-          {/* Header */}
-          <div className="p-6 bg-gradient-to-r from-[#31508c] to-[#2a4374]">
-            <h2 className="text-2xl font-bold text-white mb-4">
-              جستجوی محصولات
-            </h2>
-            <div className="relative">
-              <Input
-                type="text"
-                name="search"
-                value={searchTerm.search}
-                onChange={handleChange}
-                placeholder="نام محصول را وارد کنید..."
-                className="w-full pl-12 pr-4 py-3 rounded-full bg-white/90 border-none focus:ring-2 focus:ring-[#ffd700] text-[#31508c]"
-                autoComplete="off"
-                autoFocus
-              />
-              <SearchCheckIcon className="absolute left-4 top-3.5 h-5 w-5 text-[#31508c]" />
-            </div>
-          </div>
-
-          {/* Results */}
-          <div className="overflow-y-auto max-h-[calc(80vh-160px)]">
-            {firstTwelveItems?.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
-                {firstTwelveItems.map((prod) => (
-                  <div
-                    key={prod._id}
-                    className="group bg-white rounded-lg border border-[#31508c]/10 hover:border-[#31508c]/30 transition-all"
-                  >
-                    <div className="flex h-full">
-                      {/* Image */}
-                      <div className="w-1/3 relative">
-                        <Link
-                          href={`/product/${prod.slug}`}
-                          onClick={handleSearchClose}
-                          className="block h-full"
-                        >
-                          <Image
-                            src={prod.images[0] || "/placeholder-watch.jpg"}
-                            alt={prod.name}
-                            width={160}
-                            height={160}
-                            className="object-cover w-full h-full rounded-l-lg"
-                          />
-                        </Link>
-                      </div>
-
-                      {/* Details */}
-                      <div className="w-2/3 p-4 flex flex-col justify-between">
-                        <div>
-                          <Link
-                            href={`/product/${prod.slug}`}
-                            onClick={handleSearchClose}
-                          >
-                            <h3 className="font-bold text-lg text-[#31508c] mb-1 hover:text-[#ffd700] transition-colors">
-                              {prod.name}
-                            </h3>
-                          </Link>
-                          <p className="text-sm text-gray-600 mb-2">
-                            {prod.brand}
-                          </p>
-                          <div className="flex items-center mb-2">
-                            <Star className="h-4 w-4 text-[#ffd700] fill-current" />
-                            <span className="text-sm text-gray-600 ml-1">
-                              {prod.averageRating.toFixed(1)} ({prod.numReviews} نظر)
-                            </span>
-                          </div>
-                        </div>
-
-                        <div>
-                          <div className="flex justify-between items-center mb-2">
-                            <span className="text-lg font-bold text-[#31508c]">
-                              تومان{prod.price}
-                            </span>
-                            {prod.originalPrice && (
-                              <span className="text-sm text-gray-400 line-through">
-                              تومان{prod.originalPrice}
-                              </span>
-                            )}
-                          </div>
-                          
-                          <Link
-                            href={`/product/${prod.slug}`}
-                            onClick={handleSearchClose}
-                            className="inline-flex items-center text-[#31508c] hover:text-[#ffd700] transition-colors"
-                          >
-                            مشاهده جزئیات
-                            <ChevronLeft className="mr-1 h-4 w-4" />
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+          <motion.div
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -20, opacity: 0 }}
+            className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[80vh] overflow-hidden mx-4 border border-[#31508c]/10"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="bg-gradient-to-r from-[#31508c] to-[#2a4374] p-6">
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-white">جستجوی محصولات</h2>
+                <button
+                  onClick={handleSearchClose}
+                  className="rounded-full p-2 text-white/80 hover:bg-white/10 transition-colors"
+                >
+                  <X className="h-5 w-5" />
+                </button>
               </div>
-            ) : (
-              <div className="p-8 text-center text-gray-500">
-                نتیجه‌ای یافت نشد
+              <div className="relative">
+                <Input
+                  type="text"
+                  name="search"
+                  value={searchTerm.search}
+                  onChange={handleChange}
+                  placeholder="نام محصول را وارد کنید..."
+                  className="w-full pl-12 pr-4 py-3 rounded-full bg-white/95 border-none focus:ring-2 focus:ring-[#ffd700] text-[#31508c] shadow-lg placeholder:text-gray-400"
+                  autoComplete="off"
+                  autoFocus
+                />
+                <div className="absolute left-4 top-3.5 flex items-center space-x-2">
+                  <Search className="h-5 w-5 text-[#31508c]" />
+                  {searchTerm.search && (
+                    <button
+                      onClick={() => handleChange({ target: { value: "", name: "search" } })}
+                      className="rounded-full p-1 text-gray-400 hover:text-gray-600"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Results */}
+            <div className="overflow-y-auto max-h-[60vh] py-4">
+              {firstTwelveItems.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+                  {firstTwelveItems.map((item) => (
+                    <Link
+                      key={item._id}
+                      href={`/product/${item.slug}`}
+                      className="group flex items-center space-x-4 rounded-lg border border-gray-100 p-3 hover:bg-gray-50 transition-colors"
+                      onClick={handleSearchClose}
+                    >
+                      <div className="relative h-20 w-20 overflow-hidden rounded-lg">
+                        <Image
+                          src={item.images[0]}
+                          alt={item.name}
+                          layout="fill"
+                          objectFit="cover"
+                          className="transition-transform group-hover:scale-110"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-medium text-gray-900 group-hover:text-[#31508c]">
+                          {item.name}
+                        </h3>
+                        <div className="mt-1 flex items-center">
+                          <Star className="h-4 w-4 text-yellow-400" />
+                          <span className="ml-1 text-sm text-gray-600">
+                            {item.rating ? item.rating.toFixed(1) : "جدید"}
+                          </span>
+                        </div>
+                        <div className="mt-1 text-sm font-medium text-[#31508c]">
+                          {item.price.toLocaleString()} تومان
+                        </div>
+                      </div>
+                      <ChevronLeft className="h-5 w-5 text-gray-400 group-hover:text-[#31508c]" />
+                    </Link>
+                  ))}
+                </div>
+              ) : searchTerm.search ? (
+                <div className="flex flex-col items-center justify-center py-12">
+                  <div className="h-24 w-24 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                    <Search className="h-12 w-12 text-gray-400" />
+                  </div>
+                  <p className="text-gray-500 text-center">
+                    محصولی با این نام پیدا نشد
+                  </p>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-12">
+                  <div className="h-24 w-24 rounded-full bg-blue-50 flex items-center justify-center mb-4">
+                    <Search className="h-12 w-12 text-[#31508c]" />
+                  </div>
+                  <p className="text-gray-500 text-center">
+                    برای جستجو تایپ کنید...
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            {firstTwelveItems.length > 0 && resultArr.length > 12 && (
+              <div className="border-t border-gray-100 p-4">
+                <Button
+                  asChild
+                  className="w-full bg-[#31508c] hover:bg-[#2a4374] text-white rounded-full"
+                >
+                  <Link
+                    href={`/searchedProducts/${searchTerm.search}`}
+                    onClick={handleSearchClose}
+                  >
+                    مشاهده همه نتایج ({resultArr.length})
+                  </Link>
+                </Button>
               </div>
             )}
-          </div>
-
-          {/* Footer */}
-          {resultArr?.length > 12 && (
-            <div className="p-4 border-t border-[#31508c]/10 bg-gray-50">
-              <Button
-                asChild
-                className="w-full bg-[#31508c] hover:bg-[#2a4374] rounded-full"
-              >
-                <Link
-                  href={`/searchedProducts/${searchTerm?.search}`}
-                  onClick={handleSearchClose}
-                >
-                  نمایش همه نتایج ({resultArr.length})
-                </Link>
-              </Button>
-            </div>
-          )}
-        </div>
-      </div>
-    )
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 

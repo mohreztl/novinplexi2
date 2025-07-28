@@ -19,19 +19,12 @@ export async function GET(req) {
       .skip(skip)
       .limit(limit);
 
-    if (foundProducts) {
-      return NextResponse.json({
-        products: foundProducts,
-        total: totalProducts,
-        page: page,
-        totalPages: Math.ceil(totalProducts / limit),
-      });
-    } else {
-      return new NextResponse.json(
-        { error: "Products not found" },
-        { status: 404 }
-      );
-    }
+    return NextResponse.json({
+      products: foundProducts,
+      total: totalProducts,
+      page: page,
+      totalPages: Math.ceil(totalProducts / limit),
+    });
   } catch (error) {
     return new NextResponse.json(
       { error: "error fetching products" },

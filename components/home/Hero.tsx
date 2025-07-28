@@ -5,9 +5,34 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+interface Service {
+  _id: string;
+  title: string;
+  description: string;
+  image: string;
+  features: { title: string; description: string; }[];
+}
+
 const AcrylicHeroSection = () => {
+  const [services, setServices] = useState<Service[]>([]);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await axios.get('/api/services');
+        setServices(response.data.services.filter((service: Service) => service.isPublished));
+      } catch (error) {
+        console.error('Error fetching services:', error);
+      }
+    };
+    fetchServices();
+  }, []);
+
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100 pt-24 pb-32">
+    <section className="relative overflow-hidden bg-gradient-to-br from-blue-200/20 to-indigo-200/20 pt-24 pb-32">
       {/* دکوراسیون پس‌زمینه با جلوه شیشه‌ای */}
       <div className="absolute inset-0 z-0">
         {/* نورپردازی */}
@@ -126,11 +151,56 @@ const AcrylicHeroSection = () => {
             transition={{ duration: 0.7 }}
             className="relative lg:mr-4"
           >
-            {/* قاب اصلی با جلوه شیشه‌ای */}
-            <div className="relative rounded-3xl bg-gradient-to-br from-blue-100/50 to-indigo-100/50 p-8 backdrop-blur-xl shadow-2xl shadow-blue-200/50">
+              {/* قاب اصلی با جلوه شیشه‌ای */}
+            <div className="relative rounded-3xl bg-gradient-to-br from-blue-200/50 to-indigo-200/50 p-8 backdrop-blur-xl shadow-2xl shadow-blue-200/50">
               <div className="absolute -inset-4 -z-10 rounded-3xl bg-gradient-to-br from-blue-300/20 to-indigo-300/20 backdrop-blur-3xl"></div>
-              
-              {/* محتوای شیشه‌ای */}
+
+              {/* نمایش خدمات */}
+              <div className="absolute -right-80 top-1/2 transform -translate-y-1/2 w-72 space-y-4">
+                {services.slice(0, 3).map((service) => (
+                  <motion.div
+                    key={service._id}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="bg-white/80 backdrop-blur-sm rounded-lg p-4 shadow-lg border border-blue-100"
+                  >
+                    {service.image && (
+                      <div className="relative h-32 w-full mb-3 overflow-hidden rounded-lg">
+                        <Image
+                          src={service.image}
+                          alt={service.title}
+                          layout="fill"
+                          objectFit="cover"
+                          className="transition-transform hover:scale-105"
+                        />
+                      </div>
+                    )}
+                    <h3 className="text-lg font-bold text-gray-800 mb-2">{service.title}</h3>
+                    <p className="text-sm text-gray-600 mb-3">{service.description}</p>
+                    {service.features && service.features.length > 0 && (
+                      <div className="space-y-2">
+                        {service.features.slice(0, 2).map((feature, index) => (
+                          <div key={index} className="flex items-center text-sm">
+                            <div className="h-1.5 w-1.5 rounded-full bg-blue-500 mr-2"></div>
+                            <span className="text-gray-700">{feature.title}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <Link href={`/services/${service._id}`}>
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="mt-3 w-full rounded-md bg-gradient-to-r from-blue-500 to-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-md hover:from-blue-600 hover:to-indigo-700"
+                      >
+                        اطلاعات بیشتر
+                      </motion.button>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+                            {/* محتوای شیشه‌ای */}
               <div className="relative z-10 overflow-hidden rounded-2xl">
                 <div className="relative h-[450px] w-[350px] overflow-hidden rounded-2xl bg-gradient-to-br from-blue-50/80 to-indigo-50/80 border border-white/50">
                   <div className="absolute inset-0 flex items-center justify-center">

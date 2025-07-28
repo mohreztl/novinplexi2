@@ -5,7 +5,7 @@ import useCartStore from "../store/cartStore";
 
 import Cart from "./Cart";
 
-const CartIconNav = () => {
+const CartIcon = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [itemCount, setItemCount] = useState(0);
   const { items, getTotalItems } = useCartStore();
@@ -64,4 +64,4 @@ const CartIconNav = () => {
   );
 };
 
-export default CartIconNav;
+export default CartIcon;

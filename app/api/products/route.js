@@ -1,6 +1,7 @@
 import connect from "@/utils/config/dbConnection";
 import { Product } from "@/utils/models/Product";
 import { NextResponse } from "next/server";
+export const dynamic = 'force-dynamic';
 
 export async function GET(req, res) {
   await connect();
@@ -9,11 +10,7 @@ export async function GET(req, res) {
     .populate("user")
     .sort({ createdAt: -1 });
 
-  if (foundProducts) {
-    return NextResponse.json(foundProducts);
-  } else {
-    return new NextResponse({ error: "Cant find products" }, { status: 500 });
-  }
+  return NextResponse.json(foundProducts);
 }
 
 export async function POST(req, res) {

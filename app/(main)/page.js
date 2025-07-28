@@ -2,13 +2,7 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
-import HeroVideo from '@/components/HomepageComponents/HeroVideo';
-import GallerySlider from "@/components/HomepageComponents/GallerySlider";
-import { TwoBox } from "@/components/HomepageComponents/TwoBox";
-import ProductsOne from "@/components/HomepageComponents/ProductsOne";
-import ProductHome from "@/components/HomepageComponents/ProductHome.jsx";
-import RecentPosts from "@/components/RecentPosts";
-import NewProduct from "@/components/HomepageComponents/NewProducts";
+
 import Hero from "@/components/home/Hero";
 import ServiceSection from "@/components/home/ServiceSection";
 import TopProductSection from "@/components/home/TopProductSection";
@@ -54,7 +48,7 @@ export default function Home() {
 
       {/* Top Products Section */}
       <section className="py-16">
-        <TopProductSection products={products} isLoading={isLoading} />
+        {/* <TopProductSection products={products} isLoading={isLoading} /> */}
       </section>
 
       {/* Categories Section */}
@@ -64,7 +58,7 @@ export default function Home() {
 
       {/* Blog Section */}
       <section className="py-16">
-        <BlogSection posts={posts} isLoading={isLoading} />
+        {/* <BlogSection posts={posts} isLoading={isLoading} /> */}
       </section>
 
       {/* FAQ Section */}
@@ -73,7 +67,7 @@ export default function Home() {
       </section>
 
       {/* Floating Contact Button */}
-      <FloatingContactButton />
+      {/* <FloatingContactButton /> */}
 
       {/* Additional Content */}
     
