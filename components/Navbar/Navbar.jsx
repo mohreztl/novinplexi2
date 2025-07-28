@@ -1,10 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { Menu, X, SearchCheckIcon } from "lucide-react";
+import Link from "next/link";
 import CartIcon from "../CartIcon";
 import CartIconMobile from "../CartIconMobile";
 import SearchDrawer from "./SearchDrawer";
@@ -16,10 +16,10 @@ import UserSection from "./UserSection";
 import { Input } from "../ui/input";
 import Loader from "../ui/Loader";
 import useMobileMenuStore from "@/store/useMobileMenuStore";
+
 const Navbar = () => {
   const router = useRouter();
   const { data: session } = useSession();
-  // const [isOpen, setIsOpen] = useState(false);
   const [productOpen, setProductOpen] = useState(false);
   const [admin, setAdmin] = useState(false);
   const [adminPanelMob, setAdminPanelMob] = useState(false);
@@ -31,229 +31,166 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const firstTwelveItems = resultArr.slice(0, 12);
   const [isSearching, setIsSearching] = useState(false);
+  const [activeCategory, setActiveCategory] = useState(null);
   const user = session?.user;
-
   const [categories, setCategories] = useState([]);
-  const [activeCategory, setActiveCategory] = useState("");
-  //open menu store
   const { isOpen, openMenu, closeMenu } = useMobileMenuStore();
 
-  //
-  console.log("categories nav:", categories);
+  // Fetch categories effect
   useEffect(() => {
     const fetchCategories = async () => {
-      console.log("categories nav:", categories);
       try {
         const res = await axios.get("/api/categories");
-        setCategories(res.data.categories);
+        setCategories(res.data.categories || []);
       } catch (error) {
-        console.log("Error fetching categories:", error);
+        console.error("Error fetching categories:", error);
+        setCategories([]);
       }
     };
     fetchCategories();
   }, []);
+
+  // Scroll effect
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 10);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleMenuOpen = () => {
-    closeMenu();
-  };
-
-  const setProductModile1 = () => {
-    setProductModile(!productModile);
-  };
-
-  const setAdminPanelMobile = () => {
-    setAdminPanelMob(!adminPanelMob);
-  };
-
-  // const setMenuClose = () => {
-  //   setIsOpen(!isOpen);
-  // };
-
-  const handleSearchClick = () => {
-    setSearchOpen(true);
-    setProductOpen(false);
-  };
-
-  function debounce(func, timeout = 1000) {
-    let timer;
-    return (...args) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        func.apply(this, args);
-      }, timeout);
-    };
-  }
-
-  const debounceSearch = debounce((currentSearchTerm) => {
-    handleSubmit(currentSearchTerm);
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setSearchTerm((prevState) => ({ ...prevState, [name]: value }));
-    debounceSearch(value);
-  };
-
-  const handleSubmit = async (search) => {
-    if (!search) return;
-    setIsSearching(true);
-    try {
-      const res = await axios.get(`/api/products/${search}`);
-      setIsSearching(false);
-      if (res.status === 200) {
-        setResultArr(res.data);
-      }
-    } catch (error) {
-      setIsSearching(false);
-      console.log(error);
-    }
-  };
-
-  const handleSearchClose = () => {
-    setSearchOpen(false);
-  };
-
-  useEffect(() => {
-    if (searchTerm.search !== "") {
-      handleSubmit(searchTerm.search);
-    }
-    if (searchTerm.search === "") {
-      setResultArr([]);
-    }
-  }, [searchTerm]);
-
   return (
-    <header className=" w-full max-w-full h-[48px] md:h-[142px] bg-[#f9f9f9] md:pt-8 pt-1 mx-0 shadow-[10px_6px_40px_1px_#00000040]  font-yekanbakh">
-    <nav className="md:w-full w-[410px] h-full px-24 mx-0 md:px-14   ">
-      <div className=" h-[52px] ">
-        <div
-          className={` md:hidden flex justify-center fixed w-full  right-0 z-50  transition-all duration-300  px-4 overflow-x-hidden  ${
-            isScrolled
-              ? "bg-gray-100 opacity-90 shadow-lg top-0"
-              : "shadow-none"
-          }`}
-        >
-         
-          <Image
-            alt="s"
-            onClick={() => router.push("/")}
-            src="/logo1.svg"
-            width={140}
-            height={38}
-            className=" cursor-pointer"
-          />
-
-          
-        </div>
-
-
-          <div
-            className={`hidden md:flex fixed top-0  w-full z-50 transition-all duration-300 ${
-              isScrolled
-                ? "bg-gray-100 opacity-90 py-2 h-[60px] shadow-lg left-0 px-8"
-                : " shadow-none py-6 left-6 px-14"
-            }`}
-          >
-            <SearchDrawer
-              searchOpen={searchOpen}
-              searchTerm={searchTerm}
-              handleChange={handleChange}
-              handleSearchClose={handleSearchClose}
-              firstTwelveItems={firstTwelveItems}
-              resultArr={resultArr}
-            />
-            <ProductDrawer
-              productOpen={productOpen}
-              setProductOpen={setProductOpen}
-              categories={categories}
-              setCategory={setActiveCategory}
-              activeCategory={activeCategory}
-            />
-            <div className="flex justify-between h-[72px] w-full px-8">
-              <div className="mt-[-8px]  mr-10  ">
-                <Image
-                  alt="s"
-                  onClick={() => router.push("/")}
-                  src="/logo1.svg"
-                  width={210}
-                  height={45}
-                  className="cursor-pointer object-cover p-2 "
-                />
+    <nav
+      className={`fixed top-0 z-50 w-full transition-all duration-300 \${
+        isScrolled
+          ? "bg-white/90 backdrop-blur-md shadow-md border-b border-blue-100"
+          : "bg-transparent"
+      }`}
+    >
+      <div className="mx-auto md:px-8 px-4">
+        <div className="flex h-20 items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="flex items-center space-x-3 z-30">
+            <div className="flex items-center justify-center">
+              <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 p-1 shadow-lg">
+                <div className="flex h-full w-full items-center justify-center rounded-lg bg-white/90 backdrop-blur-sm">
+                  <div className="h-8 w-8 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-md"></div>
+                </div>
               </div>
-              <div className={`flex items-center gap-2 ${isScrolled ?"bg-transparent border-none mb-5 ": "bg-white/90" }  backdrop-blur-md rounded-full px-3 py-1.5 shadow-sm border border-gray-100`}>
-  {/* جستجو */}
-  <div className="relative flex-1 max-w-xs">
-    <Input
-      onClick={handleSearchClick}
-      placeholder="جستجو..."
-      className="pl-9 pr-3 py-1.5 text-sm rounded-full bg-gray-50 border-gray-200 hover:border-[#31508c]/50 focus:border-[#31508c] focus:ring-1 focus:ring-[#31508c]/20 transition-all"
-      aria-label="جستجوی محصولات"
-    />
-    <SearchCheckIcon className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-[#31508c]/70 w-4 h-4" />
-  </div>
-                {/* آیکون سبد خرید */}
-                <button
-                  aria-label="سبد خرید"
-                  className=" text-gray-700 transition-colors hover:text-primary-600 relative mr-3"
+              <span className="ml-3 text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent">
+                نیکو دکور
+              </span>
+            </div>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex md:space-x-6">
+            <NavbarLinks
+              categories={categories}
+              setProductOpen={setProductOpen}
+              setCategory={setCategory}
+              activeCategory={activeCategory}
+              setActiveCategory={setActiveCategory}
+            />
+          </div>
+
+          {/* Search and Actions */}
+          <div className="flex items-center space-x-4">
+            {/* Desktop Search */}
+            <div className="hidden lg:block">
+              <div className="relative">
+                <Input
+                  type="text"
+                  placeholder="جستجو محصولات..."
+                  className="w-64 rounded-full border border-blue-200 bg-white/80 py-2 pl-10 pr-4"
+                  value={searchTerm.search}
+                  onChange={(e) => setSearchTerm({ search: e.target.value })}
+                  onFocus={() => setSearchOpen(true)}
+                />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="absolute left-3 top-2.5 h-5 w-5 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
-                  <CartIcon  />
-                </button>
-                {/* بخش کاربر */}
-                <div className="ml-3">
-    <UserSection session={session} />
-  </div>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
               </div>
             </div>
+
+            {/* User Actions */}
+            <div className="flex space-x-2">
+              <CartIcon />
+              <UserSection session={session} admin={admin} setAdmin={setAdmin} />
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              className="rounded-lg p-2 text-gray-700 hover:bg-blue-50 md:hidden"
+              onClick={() => openMenu()}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+                />
+              </svg>
+            </button>
           </div>
         </div>
-        <NavbarLinks
-          session={session}
-          productOpen={productOpen}
-          setProductOpen={setProductOpen}
-          setAdmin={setAdmin}
-        />
-        <div
-          onMouseEnter={() => setAdmin(true)}
-          onMouseLeave={() => setAdmin(false)}
-        >
-          <AdminDrawer
-            admin={admin}
-            category={categories}
-            setCategory={setCategories}
+      </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <MobileMenu
+            categories={categories}
+            setProductModile={setProductModile}
+            setCategory={setCategory}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            isOpen={isOpen}
+            closeMenu={closeMenu}
           />
-        </div>
-        <MobileMenu
-          isOpen={isOpen}
-          setMenuClose={closeMenu}
-          searchOpen={searchOpen}
-          setSearchOpen={setSearchOpen}
-          searchTerm={searchTerm}
-          handleChange={handleChange}
-          handleSearchClose={handleSearchClose}
-          firstTwelveItems={firstTwelveItems}
-          resultArr={resultArr}
-          productModile={productModile}
-          setProductModile={setProductModile}
-          setAdminPanelMob={setAdminPanelMob}
-          session={session}
-          user={user}
-          adminPanelMob={adminPanelMob}
-          categories={categories}
-        />
-      </nav>
-    </header>
+        )}
+      </AnimatePresence>
+
+      {/* Drawers */}
+      <SearchDrawer
+        searchOpen={searchOpen}
+        setSearchOpen={setSearchOpen}
+        searchTerm={searchTerm}
+        resultArr={firstTwelveItems}
+        isSearching={isSearching}
+      />
+      <ProductDrawer
+        productOpen={productOpen}
+        setProductOpen={setProductOpen}
+        category={category}
+      />
+      <AdminDrawer
+        admin={admin}
+        setAdmin={setAdmin}
+        session={session}
+      />
+
+      {/* Mobile Cart */}
+      <CartIconMobile />
+    </nav>
   );
 };
 

@@ -7,33 +7,54 @@ import axios from "axios";
 import moment from "moment-jalaali";
 
 const RecentPosts = ({ limit = 3 }) => {
-  const [blog,setBlog]=useState([])
+  const [blog, setBlog] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-  async function fetchBlogs() {
-    const res = await axios.get(`/api/blog/?limit=${limit}`);
- 
-   if  (res.status === 200) {
-   
-     setBlog(res.data) 
-    
-   }
-   console.log("errorrrr")
-  
- }
- fetchBlogs();
-},[])
+    async function fetchBlogs() {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await axios.get(`/api/blog?limit=${limit}`);
+        if (res.status === 200) {
+          setBlog(res.data.blogs || []);
+        }
+      } catch (error) {
+        console.error("خطا در دریافت مقالات:", error);
+        setError("خطا در دریافت مقالات. لطفا دوباره تلاش کنید.");
+        setBlog([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchBlogs();
+  }, [limit]);
   return (
     <section className="py-16 bg-white px-4 lg:px-10">
-  
-    <div className="flex items-center my-6">
-  <div className="flex-grow border-t border-gold"></div>
-  <h2 className="px-4 md:text-5xl text-3xl font-bold text-gray-700"> مقالات</h2>
-  <div className="flex-grow border-t border-gold "></div>
-</div>
-<div >
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-  {blog.map((post, index) => (
+      <div className="flex items-center my-6">
+        <div className="flex-grow border-t border-gold"></div>
+        <h2 className="px-4 md:text-5xl text-3xl font-bold text-gray-700">مقالات</h2>
+        <div className="flex-grow border-t border-gold"></div>
+      </div>
+
+      <div className="container mx-auto">
+        {loading ? (
+          <div className="text-center py-10">
+            <div className="w-10 h-10 border-4 border-gold border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <p className="mt-2 text-gray-600">در حال بارگذاری مقالات...</p>
+          </div>
+        ) : error ? (
+          <div className="text-center py-10">
+            <p className="text-red-500">{error}</p>
+          </div>
+        ) : blog.length === 0 ? (
+          <div className="text-center py-10">
+            <p className="text-gray-600">هیچ مقاله‌ای یافت نشد</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {blog.map((post, index) => (
     <article
       key={post._id}
       className="group bg-white rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100"
@@ -87,12 +108,13 @@ const RecentPosts = ({ limit = 3 }) => {
           </Link>
         </div>
       </div>
-    </article>
-  ))}
-</div>
-    </div>
-  </section>
-  )
-}
+              </article>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+};
 
-export default RecentPosts
+export default RecentPosts;

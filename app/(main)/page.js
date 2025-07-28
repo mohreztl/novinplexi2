@@ -1,42 +1,82 @@
-"use client"
+"use client";
 
-import HeroVideo from '@/components/HomepageComponents/HeroVideo'
-
+import { useState, useEffect } from "react";
+import axios from "axios";
+import HeroVideo from '@/components/HomepageComponents/HeroVideo';
 import GallerySlider from "@/components/HomepageComponents/GallerySlider";
-
-
 import { TwoBox } from "@/components/HomepageComponents/TwoBox";
 import ProductsOne from "@/components/HomepageComponents/ProductsOne";
 import ProductHome from "@/components/HomepageComponents/ProductHome.jsx";
 import RecentPosts from "@/components/RecentPosts";
 import NewProduct from "@/components/HomepageComponents/NewProducts";
-
+import Hero from "@/components/home/Hero";
+import ServiceSection from "@/components/home/ServiceSection";
+import TopProductSection from "@/components/home/TopProductSection";
+import CategoriesSection from "@/components/home/CategoriesSection";
+import BlogSection from "@/components/home/BlogSection";
+import Faq from "@/components/home/Faq";
+import FloatingContactButton from "@/components/home/FloatingContactButton";
 
 export default function Home() {
+  const [products, setProducts] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // دریافت محصولات
+        const productsResponse = await axios.get("/api/products");
+        setProducts(productsResponse.data);
+
+        // دریافت پست‌های وبلاگ
+        const postsResponse = await axios.get("/api/posts");
+        setPosts(postsResponse.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
-    <div >
-      <HeroVideo/>
-      <TwoBox/>
-      
-   <ProductsOne/>
-   <ProductHome/>
-   <div className="flex items-center my-6 lg:px-10">
-  <div className="flex-grow border-t border-gold lg:px-10"></div>
-  <h1 className="px-4 md:text-5xl text-3xl font-bold text-gray-700"> محصولات</h1>
-  <div className="flex-grow border-t border-gold lg:px-10"></div>
-</div>
+    <div className="flex flex-col min-h-screen">
+      {/* Hero Section */}
+      <Hero />
 
-  <NewProduct/>
+      {/* Service Section */}
+      <section className="py-16 bg-gray-50">
+        <ServiceSection />
+      </section>
+
+      {/* Top Products Section */}
+      <section className="py-16">
+        <TopProductSection products={products} isLoading={isLoading} />
+      </section>
+
+      {/* Categories Section */}
+      <section className="py-16 bg-gray-50">
+        <CategoriesSection />
+      </section>
+
+      {/* Blog Section */}
+      <section className="py-16">
+        <BlogSection posts={posts} isLoading={isLoading} />
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-16 bg-gray-50">
+        <Faq />
+      </section>
+
+      {/* Floating Contact Button */}
+      <FloatingContactButton />
+
+      {/* Additional Content */}
     
-     <div className="flex items-center my-6 lg:px-10">
-  <div className="flex-grow border-t border-gold lg:px-10"></div>
-  <h1 className="px-4 md:text-5xl text-3xl font-bold text-gray-700 lg:px-10"> گالری</h1>
-  <div className="flex-grow border-t border-gold lg:px-10"></div>
-</div>
-     <GallerySlider/>
-     <RecentPosts limit={3}/>
-
     </div>
   );
 }

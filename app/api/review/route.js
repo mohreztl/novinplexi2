@@ -6,24 +6,28 @@ import Order from "@/utils/models/Order";
 import mongoose from "mongoose";
 import { Product } from "@/utils/models/Product";
 import { authOptions } from "@/lib/auth";
+import { ReviewSchema } from "@/utils/validations/reviewSchema";
 
 export async function POST(req) {
   try {
     await connect();
 
     const session = await getServerSession(authOptions);
-
     if (!session) {
-      return NextResponse.json({ canReview: false }, { status: 200 });
+      return NextResponse.json({ error: "لطفا ابتدا وارد شوید" }, { status: 401 });
     }
-
-    const { productId, rating, comment } = await req.json();
-    if (!mongoose.Types.ObjectId.isValid(productId)) {
-      return NextResponse.json(
-        { error: "invalid product id" },
-        { status: 400 }
-      );
+    
+    const body = await req.json();
+    const result = ReviewSchema.safeParse(body);
+    
+    if (!result.success) {
+      return NextResponse.json({ 
+        error: "اطلاعات نامعتبر", 
+        details: result.error.format()
+      }, { status: 400 });
     }
+    
+    const { productId, rating, comment } = result.data;
 
     const objectIdProductId = new mongoose.Types.ObjectId(productId);
 

@@ -1,24 +1,20 @@
-import Sidebar from "./components/Sidebar";
-import isAdmin from "../../utils/isAdmin";
+import Sidebar from "@/components/adminnikoo/Sidebar";
+import isAdmin from "@/utils/isAdmin";
 import "@/app/globals.css";
-
-
 
 function AdminLayout({ children }) {
   return (
-    <body
-    
-      suppressContentEditableWarning
-      suppressHydrationWarning
-    >
-      <main   className="bg-[#FFFFFF] flex flex-row ">
+    <body className="bg-gray-50" suppressHydrationWarning>
+      <div className="min-h-screen flex">
         <Sidebar />
- <div className="w-full p-0">
-    {children}
-    
-    </div>
-    </main>
+        <main className="flex-1 lg:mr-64 transition-all duration-300">
+          <div className="container mx-auto px-4 py-8">
+            {children}
+          </div>
+        </main>
+      </div>
     </body>
   );
 }
+
 export default isAdmin(AdminLayout);
