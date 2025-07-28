@@ -12,7 +12,7 @@ export default function PrivacyPolicyPage() {
           شرایط و ضوابط
           </h1>
           <p className="text-xl md:text-2xl mb-8">
-       شرایط و ضوابط استفاده از نیکو دکور
+       شرایط و ضوابط استفاده از نوین پلکسی
           </p>
         </div>
       </header>

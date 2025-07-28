@@ -78,7 +78,7 @@ const ProdDetailsList = ({ product }) => {
                   گارانتی
                 </p>
                 <p className="text-sm font-semibold text-gray-800 antialiased">
-                 24 ماهه نیکو دکور
+                 24 ماهه نوین پلکسی
                 </p>
               </div>
             </div>

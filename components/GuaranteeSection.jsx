@@ -6,7 +6,7 @@ const GuaranteeSection = () => {
     <section className="bg-gradient-to-r from-indigo-50 via-blue-50 to-pink-50 mt-8 rounded-lg pb-12 pt-10 overflow-hidden relative shadow-lg">
       <div className="container mx-auto px-4 relative z-10">
         <h2 className="text-4xl font-bold text-center mb-16 text-slate-800">
-         ویژگی های خرید از نیکو دکور
+         ویژگی های خرید از نوین پلکسی
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <GuaranteeItem

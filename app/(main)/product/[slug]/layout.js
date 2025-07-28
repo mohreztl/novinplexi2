@@ -10,7 +10,7 @@ export async function generateMetadata({ params }) {
     const product = await res.json();
 
     return {
-      title: `نیکو دکور - ${product.name}`,
+      title: `نوین پلکسی - ${product.name}`,
       description: product.description.slice(0, 140),
       openGraph: {
         title: product.name,
@@ -21,7 +21,7 @@ export async function generateMetadata({ params }) {
             url: product.images?.[0] || "https://nikodecor.com/default-image.jpg",
             width: 800,
             height: 600,
-            alt: product.name || "محصول نیکو دکور",
+            alt: product.name || "محصول نوین پلکسی",
           },
         ],
       },
@@ -38,7 +38,7 @@ export async function generateMetadata({ params }) {
   } catch (error) {
     console.error("Error fetching product metadata:", error);
     return {
-      title: "نیکو دکور - محصول ناموجود",
+      title: "نوین پلکسی - محصول ناموجود",
       description: "محصول مورد نظر یافت نشد.",
       openGraph: {
         title: "محصول ناموجود",

@@ -59,7 +59,7 @@ export default function NotFound() {
       >
         <img
           src="/logo1.svg"
-          alt="تصویر صفحه 404 نیکو دکور"
+          alt="تصویر صفحه 404 نوین پلکسی"
           className="w-80 max-w-full mx-auto"
         />
       </motion.div>

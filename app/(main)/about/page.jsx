@@ -18,10 +18,10 @@ const AboutPage = () => {
       <header className="bg-blues text-white">
         <div className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
-          درباره نیکو دکور
+          درباره نوین پلکسی
           </h1>
           <p className="text-xl md:text-2xl mb-8">
-        نیکو دکور نیکو دکور
+        نوین پلکسی نوین پلکسی
           </p>
           <Image
             width={450}
@@ -51,10 +51,10 @@ const AboutPage = () => {
             </div>
             <div className="md:w-1/2 md:pl-8">
               <p className="text-lg mb-4">
-    نیکو دکور در راستای خدمت به شما مردمان عزیز و ارائه بهترین محصولات با کمترین هزینه به شما مردمان عزیز ایران میباشد
+    نوین پلکسی در راستای خدمت به شما مردمان عزیز و ارائه بهترین محصولات با کمترین هزینه به شما مردمان عزیز ایران میباشد
               </p>
               <p className="text-lg">
-              نیکو دکور در راستای خدمت به شما مردمان عزیز و ارائه بهترین محصولات با کمترین هزینه به شما مردمان عزیز ایران میباشد
+              نوین پلکسی در راستای خدمت به شما مردمان عزیز و ارائه بهترین محصولات با کمترین هزینه به شما مردمان عزیز ایران میباشد
               </p>
             </div>
           </div>
@@ -72,14 +72,14 @@ const AboutPage = () => {
               <Clock className="w-16 h-16 mx-auto mb-4 text-blues" />
               <h3 className="text-xl font-semibold mb-2">بهترین کیفیت</h3>
               <p>
-               نیکو دکور در تلاش است بهترین کیفیت محصولات موجود را ارائه دهد
+               نوین پلکسی در تلاش است بهترین کیفیت محصولات موجود را ارائه دهد
               </p>
             </div>
             <div className="text-center">
               <Users className="w-16 h-16 mx-auto mb-4 text-blues" />
               <h3 className="text-xl font-semibold mb-2">Customer First</h3>
               <p>
-              نیکو دکور در تلاش است بهترین کیفیت محصولات موجود را ارائه دهد
+              نوین پلکسی در تلاش است بهترین کیفیت محصولات موجود را ارائه دهد
               </p>
             </div>
             <div className="text-center">
@@ -88,7 +88,7 @@ const AboutPage = () => {
          بهترین قیمت
               </h3>
               <p>
-              نیکو دکور در تلاش است بهترین قیمت محصولات موجود را ارائه دهد
+              نوین پلکسی در تلاش است بهترین قیمت محصولات موجود را ارائه دهد
               </p>
             </div>
           </div>
@@ -171,10 +171,10 @@ const AboutPage = () => {
       <section className="bg-blues text-white py-16">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          به خانواده نیکو دکور بپیوندید
+          به خانواده نوین پلکسی بپیوندید
           </h2>
           <p className="text-xl mb-8">
-خونتو به سلیقه خودت با کمک نیکو دکور زیبا کن 
+خونتو به سلیقه خودت با کمک نوین پلکسی زیبا کن 
           </p>
           <button className="bg-white text-blues font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-100 transition duration-300">
             <Link href={"/products/brand/rolex"}>مشاهده محصولات</Link>

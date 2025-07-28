@@ -19,10 +19,10 @@ const ContactPage = () => {
       <header className="bg-blues text-white">
         <div className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
-         راه های تماس با نیکو دکور
+         راه های تماس با نوین پلکسی
           </h1>
           <p className="text-xl md:text-2xl mb-8">
-نیکو دکور برای راهنمایی بیشتر در اختیار شما عزیزان می باشد
+نوین پلکسی برای راهنمایی بیشتر در اختیار شما عزیزان می باشد
           </p>
           <Image
           alt="s"
@@ -85,7 +85,7 @@ const ContactPage = () => {
             </div>
             <div className="md:w-1/2 md:pl-8">
               <h2 className="text-3xl md:text-4xl font-bold mb-8">
-               کانال پشتیبانی نیکو دکور
+               کانال پشتیبانی نوین پلکسی
               </h2>
               <div className="space-y-6">
                 <div className="flex items-center">
@@ -102,7 +102,7 @@ const ContactPage = () => {
                   <Headphones className="w-8 h-8 text-blues mr-4" />
                   <div>
                     <h3 className="text-xl font-semibold">تماس تلفنی</h3>
-                    <p>با مجموعه نیکو دکور تماس بگیرید</p>
+                    <p>با مجموعه نوین پلکسی تماس بگیرید</p>
                   </div>
                 </div>
               </div>
@@ -139,7 +139,7 @@ const ContactPage = () => {
            شرایط مرجوعی کالا به چه صورت میباشد؟
               </h3>
               <p>
-          اگر کالا به صورت فیزیکی ایراد داشته باشد مجموعه نیکو دکور محصول را مرجوع میکند
+          اگر کالا به صورت فیزیکی ایراد داشته باشد مجموعه نوین پلکسی محصول را مرجوع میکند
               </p>
             </div>
           </div>
@@ -150,10 +150,10 @@ const ContactPage = () => {
       <section className="bg-blues text-white py-16">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-    با نیکو دکور بروز بشید و از محصولات و تخفیف های مجموعه با خبر شوید
+    با نوین پلکسی بروز بشید و از محصولات و تخفیف های مجموعه با خبر شوید
           </h2>
           <p className="text-xl mb-8">
-      ثبت نام در خبر نامه نیکو دکور
+      ثبت نام در خبر نامه نوین پلکسی
           </p>
           <form className="max-w-md mx-auto flex">
             <input

@@ -60,7 +60,7 @@ const ServiceSection = () => {
         transition={{ duration: 0.6 }}
         className="text-center mb-16"
       >
-        <h2 className="text-3xl font-bold mb-4">خدمات ویژه نیکو دکور</h2>
+        <h2 className="text-3xl font-bold mb-4">خدمات ویژه نوین پلکسی</h2>
         <p className="text-gray-600 max-w-2xl mx-auto">
           ما با ارائه خدمات متنوع و با کیفیت، همواره در تلاش برای جلب رضایت مشتریان عزیز هستیم
         </p>

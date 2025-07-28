@@ -33,10 +33,10 @@ const  Blog = () => {
       <header className="bg-blues text-white">
         <div className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
-         مقالات نیکو دکور
+         مقالات نوین پلکسی
           </h1>
           <p className="text-xl md:text-2xl mb-8">
-        آموزش،معرفی و پیشنهادات خرید نیکو دکور
+        آموزش،معرفی و پیشنهادات خرید نوین پلکسی
           </p>
         </div>
       </header>

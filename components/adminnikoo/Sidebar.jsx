@@ -80,13 +80,13 @@ const Sidebar = () => {
           <Link href="/adminnikoo" className="flex items-center gap-2">
             <Image
               src="/nikoodecor.webp"
-              alt="نیکو دکور"
+              alt="نوین پلکسی"
               width={40}
               height={40}
               className="rounded-lg"
             />
             {!isCollapsed && (
-              <span className="text-xl font-bold text-gray-800">نیکو دکور</span>
+              <span className="text-xl font-bold text-gray-800">نوین پلکسی</span>
             )}
           </Link>
         </div>

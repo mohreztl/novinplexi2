@@ -137,7 +137,7 @@ const BlogSection = () => {
                 <div className="flex items-center justify-between text-sm text-gray-500">
                   <div className="flex items-center">
                     <FiUser className="mr-1" />
-                    <span>{article.author?.name || 'نیکو دکور'}</span>
+                    <span>{article.author?.name || 'نوین پلکسی'}</span>
                   </div>
                   <div className="flex items-center">
                     <FiCalendar className="mr-1" />

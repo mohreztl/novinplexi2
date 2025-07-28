@@ -14,7 +14,7 @@ const SliderProduct2 = () => {
         <div className="flex flex-col gap-6">
         <Image
                   src={'/f1b209e7034b4a9d1d54d78c8ac6169d5a682be7.png'}
-                  alt={"نیکو دکور"}
+                  alt={"نوین پلکسی"}
                   width={400}
                   height={500}
                   className="w-full h-48 object-cover"

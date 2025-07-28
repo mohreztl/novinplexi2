@@ -130,7 +130,7 @@ export default function Footer() {
             </div>
 
             <p className="text-gray-400 text-center lg:text-right text-sm leading-relaxed">
-              نیکو دکور با بیش از یک دهه تجربه، پیشرو در طراحی و اجرای مدرن‌ترین
+              نوین پلکسی با بیش از یک دهه تجربه، پیشرو در طراحی و اجرای مدرن‌ترین
               طرح‌های کاغذ دیواری در ایران
             </p>
           </div>
