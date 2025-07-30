@@ -11,21 +11,31 @@ import Image from "next/image";
 
 import ImagesList from "@/components/ImagesList";
 
+<<<<<<< HEAD
 const CreateProduct = () => {
+=======
+const Page = () => {
+>>>>>>> 55c8d91a598e4046fc83b9e0a2a5c56489b4a322
   const { data: session, status } = useSession();
   const router = useRouter();
   const id = session?.user?._id;
   const [imageUrls, setImageUrls] = useState([]);
   const [imagePath, setImagePath] = useState([]);
   const [categories, setCategories] = useState([]);
+<<<<<<< HEAD
   const [isLoading, setIsLoading] = useState(false);
+=======
+>>>>>>> 55c8d91a598e4046fc83b9e0a2a5c56489b4a322
 
   useEffect(() => {
     if (status === "unauthenticated") {
       router.replace("/login");
     }
   }, [status, router]);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 55c8d91a598e4046fc83b9e0a2a5c56489b4a322
   const [brands, setBrands] = useState([]);
   const [product, setProduct] = useState({
     user: id,
@@ -480,4 +490,8 @@ const CreateProduct = () => {
   );
 };
 
+<<<<<<< HEAD
 export default CreateProduct;
+=======
+export default Page;
+>>>>>>> 55c8d91a598e4046fc83b9e0a2a5c56489b4a322
