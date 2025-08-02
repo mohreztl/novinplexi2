@@ -103,11 +103,9 @@ const CreateBlog = async () => {
   if (status === "loading") {
     return <p>Loading...</p>;
   }
-
   if (status === "unauthenticated") {
     return <p>Access denied</p>;
   }
-
   return (
     <div className="max-w-5xl mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
