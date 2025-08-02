@@ -7,7 +7,7 @@ import {
   Mail,
   MapPin,
   Instagram,
-  Telegram,
+  MessageSquare,
   Globe,
   Save,
 } from "lucide-react";
@@ -175,7 +175,7 @@ export default function SiteSettings() {
                   onChange={handleChange}
                   className="pl-10"
                 />
-                <Telegram className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <MessageSquare className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
               </div>
             </FormGroup>
             <FormGroup label="وب‌سایت">
