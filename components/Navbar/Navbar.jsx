@@ -234,20 +234,18 @@ const Navbar = () => {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-20 items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="group flex items-center space-x-3 z-30">
-              <div className="relative flex items-center">
-                <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-blue-400 to-indigo-400 opacity-0 blur transition duration-500 group-hover:opacity-75"></div>
+            <Link href="/" className=" space-x-1 z-30">
+           
+               
                 <Image
                   src="/logo1.svg"
                   alt="نوین پلکسی"
-                  width={48}
-                  height={48}
-                  className="relative h-12 w-12"
+                  width={68}
+                  height={58}
+                  className="relative h-14 w-24"
                 />
-                <span className="mr-3 text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                  نوین پلکسی
-                </span>
-              </div>
+             
+             
             </Link>
 
             {/* Desktop Navigation */}
