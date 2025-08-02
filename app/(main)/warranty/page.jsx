@@ -10,7 +10,7 @@ import {
   FileText,
   Award,
 } from "lucide-react";
-import NewsletterComponent from "@/components/HomepageComponents/NewsletterComponent";
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -103,7 +103,7 @@ const WarrantyComponent = () => {
           </div>
         </div>
       </div>
-      <NewsletterComponent />
+   
     </div>
   );
 };

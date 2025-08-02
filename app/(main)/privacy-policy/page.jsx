@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import NewsletterComponent from "@/components/HomepageComponents/NewsletterComponent";
+
 
 export default function PrivacyPolicyPage() {
   return (
@@ -145,7 +145,7 @@ export default function PrivacyPolicyPage() {
           </Link>
         </div>
       </section>
-      <NewsletterComponent />
+   
     </div>
   );
 }

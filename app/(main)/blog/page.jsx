@@ -130,7 +130,7 @@ const  Blog = () => {
       </section>
 
       {/* Newsletter Signup */}
-      {/* <NewsletterComponent /> */}
+
     </div>
   );
 };

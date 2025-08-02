@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 
-import ContactOffice from "@/public/contact-office.jpg";
+
 const ContactPage = () => {
   return (
     <div className="bg-gray-100 min-h-screen">

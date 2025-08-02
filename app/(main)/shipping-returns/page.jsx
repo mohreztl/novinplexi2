@@ -1,7 +1,7 @@
 import React from "react";
 import { Truck, RotateCcw, Clock, DollarSign } from "lucide-react";
 import Link from "next/link";
-import NewsletterComponent from "@/components/HomepageComponents/NewsletterComponent";
+
 
 const ShippingReturnsPage = () => {
   const shippingInfo = [
@@ -129,7 +129,7 @@ const ShippingReturnsPage = () => {
       </section>
 
       {/* Newsletter Signup */}
-      <NewsletterComponent />
+   
     </div>
   );
 };

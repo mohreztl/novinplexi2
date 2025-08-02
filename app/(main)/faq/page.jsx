@@ -2,7 +2,7 @@
 import React from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Link from "next/link";
-import NewsletterComponent from "@/components/HomepageComponents/NewsletterComponent";
+
 
 const FAQPage = () => {
   const faqs = [
@@ -103,7 +103,7 @@ const FAQPage = () => {
       </section>
 
       {/* Newsletter Signup */}
-      <NewsletterComponent />
+
     </div>
   );
 };
