@@ -138,3 +138,12 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Custom blue background class */
+.bg-blues {
+  background-color: rgba(49, 80, 140, 1);
+}
+
+.text-blues {
+  color: rgba(49, 80, 140, 1);
+}
