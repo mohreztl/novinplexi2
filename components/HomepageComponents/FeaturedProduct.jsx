@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import axios from "axios";
-import HeroImageFallback from "@/public/heroimage1.jpg";
+import HeroImageFallback from "@/public/hero1.jpg";
 
 const FeaturedProduct = () => {
   const [featuredWatch1, setFeaturedWatch1] = useState(null);

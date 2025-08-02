@@ -162,9 +162,6 @@ const ContactPage = () => {
                   </div>
                 </div>
                 <div className="flex items-center">
-            
-                </div>
-                <div className="flex items-center">
                   <Headphones className="w-8 h-8 text-blues mr-4" />
                   <div>
                     <h3 className="text-xl font-semibold">تماس تلفنی</h3>
