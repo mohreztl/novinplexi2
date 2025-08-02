@@ -37,80 +37,10 @@ const BlogSection = () => {
     fetchArticles();
   }, []);
   
-  // فیلتر کردن مقالات بر اساس دسته‌بندی
-  const filteredArticles = activeCategory === 'all' 
-    ? articles 
-    : articles.filter(article => article.category === activeCategory);
 
   if (loading) {
     return <div className="py-20 text-center">در حال بارگذاری مقالات...</div>;
   }
-    {
-      id: 1,
-      title: '۱۰ نکته برش و پرداخت اکریلیک برای مبتدیان',
-      excerpt: 'در این مقاله به بررسی تکنیک‌های حرفه‌ای برش و پرداخت ورق‌های اکریلیک می‌پردازیم و نکات کلیدی برای جلوگیری از ترک خوردگی را بررسی می‌کنیم.',
-      category: 'tips',
-      date: '۱۴۰۲/۰۵/۱۲',
-      author: 'محمد حسینی',
-      readTime: '۵ دقیقه',
-      image: 'bg-gradient-to-br from-blue-100 to-indigo-200'
-    },
-    {
-      id: 2,
-      title: 'کاربردهای خلاقانه اکریلیک در دکوراسیون داخلی',
-      excerpt: 'اکریلیک با قابلیت‌های منحصر به فرد خود تحولی در طراحی داخلی ایجاد کرده است. در این مقاله جدیدترین ایده‌ها را بررسی می‌کنیم.',
-      category: 'design',
-      date: '۱۴۰۲/۰۴/۲۸',
-      author: 'فاطمه محمدی',
-      readTime: '۷ دقیقه',
-      image: 'bg-gradient-to-br from-purple-100 to-indigo-200'
-    },
-    {
-      id: 3,
-      title: 'راهنمای کامل انتخاب ضخامت مناسب ورق‌های Plexiglas',
-      excerpt: 'انتخاب ضخامت مناسب برای هر پروژه چالش برانگیز است. در این راهنما معیارهای انتخاب ضخامت بهینه را بررسی می‌کنیم.',
-      category: 'tips',
-      date: '۱۴۰۲/۰۴/۱۵',
-      author: 'رضا احمدی',
-      readTime: '۸ دقیقه',
-      image: 'bg-gradient-to-br from-cyan-100 to-blue-200'
-    },
-    {
-      id: 4,
-      title: 'نصب حرفه‌ای تابلوهای اکریلیک: از صفر تا صد',
-      excerpt: 'نصب صحیح تابلوهای اکریلیک کلید ماندگاری و زیبایی آن‌هاست. در این مقاله مراحل نصب حرفه‌ای را آموزش می‌دهیم.',
-      category: 'installation',
-      date: '۱۴۰۲/۰۳/۳۰',
-      author: 'علی کریمی',
-      readTime: '۱۰ دقیقه',
-      image: 'bg-gradient-to-br from-indigo-100 to-purple-200'
-    },
-    {
-      id: 5,
-      title: 'اکریلیک ضد خش: تکنولوژی جدید در صنعت پلیمرها',
-      excerpt: 'جدیدترین نوآوری در صنعت اکریلیک، ورق‌های ضد خش با دوام ۵ برابری. این مقاله به بررسی این تکنولوژی انقلابی می‌پردازد.',
-      category: 'innovations',
-      date: '۱۴۰۲/۰۳/۱۸',
-      author: 'زهرا امینی',
-      readTime: '۶ دقیقه',
-      image: 'bg-gradient-to-br from-blue-200 to-cyan-200'
-    },
-    {
-      id: 6,
-      title: 'طراحی مبلمان اکریلیک: ترکیب زیبایی و عملکرد',
-      excerpt: 'چگونه با استفاده از اکریلیک مبلمان مدرن و کاربردی طراحی کنیم؟ در این مقاله اصول طراحی مبلمان اکریلیک را بررسی می‌کنیم.',
-      category: 'design',
-      date: '۱۴۰۲/۰۳/۰۵',
-      author: 'حسن رضایی',
-      readTime: '۹ دقیقه',
-      image: 'bg-gradient-to-br from-violet-100 to-purple-200'
-    }
-  ];
-  
-  // فیلتر کردن مقالات بر اساس دسته‌بندی
-  const filteredArticles = activeCategory === 'all' 
-    ? articles 
-    : articles.filter(article => article.category === activeCategory);
 
   return (
     <section className="py-20 bg-gradient-to-b from-white to-blue-50">

@@ -14,29 +14,55 @@ import {
   LogIn,
   UserPlus,
   User,
+  Home,
+  Package,
+  Wrench,
+  Info,
+  Phone,
+  Mail,
+  MapPin,
+  Clock,
+  Sparkles,
+  BookOpen,
+  ChevronRight
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 const MobileMenu = ({
   isOpen,
-  setMenuClose,
+  closeMenu,
   searchOpen,
   setSearchOpen,
   searchTerm,
-  resultArr,
+  setSearchTerm,
+  resultArr = [],
   handleChange,
   handleSearchClose,
-  firstTwelveItems,
+  firstTwelveItems = [],
   categories = [],
+  services = [],
   session,
   user,
 }) => {
   const [expandedCategory, setExpandedCategory] = useState(null);
+  const [expandedServices, setExpandedServices] = useState(false);
   const { data: sessionData } = useSession();
+
+  // Use provided handleChange or create local one
+  const handleSearchChange = handleChange || ((e) => setSearchTerm({ search: e.target.value }));
+  
+  // Use provided handleSearchClose or create local one
+  const handleCloseSearch = handleSearchClose || (() => setSearchOpen(false));
 
   const toggleCategory = (slug) => {
     setExpandedCategory((prev) => (prev === slug ? null : slug));
+    setExpandedServices(false);
+  };
+
+  const toggleServices = () => {
+    setExpandedServices((prev) => !prev);
+    setExpandedCategory(null);
   };
 
   useEffect(() => {
@@ -51,38 +77,44 @@ const MobileMenu = ({
       }`}
     >
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-white border-b p-4 flex items-center justify-between">
-        <h2 className="text-xl font-bold text-[#31508c]">منو</h2>
-        <button onClick={setMenuClose} className="text-gray-600 hover:text-[#ffd700] transition">
+      <div className="sticky top-0 z-10 bg-gradient-to-r from-blue-50 to-indigo-50 backdrop-blur-sm border-b p-4 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Sparkles className="h-5 w-5 text-blue-600" />
+          <h2 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">نوین پلکسی</h2>
+        </div>
+        <button 
+          onClick={closeMenu} 
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-gray-600 shadow-md transition-all hover:bg-red-50 hover:text-red-600 hover:shadow-lg"
+        >
           <X className="h-6 w-6" />
         </button>
       </div>
 
       {/* Search Section */}
-      <div className="p-4 border-b">
+      <div className="p-4 border-b bg-gray-50">
         <div className="relative">
           <Input
-            value={searchTerm.search}
-            onChange={handleChange}
+            value={searchTerm?.search || ""}
+            onChange={handleSearchChange}
             placeholder="جستجوی محصولات..."
-            className="pl-10 bg-gray-50 border-gray-200 focus:border-[#31508c]"
+            className="pl-10 pr-4 h-12 bg-white border-2 border-gray-200 rounded-full focus:border-blue-600 focus:shadow-md transition-all"
             onClick={() => setSearchOpen(true)}
             type="text"
             name="search"
             id="search"
           />
-          <Search className="absolute left-3 top-2.5 h-5 w-5 text-[#31508c]/70" />
+          <Search className="absolute left-3 top-3.5 h-5 w-5 text-blue-600/70" />
         </div>
       </div>
 
       {/* Search Results Panel */}
       {searchOpen && (
-        <div className="flex flex-col h-[calc(100vh-112px)]">
-          <div className="sticky top-0 z-10 bg-white px-4 py-3 border-b flex justify-between items-center">
-            <span className="font-medium text-[#31508c]">نتایج جستجو</span>
+        <div className="flex flex-col h-[calc(100vh-128px)]">
+          <div className="sticky top-0 z-10 bg-white px-4 py-3 border-b flex justify-between items-center shadow-sm">
+            <span className="font-medium text-blue-600">نتایج جستجو</span>
             <button
-              onClick={handleSearchClose}
-              className="text-sm text-[#31508c] hover:text-[#ffd700] flex items-center gap-1 transition"
+              onClick={handleCloseSearch}
+              className="text-sm text-blue-600 hover:text-indigo-600 flex items-center gap-1 transition"
             >
               <X className="w-4 h-4" />
               بستن
@@ -96,43 +128,53 @@ const MobileMenu = ({
                   <Link
                     key={prod._id}
                     href={`/product/${prod.slug}`}
-                    onClick={handleSearchClose}
-                    className="flex items-center gap-3 p-3 rounded-lg border border-gray-100 hover:bg-gray-50 transition"
+                    onClick={() => {
+                      handleCloseSearch();
+                      closeMenu();
+                    }}
+                    className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:border-[#31508c]/20 transition-all group"
                   >
-                    <div className="w-20 h-20 relative flex-shrink-0">
+                    <div className="w-20 h-20 relative flex-shrink-0 rounded-lg overflow-hidden">
                       <Image
-                        src={prod.images[0] || "/placeholder.jpg"}
+                        src={prod.images?.[0] || "/placeholder.jpg"}
                         alt={prod.name}
                         fill
-                        className="rounded-md object-cover"
+                        className="object-cover group-hover:scale-105 transition-transform"
                       />
                     </div>
                     <div className="flex-1">
                       <h3 className="font-medium text-gray-800 line-clamp-1">{prod.name}</h3>
                       <p className="text-xs text-gray-500 mt-1">{prod.brand}</p>
-                      <p className="mt-1 font-bold text-[#31508c]">
+                      <p className="mt-2 font-bold text-[#31508c]">
                         {new Intl.NumberFormat('fa-IR').format(prod.price)} تومان
                       </p>
                     </div>
+                    <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-[#31508c] transition-colors" />
                   </Link>
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-10 text-gray-500">
-                <Search className="h-8 w-8 mb-2" />
-                <p>موردی یافت نشد</p>
+              <div className="flex flex-col items-center justify-center py-16 text-gray-500">
+                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                  <Search className="h-10 w-10 text-gray-400" />
+                </div>
+                <p className="text-lg font-medium">موردی یافت نشد</p>
+                <p className="text-sm mt-1">عبارت دیگری را امتحان کنید</p>
               </div>
             )}
           </div>
 
           {resultArr.length > 12 && (
-            <div className="sticky bottom-0 bg-white p-4 border-t">
+            <div className="sticky bottom-0 bg-white p-4 border-t shadow-lg">
               <Link 
                 href={`/searchedProducts/${searchTerm?.search}`} 
-                onClick={handleSearchClose}
+                onClick={() => {
+                  handleCloseSearch();
+                  closeMenu();
+                }}
                 className="block w-full"
               >
-                <Button className="w-full bg-[#31508c] hover:bg-[#31508c]/90 text-white py-3">
+                <Button className="w-full bg-gradient-to-r from-[#31508c] to-[#1e3a6f] hover:from-[#1e3a6f] hover:to-[#31508c] text-white py-3 shadow-md hover:shadow-lg transition-all">
                   نمایش همه نتایج ({resultArr.length})
                 </Button>
               </Link>
@@ -143,133 +185,221 @@ const MobileMenu = ({
 
       {/* Main Menu Content */}
       {!searchOpen && (
-        <div className="h-[calc(100vh-112px)] overflow-y-auto pb-4">
-          <ul className="px-4 py-2 space-y-1">
+        <div className="h-[calc(100vh-128px)] overflow-y-auto pb-4">
+          {/* User Section - Top */}
+          {session && (
+            <div className="mx-4 mt-4 p-4 rounded-xl bg-gradient-to-r from-blue-100 to-indigo-100">
+              <Link
+                href="/profile"
+                onClick={closeMenu}
+                className="flex items-center gap-3"
+              >
+                <div className="relative w-12 h-12">
+                  <Image
+                    src={user?.image || "/profile.jpg"}
+                    alt="Profile"
+                    fill
+                    className="rounded-full object-cover border-2 border-white shadow-md"
+                  />
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold text-gray-900">{session.user.name}</p>
+                  <p className="text-sm text-gray-600">مشاهده پروفایل</p>
+                </div>
+                <ChevronRight className="h-5 w-5 text-gray-500" />
+              </Link>
+            </div>
+          )}
+
+          <ul className="px-4 py-4 space-y-2">
+            {/* Home */}
             <li>
               <Link
                 href="/"
-                onClick={setMenuClose}
-                className="flex items-center px-3 py-3 rounded-lg hover:bg-gray-50 text-gray-700 hover:text-[#31508c]"
+                onClick={closeMenu}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 text-gray-700 hover:text-[#31508c] transition-all group"
               >
-                صفحه اصلی
+                <Home className="h-5 w-5 text-[#31508c] group-hover:scale-110 transition-transform" />
+                <span className="font-medium">صفحه اصلی</span>
               </Link>
             </li>
 
-            {/* Categories Section */}
-            <li className="mt-2">
-              <div className="px-3 py-2 text-sm font-medium text-gray-500">
-                دسته‌بندی‌ها
+            {/* Products Section */}
+            <li>
+              <div
+                className="flex items-center justify-between px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 cursor-pointer transition-all group"
+                onClick={() => toggleCategory('products')}
+              >
+                <div className="flex items-center gap-3">
+                  <Package className="h-5 w-5 text-[#31508c] group-hover:scale-110 transition-transform" />
+                  <span className="font-medium text-gray-700 group-hover:text-[#31508c]">محصولات</span>
+                </div>
+                {expandedCategory === 'products' ? (
+                  <ChevronUp className="h-5 w-5 text-[#31508c]" />
+                ) : (
+                  <ChevronDown className="h-5 w-5 text-gray-400 group-hover:text-[#31508c]" />
+                )}
               </div>
-              <ul className="mt-1 space-y-1">
-                {categories.map((cat) => (
-                  <li key={cat._id}>
-                    <div
-                      className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-gray-50 cursor-pointer"
-                      onClick={() => toggleCategory(cat.slug)}
-                    >
-                      <span className="text-gray-700">{cat.title}</span>
-                      {cat.children?.length > 0 && (
-                        expandedCategory === cat.slug ? (
-                          <ChevronUp className="h-4 w-4 text-gray-400" />
-                        ) : (
-                          <ChevronDown className="h-4 w-4 text-gray-400" />
-                        )
-                      )}
-                    </div>
-                    {expandedCategory === cat.slug && cat.children?.length > 0 && (
-                      <ul className="ml-4 mt-1 space-y-1 border-r-2 border-[#31508c]/20 pr-2">
-                        {cat.children.map((child) => (
-                          <li key={child._id}>
-                            <Link
-                              href={`/products/category/${child.slug}/1`}
-                              onClick={setMenuClose}
-                              className="block px-3 py-2 text-sm text-gray-600 hover:text-[#31508c] hover:bg-gray-50 rounded-lg"
-                            >
-                              {child.title}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </li>
-                ))}
-              </ul>
+              {expandedCategory === 'products' && (
+                <ul className="ml-6 mt-2 space-y-1 border-r-2 border-[#31508c]/20 pr-4">
+                  {categories.map((cat) => (
+                    <li key={cat._id}>
+                      <Link
+                        href={`/products/category/${cat.slug}/1`}
+                        onClick={closeMenu}
+                        className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-[#31508c] hover:bg-blue-50 rounded-lg transition-all"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                        {cat.title || cat.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
 
+            {/* Services Section */}
+            <li>
+              <div
+                className="flex items-center justify-between px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 cursor-pointer transition-all group"
+                onClick={toggleServices}
+              >
+                <div className="flex items-center gap-3">
+                  <Wrench className="h-5 w-5 text-[#31508c] group-hover:scale-110 transition-transform" />
+                  <span className="font-medium text-gray-700 group-hover:text-[#31508c]">خدمات</span>
+                </div>
+                {expandedServices ? (
+                  <ChevronUp className="h-5 w-5 text-[#31508c]" />
+                ) : (
+                  <ChevronDown className="h-5 w-5 text-gray-400 group-hover:text-[#31508c]" />
+                )}
+              </div>
+              {expandedServices && services && services.length > 0 && (
+                <ul className="ml-6 mt-2 space-y-1 border-r-2 border-[#31508c]/20 pr-4">
+                  {services.map((service) => (
+                    <li key={service._id}>
+                      <Link
+                        href={`/services/${service.slug}`}
+                        onClick={closeMenu}
+                        className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-[#31508c] hover:bg-blue-50 rounded-lg transition-all"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                        {service.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+
+            {/* Blog */}
             <li>
               <Link
                 href="/blog"
-                onClick={setMenuClose}
-                className="flex items-center px-3 py-3 rounded-lg hover:bg-gray-50 text-gray-700 hover:text-[#31508c]"
+                onClick={closeMenu}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 text-gray-700 hover:text-[#31508c] transition-all group"
               >
-                وبلاگ
+                <BookOpen className="h-5 w-5 text-[#31508c] group-hover:scale-110 transition-transform" />
+                <span className="font-medium">وبلاگ</span>
               </Link>
             </li>
-            <li>
-              <Link
-                href="/contact"
-                onClick={setMenuClose}
-                className="flex items-center px-3 py-3 rounded-lg hover:bg-gray-50 text-gray-700 hover:text-[#31508c]"
-              >
-                تماس با ما
-              </Link>
-            </li>
+
+            {/* About */}
             <li>
               <Link
                 href="/about"
-                onClick={setMenuClose}
-                className="flex items-center px-3 py-3 rounded-lg hover:bg-gray-50 text-gray-700 hover:text-[#31508c]"
+                onClick={closeMenu}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 text-gray-700 hover:text-[#31508c] transition-all group"
               >
-                درباره ما
+                <Info className="h-5 w-5 text-[#31508c] group-hover:scale-110 transition-transform" />
+                <span className="font-medium">درباره ما</span>
+              </Link>
+            </li>
+
+            {/* Contact */}
+            <li>
+              <Link
+                href="/contact"
+                onClick={closeMenu}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 text-gray-700 hover:text-[#31508c] transition-all group"
+              >
+                <Phone className="h-5 w-5 text-[#31508c] group-hover:scale-110 transition-transform" />
+                <span className="font-medium">تماس با ما</span>
               </Link>
             </li>
           </ul>
 
-          {/* User Section */}
-          <div className="mt-6 px-4">
-            {session ? (
-              <div className="space-y-3">
-                <Link
-                  href="/profile"
-                  onClick={setMenuClose}
-                  className="flex items-center gap-3 p-3 rounded-lg bg-gray-50"
-                >
-                  <div className="relative w-10 h-10">
-                    <Image
-                      src={user?.image || "/profile.jpg"}
-                      alt="Profile"
-                      fill
-                      className="rounded-full object-cover"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-medium text-gray-800">{session.user.name}</p>
-                    <p className="text-xs text-gray-500">مشاهده پروفایل</p>
-                  </div>
-                </Link>
-                <Button
-                  onClick={() => signOut()}
-                  variant="outline"
-                  className="w-full flex items-center gap-2 text-gray-700 border-gray-200 hover:border-red-100 hover:bg-red-50 hover:text-red-600"
-                >
-                  <LogOut className="h-4 w-4" />
-                  خروج از حساب
-                </Button>
+          {/* Contact Info Box */}
+          <div className="mx-4 mt-6 p-4 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100">
+            <h3 className="font-semibold text-gray-900 mb-4">اطلاعات تماس</h3>
+            <div className="space-y-3">
+              <a href="tel:+982112345678" className="flex items-center gap-3 text-sm text-gray-600 hover:text-[#31508c] transition-colors">
+                <div className="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-sm">
+                  <Phone className="h-4 w-4 text-[#31508c]" />
+                </div>
+                <span>۰۲۱-۱۲۳۴۵۶۷۸</span>
+              </a>
+              <a href="mailto:info@novinplexi.com" className="flex items-center gap-3 text-sm text-gray-600 hover:text-[#31508c] transition-colors">
+                <div className="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-sm">
+                  <Mail className="h-4 w-4 text-[#31508c]" />
+                </div>
+                <span>info@novinplexi.com</span>
+              </a>
+              <div className="flex items-start gap-3 text-sm text-gray-600">
+                <div className="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-sm">
+                  <MapPin className="h-4 w-4 text-[#31508c]" />
+                </div>
+                <span>تهران، خیابان ولیعصر</span>
               </div>
+              <div className="flex items-center gap-3 text-sm text-gray-600">
+                <div className="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-sm">
+                  <Clock className="h-4 w-4 text-[#31508c]" />
+                </div>
+                <span>شنبه تا پنجشنبه: ۹ - ۱۸</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Cart Button */}
+          <div className="mx-4 mt-4">
+            <Link
+              href="/cart"
+              onClick={closeMenu}
+              className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#31508c] to-[#1e3a6f] py-3 text-white shadow-md hover:shadow-lg transition-all"
+            >
+              <ShoppingCart className="h-5 w-5" />
+              <span className="font-medium">مشاهده سبد خرید</span>
+            </Link>
+          </div>
+
+          {/* Auth Section - Bottom */}
+          <div className="mx-4 mt-4 mb-4">
+            {session ? (
+              <Button
+                onClick={() => {
+                  signOut();
+                  closeMenu();
+                }}
+                variant="outline"
+                className="w-full flex items-center gap-2 text-gray-700 border-2 border-gray-200 hover:border-red-200 hover:bg-red-50 hover:text-red-600 rounded-xl py-3 transition-all"
+              >
+                <LogOut className="h-5 w-5" />
+                خروج از حساب
+              </Button>
             ) : (
               <div className="grid grid-cols-2 gap-3">
-                <Link href="/login" onClick={setMenuClose} className="block">
+                <Link href="/login" onClick={closeMenu} className="block">
                   <Button
                     variant="outline"
-                    className="w-full flex items-center gap-2 border-gray-200"
+                    className="w-full flex items-center gap-2 border-2 border-gray-200 hover:border-[#31508c] hover:text-[#31508c] rounded-xl py-3 transition-all"
                   >
-                    <LogIn className="h-4 w-4" />
+                    <LogIn className="h-5 w-5" />
                     ورود
                   </Button>
                 </Link>
-                <Link href="/register" onClick={setMenuClose} className="block">
-                  <Button className="w-full flex items-center gap-2 bg-[#31508c] hover:bg-[#31508c]/90">
-                    <UserPlus className="h-4 w-4" />
+                <Link href="/register" onClick={closeMenu} className="block">
+                  <Button className="w-full flex items-center gap-2 bg-gradient-to-r from-[#31508c] to-[#1e3a6f] hover:from-[#1e3a6f] hover:to-[#31508c] text-white rounded-xl py-3 shadow-md hover:shadow-lg transition-all">
+                    <UserPlus className="h-5 w-5" />
                     ثبت نام
                   </Button>
                 </Link>

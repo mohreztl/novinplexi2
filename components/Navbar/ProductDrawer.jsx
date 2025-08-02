@@ -12,6 +12,7 @@ const ProductDrawer = ({ isOpen, setIsOpen }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+
     const fetchCategories = async () => {
       try {
         const res = await axios.get("/api/categories?includeChildren=true");

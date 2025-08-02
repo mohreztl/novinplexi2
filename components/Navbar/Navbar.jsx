@@ -6,40 +6,166 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { Search, Menu, X, ChevronDown, ShoppingBag, User } from "lucide-react";
+import { 
+  Search, 
+  Menu, 
+  X, 
+  ChevronDown, 
+  ShoppingBag, 
+  User,
+  Phone,
+  Mail,
+  MapPin,
+  Clock,
+  Sparkles,
+  Package,
+  Wrench,
+  ChevronRight
+} from "lucide-react";
 import CartIcon from "../CartIcon";
-import CartIconMobile from "../CartIconMobile";
 import SearchDrawer from "./SearchDrawer";
 import ProductDrawer from "./ProductDrawer";
+import ServiceDrawer from "./ServiceDrawer";
 import AdminDrawer from "./AdminDrawer";
 import MobileMenu from "./MobileMenu";
-import NavbarLinks from "./NavbarLinks";
 import UserSection from "./UserSection";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import Loader from "../ui/Loader";
 import useMobileMenuStore from "@/store/useMobileMenuStore";
 
-const NavbarLink = ({ href, children, hasDropdown, isOpen, onClick }) => (
+// Contact Section Component for Mega Menus
+const ContactSection = () => (
+  <div className="border-r border-gray-100 pl-8 pr-6">
+    <h4 className="mb-4 text-lg font-bold text-gray-900">تماس با ما</h4>
+    <div className="space-y-3">
+      <a href="tel:+982112345678" className="flex items-center gap-3 text-sm text-gray-600 transition-colors hover:text-blue-600">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-50">
+          <Phone className="h-4 w-4 text-blue-600" />
+        </div>
+        <span>۰۲۱-۱۲۳۴۵۶۷۸</span>
+      </a>
+      <a href="mailto:info@novinplexi.com" className="flex items-center gap-3 text-sm text-gray-600 transition-colors hover:text-blue-600">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-50">
+          <Mail className="h-4 w-4 text-blue-600" />
+        </div>
+        <span>info@novinplexi.com</span>
+      </a>
+      <div className="flex items-start gap-3 text-sm text-gray-600">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-50">
+          <MapPin className="h-4 w-4 text-blue-600" />
+        </div>
+        <span className="flex-1">تهران، خیابان ولیعصر، پلاک ۲۵۴</span>
+      </div>
+      <div className="flex items-center gap-3 text-sm text-gray-600">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-50">
+          <Clock className="h-4 w-4 text-blue-600" />
+        </div>
+        <span>شنبه تا پنجشنبه: ۹ - ۱۸</span>
+      </div>
+    </div>
+  </div>
+);
+
+// Enhanced Navbar Link Component
+const NavbarLink = ({ href, children, hasDropdown, isOpen, onClick, icon: Icon }) => (
   <Link
     href={href}
-    className="group relative flex items-center gap-1.5 rounded-full px-4 py-2 transition-all hover:bg-[#31508c]/10"
+    className="group relative flex items-center gap-2 rounded-full px-5 py-2.5 transition-all hover:bg-white/50 hover:shadow-md"
     onClick={onClick}
   >
-    <span className="text-base font-medium text-gray-700 transition-colors group-hover:text-[#31508c]">
+    {Icon && <Icon className="h-4 w-4 text-gray-600 transition-colors group-hover:text-blue-600" />}
+    <span className="text-base font-medium text-gray-700 transition-colors group-hover:text-blue-600">
       {children}
     </span>
     {hasDropdown && (
-      <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform group-hover:text-[#31508c] ${isOpen ? 'rotate-180' : ''}`} />
+      <ChevronDown className={`h-4 w-4 text-gray-500 transition-all duration-300 group-hover:text-blue-600 ${isOpen ? 'rotate-180' : ''}`} />
     )}
-    <span className="absolute bottom-1 right-4 h-[2px] w-[calc(100%-2rem)] origin-right scale-x-0 bg-[#ffd700] transition-all duration-500 group-hover:scale-x-100" />
+    <span className="absolute bottom-0 right-5 h-0.5 w-[calc(100%-2.5rem)] origin-right scale-x-0 bg-gradient-to-r from-blue-600 to-indigo-600 transition-all duration-500 group-hover:scale-x-100" />
   </Link>
+);
+
+// Products Mega Menu
+const ProductsMegaMenu = ({ categories, onClose }) => (
+  <motion.div
+    initial={{ opacity: 0, y: -10 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -10 }}
+    className="absolute right-0 top-full mt-2 w-[800px] overflow-hidden rounded-2xl bg-white shadow-2xl"
+  >
+    <div className="flex">
+      <div className="flex-1 p-8">
+        <h3 className="mb-6 text-xl font-bold text-gray-900">دسته‌بندی محصولات</h3>
+        <div className="grid grid-cols-2 gap-4">
+          {categories.map((category) => (
+            <Link
+              key={category._id}
+              href={`/products?category=${category.slug}`}
+              className="group flex items-center gap-3 rounded-lg p-3 transition-all hover:bg-blue-50"
+              onClick={onClose}
+            >
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 transition-colors group-hover:bg-blue-600">
+                <Package className="h-5 w-5 text-gray-600 transition-colors group-hover:text-white" />
+              </div>
+              <div>
+                <p className="font-medium text-gray-900">{category.name}</p>
+                {category.description && (
+                  <p className="text-sm text-gray-500">{category.description}</p>
+                )}
+              </div>
+              <ChevronRight className="mr-auto h-4 w-4 text-gray-400 transition-transform group-hover:translate-x-1" />
+            </Link>
+          ))}
+        </div>
+      </div>
+      <ContactSection />
+    </div>
+  </motion.div>
+);
+
+// Services Mega Menu
+const ServicesMegaMenu = ({ services, onClose }) => (
+  <motion.div
+    initial={{ opacity: 0, y: -10 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -10 }}
+    className="absolute right-0 top-full mt-2 w-[800px] overflow-hidden rounded-2xl bg-white shadow-2xl"
+  >
+    <div className="flex">
+      <div className="flex-1 p-8">
+        <h3 className="mb-6 text-xl font-bold text-gray-900">خدمات ما</h3>
+        <div className="grid grid-cols-2 gap-4">
+          {services.map((service) => (
+            <Link
+              key={service._id}
+              href={`/services/${service.slug}`}
+              className="group flex items-center gap-3 rounded-lg p-3 transition-all hover:bg-blue-50"
+              onClick={onClose}
+            >
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 transition-colors group-hover:bg-blue-600">
+                <Wrench className="h-5 w-5 text-gray-600 transition-colors group-hover:text-white" />
+              </div>
+              <div>
+                <p className="font-medium text-gray-900">{service.name}</p>
+                {service.description && (
+                  <p className="text-sm text-gray-500">{service.description}</p>
+                )}
+              </div>
+              <ChevronRight className="mr-auto h-4 w-4 text-gray-400 transition-transform group-hover:translate-x-1" />
+            </Link>
+          ))}
+        </div>
+      </div>
+      <ContactSection />
+    </div>
+  </motion.div>
 );
 
 const Navbar = () => {
   const router = useRouter();
   const { data: session } = useSession();
   const [productOpen, setProductOpen] = useState(false);
+  const [serviceOpen, setServiceOpen] = useState(false);
   const [admin, setAdmin] = useState(false);
   const [adminPanelMob, setAdminPanelMob] = useState(false);
   const [productModile, setProductModile] = useState(false);
@@ -54,19 +180,25 @@ const Navbar = () => {
   const [activeCategory, setActiveCategory] = useState(null);
   const user = session?.user;
   const [categories, setCategories] = useState([]);
+  const [services, setServices] = useState([]);
 
-  // Fetch categories effect
+  // Fetch categories and services
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchData = async () => {
       try {
-        const res = await axios.get("/api/categories");
-        setCategories(res.data.categories || []);
+        const [categoriesRes, servicesRes] = await Promise.all([
+          axios.get("/api/categories"),
+          axios.get("/api/services")
+        ]);
+        setCategories(categoriesRes.data.categories || []);
+        setServices(servicesRes.data.services || []);
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        console.error("Error fetching data:", error);
         setCategories([]);
+        setServices([]);
       }
     };
-    fetchCategories();
+    fetchData();
   }, []);
 
   // Scroll effect
@@ -78,117 +210,171 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Close menus when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest('.mega-menu-container')) {
+        setProductOpen(false);
+        setServiceOpen(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
   return (
-    <nav
-      className={`fixed top-0 z-50 w-full transition-all duration-300 ${
-        isScrolled
-          ? "bg-gradient-to-r from-blue-200/80 to-indigo-200/80 backdrop-blur-md shadow-md"
-          : "bg-transparent"
-      }`}
-    >
-      <div className="mx-auto md:px-8 px-4">
-        <div className="flex h-20 items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center space-x-3 z-30">
-            <div className="flex items-center justify-center">
-              <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 p-1 shadow-lg">
-                <div className="flex h-full w-full items-center justify-center rounded-lg bg-white/90 backdrop-blur-sm">
-                  <div className="h-8 w-8 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-md"></div>
+    <>
+      <nav
+        className={`fixed top-0 z-50 w-full transition-all duration-500 ${
+          isScrolled
+            ? "bg-white/95 backdrop-blur-lg shadow-lg"
+            : "bg-gradient-to-b from-white/80 to-transparent backdrop-blur-sm"
+        }`}
+      >
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-20 items-center justify-between">
+            {/* Logo */}
+            <Link href="/" className="group flex items-center space-x-3 z-30">
+              <div className="relative flex items-center">
+                <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-blue-400 to-indigo-400 opacity-0 blur transition duration-500 group-hover:opacity-75"></div>
+                <Image
+                  src="/logo1.svg"
+                  alt="نوین پلکسی"
+                  width={48}
+                  height={48}
+                  className="relative h-12 w-12"
+                />
+                <span className="mr-3 text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                  نوین پلکسی
+                </span>
+              </div>
+            </Link>
+
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex lg:items-center lg:space-x-reverse lg:space-x-6">
+              <NavbarLink href="/" icon={Sparkles}>
+                صفحه اصلی
+              </NavbarLink>
+              
+              <div className="mega-menu-container relative">
+                <NavbarLink
+                  href="#"
+                  hasDropdown
+                  isOpen={productOpen}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setProductOpen(!productOpen);
+                    setServiceOpen(false);
+                  }}
+                  icon={Package}
+                >
+                  محصولات
+                </NavbarLink>
+                <AnimatePresence>
+                  {productOpen && (
+                    <ProductsMegaMenu 
+                      categories={categories} 
+                      onClose={() => setProductOpen(false)}
+                    />
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <div className="mega-menu-container relative">
+                <NavbarLink
+                  href="#"
+                  hasDropdown
+                  isOpen={serviceOpen}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setServiceOpen(!serviceOpen);
+                    setProductOpen(false);
+                  }}
+                  icon={Wrench}
+                >
+                  خدمات
+                </NavbarLink>
+                <AnimatePresence>
+                  {serviceOpen && (
+                    <ServicesMegaMenu 
+                      services={services} 
+                      onClose={() => setServiceOpen(false)}
+                    />
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <NavbarLink href="/about">
+                درباره ما
+              </NavbarLink>
+              
+              <NavbarLink href="/contact">
+                تماس با ما
+              </NavbarLink>
+            </div>
+
+            {/* Search and Actions */}
+            <div className="flex items-center gap-4">
+              {/* Desktop Search */}
+              <div className="hidden lg:block">
+                <div className="group relative">
+                  <Input
+                    type="text"
+                    placeholder="جستجو محصولات..."
+                    className="w-64 rounded-full border-2 border-gray-200 bg-gray-50 py-2.5 pl-11 pr-4 text-sm transition-all focus:border-blue-600 focus:bg-white focus:shadow-lg focus:w-72"
+                    value={searchTerm.search}
+                    onChange={(e) => setSearchTerm({ search: e.target.value })}
+                    onFocus={() => setSearchOpen(true)}
+                  />
+                  <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400 transition-colors group-focus-within:text-blue-600" />
                 </div>
               </div>
-              <span className="ml-3 text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent">
-                نوین پلکسی
-              </span>
-            </div>
-          </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex md:space-x-6">
-            <NavbarLinks
-              session={session}
-              productOpen={productOpen}
-              setProductOpen={setProductOpen}
-              setAdmin={setAdmin}
-            />
-          </div>
-
-          {/* Search and Actions */}
-          <div className="flex items-center space-x-4">
-            {/* Desktop Search */}
-            <div className="hidden lg:block">
-              <div className="relative">
-                <Input
-                  type="text"
-                  placeholder="جستجو محصولات..."
-                  className="w-64 rounded-full border border-blue-200 bg-white/80 py-2 pl-10 pr-4"
-                  value={searchTerm.search}
-                  onChange={(e) => setSearchTerm({ search: e.target.value })}
-                  onFocus={() => setSearchOpen(true)}
-                />
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="absolute left-3 top-2.5 h-5 w-5 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </div>
-            </div>
-
-            {/* User Actions */}
-            <div className="flex space-x-2">
-              <CartIcon />
-              <UserSection session={session} admin={admin} setAdmin={setAdmin} />
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              className="rounded-lg p-2 text-gray-700 hover:bg-blue-50 md:hidden"
-              onClick={() => openMenu()}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+              {/* Mobile Search */}
+              <button
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-all hover:bg-blue-600 hover:text-white lg:hidden"
+                onClick={() => setSearchOpen(true)}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
-                />
-              </svg>
-            </button>
+                <Search className="h-5 w-5" />
+              </button>
+
+              {/* Cart Icon */}
+              <CartIcon />
+
+              {/* User Section */}
+              <UserSection session={session} admin={admin} setAdmin={setAdmin} />
+
+              {/* Mobile Menu Button */}
+              <button
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-all hover:bg-blue-600 hover:text-white lg:hidden"
+                onClick={() => openMenu()}
+              >
+                {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      </nav>
 
       {/* Mobile Menu */}
-      <AnimatePresence>
-        {isOpen && (
-          <MobileMenu
-            categories={categories}
-            setProductModile={setProductModile}
-            setCategory={setCategory}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            isOpen={isOpen}
-            closeMenu={closeMenu}
-          />
-        )}
-      </AnimatePresence>
+      <MobileMenu
+        isOpen={isOpen}
+        closeMenu={closeMenu}
+        searchOpen={searchOpen}
+        setSearchOpen={setSearchOpen}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        resultArr={resultArr}
+        handleChange={(e) => setSearchTerm({ search: e.target.value })}
+        handleSearchClose={() => setSearchOpen(false)}
+        firstTwelveItems={firstTwelveItems}
+        categories={categories}
+        services={services}
+        session={session}
+        user={user}
+      />
 
       {/* Drawers */}
-      {/* Search Drawer */}
       <SearchDrawer
         searchOpen={searchOpen}
         setSearchOpen={setSearchOpen}
@@ -200,23 +386,24 @@ const Navbar = () => {
         isSearching={isSearching}
       />
 
-      {/* Product Drawer */}
       <ProductDrawer
         isOpen={productOpen}
         setIsOpen={setProductOpen}
         category={category}
       />
 
-      {/* Admin Drawer */}
+      <ServiceDrawer
+        isOpen={serviceOpen}
+        setIsOpen={setServiceOpen}
+        services={services}
+      />
+
       <AdminDrawer
         admin={admin}
         setAdmin={setAdmin}
         session={session}
       />
-
-      {/* Mobile Cart */}
-      <CartIconMobile />
-    </nav>
+    </>
   );
 };
 
