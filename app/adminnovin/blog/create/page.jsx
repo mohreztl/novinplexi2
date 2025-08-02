@@ -15,7 +15,7 @@ import ReactQuill from "react-quill";
 
 const Editor = dynamic(() => import("@/components/ui/Editor"), { ssr: false });
 
-const CreateBlog = () => {
+const CreateBlog = async () => {
   const router = useRouter();
   const { data: session, status } = useSession();
   const { control, register, handleSubmit, setValue, formState: { errors } } = useForm({
@@ -75,12 +75,12 @@ const CreateBlog = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!formData.title || !content || !images.length) {
-      toast.error("لطفا تمام فیلدهای ضروری را پر کنید");
-      return;
-    }
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (!formData.title || !content || !images.length) {
+  //     toast.error("لطفا تمام فیلدهای ضروری را پر کنید");
+  //     return;
+  //   }
 
     setLoading(true);
     try {
@@ -271,6 +271,6 @@ const CreateBlog = () => {
       </form>
     </div>
   );
-}
+
 
 export default CreateBlog;
