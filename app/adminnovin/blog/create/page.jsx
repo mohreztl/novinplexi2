@@ -67,7 +67,7 @@ const CreateBlog = () => {
     "اخبار",
   ];
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e) => {
     if (!e.target.files) return;
     
     const files = Array.from(e.target.files);
@@ -100,7 +100,7 @@ const CreateBlog = () => {
     }
   };
 
-  const removeImage = (index: number) => {
+  const removeImage = (index) => {
     const currentImages = watch("images");
     const newImages = currentImages.filter((_, i) => i !== index);
     setValue("images", newImages);
