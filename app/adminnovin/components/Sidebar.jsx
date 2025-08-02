@@ -17,7 +17,7 @@ const itemList = [
       <ShoppingBagIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-blues rounded-full md:rounded-none md:border-none " />
     ),
     name: "داشبورد",
-    link: "/adminnikoo",
+    link: "/adminnovin",
   },
 
   {
@@ -25,7 +25,7 @@ const itemList = [
       <PresentationChartBarIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-blues rounded-full md:rounded-none md:border-none" />
     ),
     name: " ایجاد محصول جدید ",
-    link: "/adminnikoo/create",
+    link: "/adminnovin/create",
   },
 
   {
@@ -33,41 +33,41 @@ const itemList = [
       <ShoppingBagIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-blues rounded-full md:rounded-none md:border-none" />
     ),
     name: "محصولات",
-    link: "/adminnikoo/products",
+    link: "/adminnovin/products",
   },
   {
     icon: (
       <ShoppingBagIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-blues rounded-full md:rounded-none md:border-none" />
     ),
     name: "دسته بندی ها",
-    link: "/adminnikoo/category",
+    link: "/adminnovin/category",
   },
   {
     icon: (
       <ShoppingBagIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-blues rounded-full md:rounded-none md:border-none" />
     ),
     name: " برند ها",
-    link: "/adminnikoo/brand",
+    link: "/adminnovin/brand",
   },
   {
     icon: (
       <InboxIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-blues rounded-full md:rounded-none md:border-none" />
     ),
     name: "سفارشات",
-    link: "/adminnikoo/orders",
+    link: "/adminnovin/orders",
   },
   {
     icon: (
       <InboxIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-blues rounded-full md:rounded-none md:border-none" />
     ),
     name: "وبلاگ",
-    link: "/adminnikoo/blog",
+    link: "/adminnovin/blog",
   }, {
     icon: (
       <InboxIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-blues rounded-full md:rounded-none md:border-none" />
     ),
     name: "ساخت وبلاگ",
-    link: "/adminnikoo/blog/create",
+    link: "/adminnovin/blog/create",
   },
   
 ];

@@ -283,7 +283,7 @@ const OrdersPage = () => {
                       variant="ghost"
                       size="icon"
                       onClick={() =>
-                        router.push(`/adminnikoo/orders/${order._id}`)
+                        router.push(`/adminnovin/orders/${order._id}`)
                       }
                     >
                       <Eye className="w-4 h-4" />

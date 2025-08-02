@@ -148,7 +148,7 @@ const Page = () => {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">مدیریت محصولات</h1>
           <Button
-            onClick={() => router.push("/adminnikoo/products/create")}
+            onClick={() => router.push("/adminnovin/products/create")}
             className="gap-2"
           >
             <PlusCircle className="w-4 h-4" />
@@ -304,7 +304,7 @@ const Page = () => {
                         variant="ghost"
                         size="icon"
                         onClick={() =>
-                          router.push(`/adminnikoo/products/edit/${product.slug}`)
+                          router.push(`/adminnovin/products/edit/${product.slug}`)
                         }
                       >
                         <Edit2 className="w-4 h-4" />

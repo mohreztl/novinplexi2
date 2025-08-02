@@ -17,5 +17,5 @@ export async function middleware(req) {
 }
 
 export const config = {
-  matcher: ["/api/admin/:path*", "/adminnikoo/:path*"], // مسیرهایی که نیاز به بررسی دارند
+  matcher: ["/api/admin/:path*", "/adminnovin/:path*"], // مسیرهایی که نیاز به بررسی دارند
 };

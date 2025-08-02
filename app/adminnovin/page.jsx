@@ -42,34 +42,34 @@ export default function AdminDashboard() {
     {
       title: "محصولات",
       icon: FiBox,
-      link: "/adminnikoo/products",
+      link: "/adminnovin/products",
       stat: stats.totalProducts,
       color: "from-blue-600 to-blue-400"
     },
     {
       title: "سفارشات",
       icon: FiShoppingBag,
-      link: "/adminnikoo/orders",
+      link: "/adminnovin/orders",
       stat: stats.totalOrders,
       color: "from-green-600 to-green-400"
     },
     {
       title: "دسته‌بندی‌ها",
       icon: FiGrid,
-      link: "/adminnikoo/category",
+      link: "/adminnovin/category",
       stat: stats.totalCategories,
       color: "from-purple-600 to-purple-400"
     },
     {
       title: "بلاگ",
       icon: FiFileText,
-      link: "/adminnikoo/blog",
+      link: "/adminnovin/blog",
       color: "from-yellow-600 to-yellow-400"
     },
     {
       title: "تنظیمات",
       icon: FiSettings,
-      link: "/adminnikoo/settings",
+      link: "/adminnovin/settings",
       color: "from-red-600 to-red-400"
     }
   ];

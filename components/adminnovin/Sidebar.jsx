@@ -23,32 +23,32 @@ const Sidebar = () => {
   const menuItems = [
     {
       title: 'داشبورد',
-      href: '/adminnikoo',
+      href: '/adminnovin',
       icon: LayoutDashboard
     },
     {
       title: 'محصولات',
-      href: '/adminnikoo/products',
+      href: '/adminnovin/products',
       icon: Package
     },
     {
       title: 'سفارشات',
-      href: '/adminnikoo/orders',
+      href: '/adminnovin/orders',
       icon: ShoppingCart
     },
     {
       title: 'کاربران',
-      href: '/adminnikoo/users',
+      href: '/adminnovin/users',
       icon: Users
     },
     {
       title: 'وبلاگ',
-      href: '/adminnikoo/blog',
+      href: '/adminnovin/blog',
       icon: FileText
     },
     {
       title: 'تنظیمات',
-      href: '/adminnikoo/settings',
+      href: '/adminnovin/settings',
       icon: Settings
     }
   ];
@@ -77,7 +77,7 @@ const Sidebar = () => {
       >
         {/* Logo Section */}
         <div className="flex items-center justify-center h-16 border-b border-gray-200">
-          <Link href="/adminnikoo" className="flex items-center gap-2">
+          <Link href="/adminnovin" className="flex items-center gap-2">
             <Image
               src="/nikoodecor.webp"
               alt="نوین پلکسی"

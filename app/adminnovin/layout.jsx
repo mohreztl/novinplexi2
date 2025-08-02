@@ -1,4 +1,4 @@
-import Sidebar from "@/components/adminnikoo/Sidebar";
+import Sidebar from "@/components/adminnovin/Sidebar";
 import isAdmin from "@/utils/isAdmin";
 import "@/app/globals.css";
 

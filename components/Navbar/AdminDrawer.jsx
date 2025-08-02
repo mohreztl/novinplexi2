@@ -8,7 +8,7 @@ const AdminDrawer = ({ admin, category, setCategory }) => {
         <div className="flex justify-between w-full h-full">
           <div className="w-full h-full flex flex-col justify-between">
             <div>
-              <Link className="bg-slate-100 h-14 w-full flex justify-center" href="/adminnikoo">
+              <Link className="bg-slate-100 h-14 w-full flex justify-center" href="/adminnovin">
                 <span className="text-2xl pt-2 text-black font-bold">
                   Admin Panel
                 </span>

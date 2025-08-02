@@ -48,7 +48,7 @@ export default function BlogTable({ blogs, page, totalPages }) {
               </td>
               <td className="p-2 border flex gap-2">
                 <Link
-                  href={`/adminnikoo/blog/edit/${blog._id}`}
+                  href={`/adminnovin/blog/edit/${blog._id}`}
                   className="text-blue-600 underline"
                 >
                   ویرایش
