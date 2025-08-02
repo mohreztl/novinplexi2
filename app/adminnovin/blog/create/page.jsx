@@ -106,7 +106,7 @@ const CreateBlog = () => {
     setValue("images", newImages);
   };
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data) => {
     try {
       setLoading(true);
       await axios.post("/api/blog", data);
