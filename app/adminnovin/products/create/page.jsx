@@ -10,7 +10,7 @@ import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 import * as z from "zod";
-import { Loader2, X, Plus, Minus } from "lucide-react";
+import { Loader2, X, Plus } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -190,7 +190,7 @@ const CreateProduct = () => {
                 </label>
                 <Input
                   {...register("name")}
-                  className={`${errors.name ? "border-red-500" : ""}`}
+                  className={errors.name ? "border-red-500" : ""}
                   placeholder="نام محصول خود را وارد کنید"
                 />
                 {errors.name && (
@@ -206,7 +206,7 @@ const CreateProduct = () => {
                 </label>
                 <Input
                   {...register("slug")}
-                  className={`${errors.slug ? "border-red-500" : ""}`}
+                  className={errors.slug ? "border-red-500" : ""}
                   placeholder="نامک محصول (برای SEO)"
                 />
                 {errors.slug && (
@@ -224,12 +224,15 @@ const CreateProduct = () => {
                   name="categories"
                   control={control}
                   render={({ field }) => (
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select 
+                      onValueChange={field.onChange} 
+                      value={field.value}
+                    >
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="انتخاب دسته‌بندی" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">بدون دسته‌بندی</SelectItem>
+                        {/* حذف گزینه با مقدار خالی */}
                         {categories.map((cat) => (
                           <React.Fragment key={cat._id}>
                             <SelectItem value={cat._id}>
@@ -419,7 +422,7 @@ const CreateProduct = () => {
                 </label>
                 <Textarea
                   rows={3}
-                  className={`${errors.description ? "border-red-500" : ""}`}
+                  className={errors.description ? "border-red-500" : ""}
                   placeholder="توضیحات مختصر محصول"
                   {...register("description")}
                 />
@@ -436,7 +439,7 @@ const CreateProduct = () => {
                 </label>
                 <Textarea
                   rows={5}
-                  className={`${errors.fullDescription ? "border-red-500" : ""}`}
+                  className={errors.fullDescription ? "border-red-500" : ""}
                   placeholder="توضیحات کامل محصول"
                   {...register("fullDescription")}
                 />
@@ -463,7 +466,7 @@ const CreateProduct = () => {
                 </label>
                 <Input
                   type="number"
-                  className={`${errors.originalPrice ? "border-red-500" : ""}`}
+                  className={errors.originalPrice ? "border-red-500" : ""}
                   placeholder="قیمت پایه محصول"
                   {...register("originalPrice")}
                 />
