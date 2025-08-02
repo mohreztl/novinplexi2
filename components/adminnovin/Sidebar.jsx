@@ -11,7 +11,8 @@ import {
   FileText,
   ChevronDown,
   Menu,
-  X
+  X,
+  Folder
 } from 'lucide-react';
 import Image from 'next/image';
 
@@ -30,6 +31,11 @@ const Sidebar = () => {
       title: 'محصولات',
       href: '/adminnovin/products',
       icon: Package
+    },
+    {
+      title: 'دسته‌بندی‌ها',
+      href: '/adminnovin/category',
+      icon: Folder
     },
     {
       title: 'سفارشات',

@@ -66,7 +66,7 @@ const CreateProduct = () => {
   } = useForm({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      name: "کاغذ دیواری",
+      name: "",
       slug: "",
       categories: "",
       description: "",
