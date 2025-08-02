@@ -55,7 +55,7 @@ const ContactPage = () => {
             <div className="bg-white rounded-lg shadow-lg p-6 text-center">
               <Mail className="w-12 h-12 mx-auto mb-4 text-blues" />
               <h3 className="text-xl font-semibold mb-2">ایمیل</h3>
-              <p>support@nikodecor.com</p>
+              <p>support@novinplexi.com</p>
             </div>
             <div className="bg-white rounded-lg shadow-lg p-6 text-center">
               <Clock className="w-12 h-12 mx-auto mb-4 text-blues" />
