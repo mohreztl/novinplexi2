@@ -2,7 +2,7 @@
 import "../globals.css";
 
 import Navbar from "@/components/Navbar/Navbar";
-import Footer from "@/components/Footer/Footer";
+import Footer from "@/components/home/Footer";
 import MobileBottomNav from "@/components/MobileBottomNav"
 import AuthProvider from "@/components/AuthProvider";
 
@@ -30,8 +30,8 @@ export default function RootLayout({ children }) {
           <main>
             {children}
           </main>
-          {/* <Footer className="p-0" /> */}
-          <MobileBottomNav />
+          <Footer className="p-0" />
+          {/* <MobileBottomNav /> */}
         </AuthProvider>
       </body>
   

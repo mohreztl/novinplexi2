@@ -67,7 +67,7 @@ export default function Home() {
       </section>
 
       {/* Floating Contact Button */}
-      {/* <FloatingContactButton /> */}
+      <FloatingContactButton />
 
       {/* Additional Content */}
     

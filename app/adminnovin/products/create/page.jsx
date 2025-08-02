@@ -1,477 +1,496 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
-
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm, Controller } from "react-hook-form";
+import * as z from "zod";
+import { Loader2, X, Plus, Minus } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import ImagesList from "@/components/ImagesList";
+
+// اسکیمای اعتبارسنجی
+const productSchema = z.object({
+  name: z.string().min(3, "نام محصول باید حداقل ۳ کاراکتر باشد"),
+  slug: z.string().min(3, "برچسب باید حداقل ۳ کاراکتر باشد"),
+  categories: z.string().min(1, "انتخاب دسته‌بندی الزامی است"),
+  description: z.string().min(10, "توضیحات محصول باید حداقل ۱۰ کاراکتر باشد"),
+  fullDescription: z
+    .string()
+    .min(20, "توضیحات کامل باید حداقل ۲۰ کاراکتر باشد"),
+  originalPrice: z
+    .string()
+    .min(1, "قیمت اصلی الزامی است")
+    .regex(/^\d+$/, "قیمت باید عددی باشد"),
+  price: z.string().optional(),
+  images: z.array(z.string()).min(1, "حداقل یک تصویر الزامی است"),
+  variations: z.array(
+    z.object({
+      type: z.string().min(1, "نوع متغیر الزامی است"),
+      options: z.array(
+        z.object({
+          name: z.string().min(1, "نام گزینه الزامی است"),
+          price: z.string().min(1, "قیمت الزامی است"),
+        })
+      ).min(1, "حداقل یک گزینه الزامی است"),
+    })
+  ).min(1, "حداقل یک متغیر الزامی است"),
+});
 
 const CreateProduct = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const id = session?.user?._id;
-  const [imageUrls, setImageUrls] = useState([]);
-  const [imagePath, setImagePath] = useState([]);
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [imagePath, setImagePath] = useState([]);
+
+  // فرم و اعتبارسنجی
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(productSchema),
+    defaultValues: {
+      name: "کاغذ دیواری",
+      slug: "",
+      categories: "",
+      description: "",
+      fullDescription: "",
+      originalPrice: "",
+      price: "",
+      images: [],
+      variations: [
+        {
+          type: "رنگ",
+          options: [
+            { name: "", price: "0" }
+          ]
+        },
+        {
+          type: "اندازه",
+          options: [
+            { name: "", price: "0" }
+          ]
+        }
+      ]
+    },
+  });
 
   useEffect(() => {
     if (status === "unauthenticated") {
       router.replace("/login");
+      return;
     }
-  }, [status, router]);
 
-  const [brands, setBrands] = useState([]);
-  const [product, setProduct] = useState({
-    user: id,
-    slug: "",
-    name: "کاغذ دیواری",
-    fullDescription: "",
-    description: "",
-    categories: "",
-    condition: "",
-    washable: "",
-    brand: "",
-    material: "",
-    images: [],
-    price: "",
-    originalPrice: "",
-    place: "",
-    weight: "",
-    color: "",
-    strong: "",
-    country: "",
-    antistatic: "",
-    other: "",
-  });
+    // تنظیم کاربر فعلی
+    setValue("user", session?.user?._id);
+  }, [status, router, session, setValue]);
 
-  function generateSlug(name) {
-    return name
-      .toLowerCase()
-      .replace(/ /g, "-")
-      .replace(/[^\w-]+/g, "");
-  }
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProduct((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
- 
+  // دریافت دسته‌بندی‌ها
   useEffect(() => {
-    fetch("/api/categories")
-      .then((res) => res.json())
-      .then((data) => setCategories(data.categories || []));
-    fetch("/api/brand")
-      .then((res) => res.json())
-      .then((data) => setBrands(data.data || []));
+    const fetchData = async () => {
+      try {
+        const categoriesRes = await axios.get("/api/categories");
+        setCategories(categoriesRes.data.categories || []);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchData();
   }, []);
-  const handleRemoveImage = (e, urlToRemove) => {
-    e.preventDefault();
-    setImagePath((prevUrls) => prevUrls.filter((url) => url !== urlToRemove));
+
+  // حذف تصویر
+  const handleRemoveImage = (urlToRemove) => {
+    setImagePath((prev) => prev.filter((url) => url !== urlToRemove));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (imagePath) {
-      try {
-        const productData = {
-          ...product,
-          images: imagePath,
-        };
-        const productRes = await axios.post("/api/products", productData);
-        if (productRes.status === 200 || productRes.status === 201) {
-          router.push("/");
-        }
-    
-      } catch (error) {
-        console.log(error);
+  // مدیریت متغیرها
+  const addVariationOption = (variationIndex) => {
+    const variations = [...watch("variations")];
+    variations[variationIndex].options.push({ name: "", price: "0" });
+    setValue("variations", variations);
+  };
+
+  const removeVariationOption = (variationIndex, optionIndex) => {
+    const variations = [...watch("variations")];
+    variations[variationIndex].options.splice(optionIndex, 1);
+    setValue("variations", variations);
+  };
+
+  // ارسال فرم
+  const onSubmit = async (data) => {
+    try {
+      setIsLoading(true);
+      const productData = {
+        ...data,
+        images: imagePath,
+        user: session?.user?._id,
+      };
+
+      const response = await axios.post("/api/products", productData);
+      
+      if (response.status === 200 || response.status === 201) {
+        router.push("/");
       }
+    } catch (error) {
+      console.error("Error creating product:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (status === "loading") {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader2 className="w-12 h-12 animate-spin text-indigo-600" />
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white py-0  w-full">
-      <div className="max-w-full w-full mx-auto bg-white rounded-none shadow-2xl overflow-hidden">
-        <div className="bg-blues py-6">
-          <h1 className="text-center text-white text-3xl font-extrabold">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-8 w-full">
+      <div className="max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden border border-indigo-100">
+        <div className="bg-gradient-to-r from-indigo-600 to-blue-600 py-6 px-8">
+          <h1 className="text-center text-white text-3xl font-bold">
             ثبت محصول جدید
           </h1>
         </div>
-        <form onSubmit={handleSubmit} className="px-8 py-10 space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                نام محصول
-              </label>
-              <Input
-                type="text"
-                name="name"
-                id="name"
-                value={product.name}
-                onChange={handleChange}
-                placeholder="نام محصول خود را وارد کنید"
-                className="w-full"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                برچسب
-              </label>
-              <Input
-                type="text"
-                name="slug"
-                id="slug"
-                value={product.slug}
-                onChange={handleChange}
-                placeholder="Enter product slug"
-                className="w-full"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                برند
-              </label>
-              <select
-                name="brand"
-                id="brand"
-                value={product.brand}
-                onChange={handleChange}
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blues focus:border-blues sm:text-sm rounded-md"
-                required
-              >
-                <option value="">No Parent</option>
-                {brands.map((cat) => (
-                  <option key={cat._id} value={cat.name}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                دسته بندی
-              </label>
-              <select
-  name="categories"
-  id="categories"
-  value={product.categories}
-  onChange={handleChange}
-  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blues focus:border-blues sm:text-sm rounded-md"
-  required
->
-  <option value="">بدون دسته‌بندی مادر</option>
-
-  {categories.map((cat) => (
-    <React.Fragment key={cat._id}>
-      <option value={cat._id}>
-        {cat.title}
-      </option>
-
-      {/* اگر دسته‌بندی چیلد داشته باشه، چیلدها رو هم نمایش بده */}
-      {cat.children && cat.children.length > 0 && cat.children.map((child) => (
-        <option key={child._id} value={child._id}>
-          --- {child.title}
-        </option>
-      ))}
-    </React.Fragment>
-  ))}
-</select>
+        
+        <form 
+          onSubmit={handleSubmit(onSubmit)} 
+          className="px-6 py-8 space-y-8"
+        >
+          {/* بخش اطلاعات پایه محصول */}
+          <div className="border-b border-gray-200 pb-8">
+            <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
+              <div className="w-2 h-8 bg-indigo-600 rounded-full mr-3"></div>
+              اطلاعات پایه محصول
+            </h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  نام محصول *
+                </label>
+                <Input
+                  {...register("name")}
+                  className={`${errors.name ? "border-red-500" : ""}`}
+                  placeholder="نام محصول خود را وارد کنید"
+                />
+                {errors.name && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.name.message}
+                  </p>
+                )}
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  برچسب (نامک) *
+                </label>
+                <Input
+                  {...register("slug")}
+                  className={`${errors.slug ? "border-red-500" : ""}`}
+                  placeholder="نامک محصول (برای SEO)"
+                />
+                {errors.slug && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.slug.message}
+                  </p>
+                )}
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  دسته‌بندی *
+                </label>
+                <Controller
+                  name="categories"
+                  control={control}
+                  render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="انتخاب دسته‌بندی" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="">بدون دسته‌بندی</SelectItem>
+                        {categories.map((cat) => (
+                          <React.Fragment key={cat._id}>
+                            <SelectItem value={cat._id}>
+                              {cat.title}
+                            </SelectItem>
+                            {cat.children?.map((child) => (
+                              <SelectItem
+                                key={child._id}
+                                value={child._id}
+                                className="pr-8"
+                              >
+                                &nbsp;&nbsp;├ {child.title}
+                              </SelectItem>
+                            ))}
+                          </React.Fragment>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                {errors.categories && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.categories.message}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
-
-          <div>
-            <div className="w-full max-w-sm">
-              <ImagesList onImageSelect={setImagePath} />
-              {/* <ImageUpload onImageUpload={setImagePath} /> */}
+          
+          {/* بخش تصاویر محصول */}
+          <div className="border-b border-gray-200 pb-8">
+            <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
+              <div className="w-2 h-8 bg-indigo-600 rounded-full mr-3"></div>
+              تصاویر محصول
+            </h2>
+            
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                آپلود تصاویر *
+              </label>
+              <ImagesList 
+                onImageSelect={setImagePath} 
+                maxImages={8}
+              />
+              <input
+                type="hidden"
+                {...register("images")}
+                value={imagePath}
+                onChange={() => {}}
+              />
+              {errors.images && (
+                <p className="mt-2 text-sm text-red-500">
+                  {errors.images.message}
+                </p>
+              )}
             </div>
-            <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-              {imagePath.map((url, index) => (
-                <div key={index} className="relative group">
-                  <Image
-                    height={400}
-                    width={400}
-                    className="h-36 w-full object-cover rounded-md"
-                    src={url}
-                    alt={`Uploaded image ${index + 1}`}
-                  />
-                  <button
-                    className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-md"
-                    onClick={(e) => handleRemoveImage(e, url)}
+            
+            <div className="mt-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                تصاویر انتخاب شده
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                {imagePath.map((url, index) => (
+                  <div
+                    key={index}
+                    className="relative group border border-gray-200 rounded-lg overflow-hidden"
                   >
-                    <svg
-                      className="h-6 w-6 text-white"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
+                    <Image
+                      height={200}
+                      width={200}
+                      className="h-40 w-full object-cover"
+                      src={url}
+                      alt={`تصویر محصول ${index + 1}`}
+                    />
+                    <button
+                      type="button"
+                      className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+                      onClick={() => handleRemoveImage(url)}
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          
+          {/* بخش متغیرهای محصول */}
+          <div className="border-b border-gray-200 pb-8">
+            <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
+              <div className="w-2 h-8 bg-indigo-600 rounded-full mr-3"></div>
+              متغیرهای محصول
+            </h2>
+            
+            <div className="space-y-8">
+              {watch("variations")?.map((variation, variationIndex) => (
+                <div key={variationIndex} className="border border-gray-200 rounded-lg p-6">
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="font-medium text-gray-700">
+                      {variation.type === "رنگ" ? "رنگ" : "اندازه"}
+                    </h3>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    {variation.options.map((option, optionIndex) => (
+                      <div key={optionIndex} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                        <div className="md:col-span-5">
+                          <label className="block text-sm text-gray-600 mb-1">
+                            نام گزینه
+                          </label>
+                          <Input
+                            value={option.name}
+                            onChange={(e) => {
+                              const variations = [...watch("variations")];
+                              variations[variationIndex].options[optionIndex].name = e.target.value;
+                              setValue("variations", variations);
+                            }}
+                            placeholder={variation.type === "رنگ" ? "نام رنگ" : "اندازه"}
+                          />
+                        </div>
+                        
+                        <div className="md:col-span-5">
+                          <label className="block text-sm text-gray-600 mb-1">
+                            قیمت اضافی (تومان)
+                          </label>
+                          <Input
+                            type="number"
+                            value={option.price}
+                            onChange={(e) => {
+                              const variations = [...watch("variations")];
+                              variations[variationIndex].options[optionIndex].price = e.target.value;
+                              setValue("variations", variations);
+                            }}
+                            placeholder="قیمت اضافی"
+                          />
+                        </div>
+                        
+                        <div className="md:col-span-2 flex justify-end">
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            className="p-2"
+                            onClick={() => removeVariationOption(variationIndex, optionIndex)}
+                            disabled={variation.options.length <= 1}
+                          >
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                    
+                    <div className="flex justify-end">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="border-indigo-600 text-indigo-600 hover:bg-indigo-50 gap-1"
+                        onClick={() => addVariationOption(variationIndex)}
+                      >
+                        <Plus className="w-4 h-4" />
+                        افزودن گزینه جدید
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               ))}
+              
+              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                <h3 className="font-medium text-blue-800 mb-2">نحوه محاسبه قیمت</h3>
+                <p className="text-sm text-blue-700">
+                  قیمت نهایی محصول = قیمت پایه + مجموع قیمت‌های اضافی انتخاب‌شده
+                </p>
+              </div>
             </div>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                جنس
-              </label>
-              <select
-                name="material"
-                id="material"
-                value={product.material}
-                onChange={handleChange}
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blues focus:border-blues sm:text-sm rounded-md"
-                required
-              >
-                <option value="">انتخاب جنس محصول</option>
-                <option value="کاغذ">کاغذ</option>
-                <option value="پارچه">پارچه</option>
-                <option value="وینیل ">وینیل </option>
-                <option value=" الیاف بافته نشده">الیاف بافته نشده </option>
-                <option value=" مواد طبیعی">مواد طبیعی </option>
-                <option value=" فلز "> فلز </option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                قابلیت شستشو
-              </label>
-              <select
-                name="washable"
-                id="washable"
-                value={product.washable}
-                onChange={handleChange}
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blues focus:border-blues sm:text-sm rounded-md"
-                required
-              >
-                <option value="">قابلیت شستشو</option>
-                <option value="دارد">دارد</option>
-                <option value="ندارد">ندارد</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                وضعیت محصول
-              </label>
-              <select
-                name="condition"
-                id="condition"
-                value={product.condition}
-                onChange={handleChange}
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blues focus:border-blues sm:text-sm rounded-md"
-                required
-              >
-                <option value="">نوع محصول</option>
-                <option value="نو">نو</option>
-                <option value="استوک">استوک</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                محیط استفاده
-              </label>
-              <select
-                name="place"
-                id="place"
-                value={product.place}
-                onChange={handleChange}
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blues focus:border-blues sm:text-sm rounded-md"
-              >
-                <option value="">محیط استفاده</option>
-                <option value="همه مکان ها">همه مکان ها</option>
-                <option value="پذیرایی">پذیرایی</option>
-                <option value="اتاق خواب">اتاق خواب</option>
-                <option value="اداری">اداری</option>
-                <option value="اتاق بازی">اتاق بازی</option>
-                <option value="آشپزخانه">آشپزخانه</option>
-                <option value="سرویس بهداشتی">سرویس بهداشتی</option>
-                <option value="استودیو">استودیو</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                وزن بسته بندی
-              </label>
-              <Input
-                type="text"
-                name="weight"
-                id="weight"
-                value={product.weight}
-                onChange={handleChange}
-                placeholder="e.g., 148 گرم"
-                className="w-full"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                رنگ پس زمینه
-              </label>
-              <Input
-                type="text"
-                name="color"
-                id="color"
-                value={product.color}
-                onChange={handleChange}
-                placeholder="سفید"
-                className="w-full"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                مقاوم در برابر
-              </label>
-              <Input
-                type="text"
-                name="strong"
-                id="strong"
-                value={product.strong}
-                onChange={handleChange}
-                placeholder="مقاوم در برابر نور آفتاب"
-                className="w-full"
-              />
-            </div>
-          </div>
-
-        
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                ساخت کشور
-              </label>
-              <Input
-                type="text"
-                name="country"
-                id="country"
-                value={product.country}
-                onChange={handleChange}
-                placeholder="ایران"
-                className="w-full"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                انتی استاتیک(ضدالکتریسیته ساکن)
-              </label>
-              <select
-                name="antistatic"
-                id="antistatic"
-                value={product.antistatic}
-                onChange={handleChange}
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blues focus:border-blues sm:text-sm rounded-md"
-              >
-                <option value="">انتخاب کنید</option>
-                <option value="دارد">دارد</option>
-                <option value="ندارد">ندارد</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                سایر ویژگی ها
-              </label>
-              <Input
-                type="text"
-                name="other"
-                id="other"
-                value={product.other}
-                onChange={handleChange}
-                placeholder="سایر ویژگی ها"
-                className="w-full"
-              />
-            </div>
-          </div>
-         
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+          
+          {/* بخش توضیحات */}
+          <div className="border-b border-gray-200 pb-8">
+            <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
+              <div className="w-2 h-8 bg-indigo-600 rounded-full mr-3"></div>
               توضیحات محصول
-            </label>
-            <Textarea
-              name="description"
-              id="description"
-              value={product.description}
-              onChange={handleChange}
-              rows={4}
-              className="shadow-sm focus:ring-blues focus:border-blues mt-1 block w-full sm:text-sm border-gray-300 rounded-md"
-              placeholder="توضیحات محصول"
-              required
-            />
+            </h2>
+            
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  توضیحات کوتاه *
+                </label>
+                <Textarea
+                  rows={3}
+                  className={`${errors.description ? "border-red-500" : ""}`}
+                  placeholder="توضیحات مختصر محصول"
+                  {...register("description")}
+                />
+                {errors.description && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.description.message}
+                  </p>
+                )}
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  توضیحات کامل *
+                </label>
+                <Textarea
+                  rows={5}
+                  className={`${errors.fullDescription ? "border-red-500" : ""}`}
+                  placeholder="توضیحات کامل محصول"
+                  {...register("fullDescription")}
+                />
+                {errors.fullDescription && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.fullDescription.message}
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
+          
+          {/* بخش قیمت‌گذاری */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              توضیحات کامل محصول
-            </label>
-            <Textarea
-              name="fullDescription"
-              id="fullDescription"
-              value={product.fullDescription}
-              onChange={handleChange}
-              rows={4}
-              className="shadow-sm focus:ring-blues focus:border-blues mt-1 block w-full sm:text-sm border-gray-300 rounded-md"
-              placeholder="توضیحات کامل محصول"
-              required
-            />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                قیمت اصلی
-              </label>
-              <Input
-                type="number"
-                name="originalPrice"
-                id="originalPrice"
-                value={product.originalPrice}
-                onChange={handleChange}
-                placeholder="Enter original price"
-                className="w-full"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                قیمت تخفیف
-              </label>
-              <Input
-                type="number"
-                name="price"
-                id="price"
-                value={product.price}
-                onChange={handleChange}
-                placeholder="Enter sale price"
-                className="w-full"
-              />
+            <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
+              <div className="w-2 h-8 bg-indigo-600 rounded-full mr-3"></div>
+              قیمت‌گذاری پایه
+            </h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  قیمت پایه (تومان) *
+                </label>
+                <Input
+                  type="number"
+                  className={`${errors.originalPrice ? "border-red-500" : ""}`}
+                  placeholder="قیمت پایه محصول"
+                  {...register("originalPrice")}
+                />
+                {errors.originalPrice && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.originalPrice.message}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
-
-          <div className="flex justify-end">
+          
+          {/* دکمه ثبت */}
+          <div className="flex justify-end pt-8">
             <Button
-              variant="myButton"
               type="submit"
-              className="px-8 py-3 bg-blues text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blues focus:ring-offset-2"
+              className="bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 px-8 py-6 text-lg font-medium text-white shadow-lg transition-all"
+              disabled={isLoading}
             >
-              ثبت محصول
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                  در حال ثبت...
+                </>
+              ) : (
+                "ثبت محصول"
+              )}
             </Button>
           </div>
         </form>
