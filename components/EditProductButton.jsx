@@ -13,7 +13,7 @@ const EditProductButton = ({ productId }) => {
     <Button
       onClick={handleClick}
       variant="outline"
-      className="bg-blues/90 text-white hover:bg-blues focus:ring-2 focus:ring-blue-300"
+      className="bg-primary/90 text-white hover:bg-primary focus:ring-2 focus:ring-blue-300"
     >
       Edit Product
     </Button>

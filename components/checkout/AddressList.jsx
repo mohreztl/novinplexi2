@@ -28,7 +28,7 @@ export default function AddressList() {
             <li
               key={address._id}
               className={`p-2 border rounded cursor-pointer ${
-                selectedAddress?._id === address._id ? "bg-blues/90 text-white" : "bg-gray-100"
+                selectedAddress?._id === address._id ? "bg-primary/90 text-white" : "bg-gray-100"
               }`}
               onClick={() => setSelectedAddress(address)}
             >

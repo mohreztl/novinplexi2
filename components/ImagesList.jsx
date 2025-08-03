@@ -87,7 +87,7 @@ const ImagesList = ({ onImageSelect }) => {
   return (
     <div>
       
-    <Button type="button" className="bg-blues hover:opacity-70 text-white" onClick={openModal}>آپلود عکس محصول</Button>
+    <Button type="button" className="bg-primary hover:opacity-70 text-white" onClick={openModal}>آپلود عکس محصول</Button>
     
     <Modal isOpen={isModalOpen} onRequestClose={closeModal} contentLabel="S3 File Management "      className="relative bg-white rounded-lg shadow-lg max-w-full w-full max-h-[90vh] p-6 overflow-auto"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
@@ -163,7 +163,7 @@ const ImagesList = ({ onImageSelect }) => {
       
       <div className="fixed bottom-8 left-0 w-full bg-gray-100 border-t border-gray-300 p-4 flex justify-between px-12 ">
       <Button className="bg-red-600 hover:bg-opacity-70 w-[120px] font-bold text-md text-white" onClick={closeModal}>بستن</Button>
-      <Button className="bg-blues hover:bg-opacity-70 font-bold text-md text-white" onClick={handleFileSelect}>
+      <Button className="bg-primary hover:bg-opacity-70 font-bold text-md text-white" onClick={handleFileSelect}>
 انتخاب عکس محصول
       </Button>
       </div>

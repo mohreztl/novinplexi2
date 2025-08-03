@@ -208,14 +208,14 @@ export default function AdminCategoriesPage() {
                   دسته مادر
                 </label>
                 <Select 
-                  value={form.parent} 
-                  onValueChange={(value) => setForm({ ...form, parent: value })}
+                  value={form.parent || "none"} 
+                  onValueChange={(value) => setForm({ ...form, parent: value === "none" ? "" : value })}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="انتخاب دسته مادر (اختیاری)" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">بدون والد (دسته اصلی)</SelectItem>
+                    <SelectItem value="none">بدون والد (دسته اصلی)</SelectItem>
                     {categories.map((cat) => (
                       <SelectItem key={cat._id} value={cat._id}>
                         {cat.title}

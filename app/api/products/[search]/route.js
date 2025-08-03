@@ -1,10 +1,9 @@
-import connect from "@/utils/config/dbConnection";
+import dbConnect from "@/utils/config/dbConnection";
 import { Product } from "@/utils/models/Product";
 import { NextResponse } from "next/server";
 
-export async function GET(req, res) {
-  await connect();
-  const { params } = res;
+export async function GET(req, { params }) {
+  await dbConnect();
   const searchTerm = params?.search;
 
   // Function to convert search term to a more flexible regex pattern

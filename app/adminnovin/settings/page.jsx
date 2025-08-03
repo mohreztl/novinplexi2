@@ -51,7 +51,7 @@ const Textarea = (props) => (
 export default function SiteSettings() {
   const [settings, setSettings] = useState({
     // اطلاعات فروشگاه
-    storeName: "نیکودکور",
+    storeName: "نوین پلکسی",
     storeDescription: "فروشگاه محصولات دکوراسیون داخلی",
     email: "info@nikodecor.com",
     phone: "021-12345678",
@@ -68,7 +68,7 @@ export default function SiteSettings() {
     shippingCost: "50000",
     
     // پیام‌های سایت
-    welcomeMessage: "به فروشگاه نیکودکور خوش آمدید",
+    welcomeMessage: "به فروشگاه نوین پلکسی خوش آمدید",
     orderSuccessMessage: "سفارش شما با موفقیت ثبت شد",
   });
 

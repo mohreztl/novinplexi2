@@ -96,7 +96,7 @@ const ProductImageGallery = ({ product }) => {
               objectFit="cover"
               className={`rounded-lg cursor-pointer transition-all duration-300 ${
                 currentImageIndex === index
-                  ? "ring-2 ring-blues/90"
+                  ? "ring-2 ring-primary/90"
                   : "opacity-70 hover:opacity-100"
               }`}
               onClick={() => setCurrentImageIndex(index)}

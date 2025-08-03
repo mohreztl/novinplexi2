@@ -117,8 +117,15 @@ const CreateProduct = () => {
 
   // حذف تصویر
   const handleRemoveImage = (urlToRemove) => {
-    setImagePath((prev) => prev.filter((url) => url !== urlToRemove));
+    const newImagePath = imagePath.filter((url) => url !== urlToRemove);
+    setImagePath(newImagePath);
+    setValue("images", newImagePath); // به‌روزرسانی فیلد images در فرم
   };
+
+  // به‌روزرسانی تصاویر در فرم
+  useEffect(() => {
+    setValue("images", imagePath);
+  }, [imagePath, setValue]);
 
   // مدیریت متغیرها
   const addVariationOption = (variationIndex) => {
@@ -135,11 +142,20 @@ const CreateProduct = () => {
 
   // ارسال فرم
   const onSubmit = async (data) => {
+    console.log("Form Data:", data);
+    console.log("ImagePath State:", imagePath);
+    
+    // بررسی اینکه آیا تصاویر موجود است
+    if (!data.images || data.images.length === 0) {
+      console.error("No images in form data");
+      return;
+    }
+    
     try {
       setIsLoading(true);
       const productData = {
         ...data,
-        images: imagePath,
+        images: data.images, // استفاده از data.images به جای imagePath
         user: session?.user?._id,
       };
 
@@ -274,14 +290,11 @@ const CreateProduct = () => {
                 آپلود تصاویر *
               </label>
               <ImagesList 
-                onImageSelect={setImagePath} 
+                onImageSelect={(images) => {
+                  setImagePath(images);
+                  setValue("images", images);
+                }}
                 maxImages={8}
-              />
-              <input
-                type="hidden"
-                {...register("images")}
-                value={imagePath}
-                onChange={() => {}}
               />
               {errors.images && (
                 <p className="mt-2 text-sm text-red-500">

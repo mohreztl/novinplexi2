@@ -133,7 +133,7 @@ const EditProduct = ({ params }) => {
     <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white py-12 px-4 sm:px-6 lg:px-8">
       <Toaster position="top-right" />
       <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
-        <div className="bg-blues py-6">
+        <div className="bg-primary py-6">
           <h1 className="text-center text-white text-3xl font-extrabold">
       ویرایش محصول {product.name}
           </h1>
@@ -179,7 +179,7 @@ const EditProduct = ({ params }) => {
                 id="brand"
                 value={product.brand}
                 onChange={handleChange}
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blues focus:border-blues sm:text-sm rounded-md"
+                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md"
                 required
               >
                 <option value="">No Parent</option>
@@ -199,7 +199,7 @@ const EditProduct = ({ params }) => {
   id="categories"
   value={product.categories}
   onChange={handleChange}
-  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blues focus:border-blues sm:text-sm rounded-md"
+  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md"
   required
 >
   <option value="">بدون دسته‌بندی مادر</option>
@@ -278,7 +278,7 @@ const EditProduct = ({ params }) => {
                 id="material"
                 value={product.material}
                 onChange={handleChange}
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blues focus:border-blues sm:text-sm rounded-md"
+                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md"
                 required
               >
                 <option value="">انتخاب جنس محصول</option>
@@ -299,7 +299,7 @@ const EditProduct = ({ params }) => {
                 id="washable"
                 value={product.washable}
                 onChange={handleChange}
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blues focus:border-blues sm:text-sm rounded-md"
+                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md"
                 required
               >
                 <option value="">قابلیت شستشو</option>
@@ -316,7 +316,7 @@ const EditProduct = ({ params }) => {
                 id="condition"
                 value={product.condition}
                 onChange={handleChange}
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blues focus:border-blues sm:text-sm rounded-md"
+                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md"
                 required
               >
                 <option value="">نوع محصول</option>
@@ -336,7 +336,7 @@ const EditProduct = ({ params }) => {
                 id="place"
                 value={product.place}
                 onChange={handleChange}
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blues focus:border-blues sm:text-sm rounded-md"
+                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md"
               >
                 <option value="">محیط استفاده</option>
                 <option value="">همه مکان ها</option>
@@ -421,7 +421,7 @@ const EditProduct = ({ params }) => {
                 id="antistatic"
                 value={product.antistatic}
                 onChange={handleChange}
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blues focus:border-blues sm:text-sm rounded-md"
+                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md"
               >
                 <option value="">قابلیت شستشو</option>
                 <option value="">دارد</option>
@@ -454,7 +454,7 @@ const EditProduct = ({ params }) => {
               value={product.description}
               onChange={handleChange}
               rows={4}
-              className="shadow-sm focus:ring-blues focus:border-blues mt-1 block w-full sm:text-sm border-gray-300 rounded-md"
+              className="shadow-sm focus:ring-primary focus:border-primary mt-1 block w-full sm:text-sm border-gray-300 rounded-md"
               placeholder="توضیحات محصول"
               required
             />
@@ -469,7 +469,7 @@ const EditProduct = ({ params }) => {
               value={product.fullDescription}
               onChange={handleChange}
               rows={4}
-              className="shadow-sm focus:ring-blues focus:border-blues mt-1 block w-full sm:text-sm border-gray-300 rounded-md"
+              className="shadow-sm focus:ring-primary focus:border-primary mt-1 block w-full sm:text-sm border-gray-300 rounded-md"
               placeholder="توضیحات کامل محصول"
               required
             />
@@ -510,7 +510,7 @@ const EditProduct = ({ params }) => {
             <Button
               variant="myButton"
               type="submit"
-              className="px-8 py-3 bg-blues text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blues focus:ring-offset-2"
+              className="px-8 py-3 bg-primary text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             >
               Update Product
             </Button>

@@ -85,7 +85,7 @@ const Sidebar = () => {
         <div className="flex items-center justify-center h-16 border-b border-gray-200">
           <Link href="/adminnovin" className="flex items-center gap-2">
             <Image
-              src="/nikoodecor.webp"
+              src="/logo1.svg"
               alt="نوین پلکسی"
               width={40}
               height={40}

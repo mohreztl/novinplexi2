@@ -155,10 +155,10 @@ setLoading(true);
   }, [status, session, router]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blues-100 to-gold-50 flex flex-col items-center justify-center p-4 relative">
+    <div className="min-h-screen bg-gradient-to-br from-primary-100 to-secondary-50 flex flex-col items-center justify-center p-4 relative">
   <button
     onClick={() => router.push("/")}
-    className="absolute top-6 left-6 flex items-center text-blues-600 hover:text-blues-700 transition-colors"
+    className="absolute top-6 left-6 flex items-center text-primary-600 hover:text-primary-700 transition-colors"
   >
 
     <span className="font-medium">بازگشت به صفحه اصلی</span>
@@ -210,7 +210,7 @@ setLoading(true);
            placeholder="09123456789"
            value={phoneNumber}
            onChange={(e) => setPhoneNumber(e.target.value)}
-           className="pl-10 w-full border-gold"
+           className="pl-10 w-full border-secondary"
            required
          />
          <Mail
@@ -221,7 +221,7 @@ setLoading(true);
        <Button
             variant="default"
             type="submit"
-            className="w-full bg-blues hover:bg-indigo-700 text-white"
+            className="w-full bg-primary hover:bg-indigo-700 text-white"
             onClick={handlePhoneSubmit}
             disabled={loading}
           >
@@ -243,7 +243,7 @@ setLoading(true);
            placeholder="نام و نام خانوادگی"
            value={userInfo.name}
            onChange={(e) => setUserInfo({ ...userInfo, name: e.target.value })}
-           className="pl-10 w-full border-gold"
+           className="pl-10 w-full border-secondary"
            required
          />
          <Mail
@@ -261,7 +261,7 @@ setLoading(true);
            placeholder="کد تایید"
            value={verificationCode}
            onChange={(e) => setVerificationCode(e.target.value)}
-           className="pl-10 w-full border-gold"
+           className="pl-10 w-full border-secondary"
            required
          />
          <Mail
@@ -272,7 +272,7 @@ setLoading(true);
              <Button
             variant="default"
             type="submit"
-            className="w-full bg-blues hover:bg-indigo-700 text-white"
+            className="w-full bg-primary hover:bg-indigo-700 text-white"
             onClick={handleSignupSubmit}
             disabled={loading}
           >
@@ -293,7 +293,7 @@ setLoading(true);
            placeholder="کد تایید"
            value={verificationCode}
            onChange={(e) => setVerificationCode(e.target.value)}
-           className="pl-10 w-full border-gold"
+           className="pl-10 w-full border-secondary"
            required
          />
          <Mail
@@ -304,7 +304,7 @@ setLoading(true);
        <Button
             variant="default"
             type="submit"
-            className="w-full bg-blues hover:bg-indigo-700 text-white"
+            className="w-full bg-primary hover:bg-indigo-700 text-white"
             onClick={handleVerificationSubmit}
             disabled={loading}
           >

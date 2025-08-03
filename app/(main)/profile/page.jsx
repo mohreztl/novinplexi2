@@ -8,7 +8,6 @@ import {
   Mail,
   ShieldCheck,
   ShoppingBag,
-  Heart,
   Settings,
   ChevronLeft,
   Edit2,
@@ -25,11 +24,10 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import toast, { Toaster } from "react-hot-toast";
 import OrdersList from "@/components/OrdersList";
-import Wishlist from "@/components/Wishlist";
 import SettingsComponent from "@/components/Settings";
 
 const ProfilePage = () => {
-  const { data: session, update,status } = useSession();
+  const { data: session, update } = useSession();
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState({
     name: "",
@@ -54,7 +52,7 @@ const ProfilePage = () => {
           router.replace('/login');
 
     }
-  }, [session]);
+  }, [session, router]);
 
   const handleEdit = () => setIsEditing(true);
 
@@ -160,8 +158,6 @@ const ProfilePage = () => {
     </Card>
   );
 
-  const renderWishlistContent = () => <Wishlist />;
-
   const renderSettingsContent = () => <SettingsComponent />;
 
   if (!session) {
@@ -206,7 +202,6 @@ const ProfilePage = () => {
             {[
               { label: "پروفایل", id: "Profile", icon: UserIcon },
               { label: "سفارشات", id: "Orders", icon: ShoppingBag },
-              { label: "لیست علاقه مندی ها", id: "Wishlist", icon: Heart },
               { label: "تنظیمات", id: "Settings", icon: Settings },
             ].map((item) => (
               <Button
@@ -237,7 +232,6 @@ const ProfilePage = () => {
         <div className="w-full lg:w-[65%] overflow-y-auto pr-0 lg:pr-4">
           {activeTab === "profile" && renderProfileContent()}
           {activeTab === "Orders" && <OrdersList />}
-          {activeTab === "Wishlist" && renderWishlistContent()}
           {activeTab === "settings" && renderSettingsContent()}
         </div>
       </div>

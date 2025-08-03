@@ -1,9 +1,9 @@
-import connect from "@/utils/config/dbConnection";
+import dbConnect from "@/utils/config/dbConnection";
 import { Product } from "@/utils/models/Product";
 import { NextResponse } from "next/server";
 export const dynamic = 'force-dynamic';
 export async function GET(req) {
-  await connect();
+  await dbConnect();
 
   const { searchParams } = new URL(req.url);
   const page = parseInt(searchParams.get("page") || 1);

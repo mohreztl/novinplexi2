@@ -139,11 +139,11 @@
   }
 }
 
-/* Custom blue background class */
-.bg-blues {
-  background-color: rgba(49, 80, 140, 1);
+/* Custom primary background class */
+.bg-primary {
+  background-color: #2563eb; /* blue-600 */
 }
 
-.text-blues {
-  color: rgba(49, 80, 140, 1);
+.text-primary {
+  color: #2563eb; /* blue-600 */
 }

@@ -1,9 +1,9 @@
-import connect from "@/utils/config/dbConnection";
+import dbConnect from "@/utils/config/dbConnection";
 import { Product } from "@/utils/models/Product";
 import { NextResponse } from "next/server";
 
 export async function GET(req, { params }) {
-  await connect();
+  await dbConnect();
 
   const { brand } = params;
 

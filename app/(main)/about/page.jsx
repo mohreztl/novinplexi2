@@ -15,7 +15,7 @@ const AboutPage = () => {
   return (
     <div className="bg-gray-100 min-h-screen">
       {/* Hero Section */}
-      <header className="bg-blues text-white">
+      <header className="bg-primary text-white">
         <div className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
           درباره نوین پلکسی
@@ -69,21 +69,21 @@ const AboutPage = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <Clock className="w-16 h-16 mx-auto mb-4 text-blues" />
+              <Clock className="w-16 h-16 mx-auto mb-4 text-primary" />
               <h3 className="text-xl font-semibold mb-2">بهترین کیفیت</h3>
               <p>
                نوین پلکسی در تلاش است بهترین کیفیت محصولات موجود را ارائه دهد
               </p>
             </div>
             <div className="text-center">
-              <Users className="w-16 h-16 mx-auto mb-4 text-blues" />
+              <Users className="w-16 h-16 mx-auto mb-4 text-primary" />
               <h3 className="text-xl font-semibold mb-2">Customer First</h3>
               <p>
               نوین پلکسی در تلاش است بهترین کیفیت محصولات موجود را ارائه دهد
               </p>
             </div>
             <div className="text-center">
-              <TrendingUp className="w-16 h-16 mx-auto mb-4 text-blues" />
+              <TrendingUp className="w-16 h-16 mx-auto mb-4 text-primary" />
               <h3 className="text-xl font-semibold mb-2">
          بهترین قیمت
               </h3>
@@ -168,7 +168,7 @@ const AboutPage = () => {
       </section>
 
       {/* Call to Action */}
-      <section className="bg-blues text-white py-16">
+      <section className="bg-primary text-white py-16">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
           به خانواده نوین پلکسی بپیوندید
@@ -176,7 +176,7 @@ const AboutPage = () => {
           <p className="text-xl mb-8">
 خونتو به سلیقه خودت با کمک نوین پلکسی زیبا کن 
           </p>
-          <button className="bg-white text-blues font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-100 transition duration-300">
+          <button className="bg-white text-primary font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-100 transition duration-300">
             <Link href={"/products/brand/rolex"}>مشاهده محصولات</Link>
           </button>
         </div>

@@ -42,7 +42,7 @@ const FAQPage = () => {
   return (
     <div className="bg-gray-100 min-h-screen">
       {/* Hero Section */}
-      <header className="bg-blues text-white">
+      <header className="bg-primary text-white">
         <div className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
             Frequently Asked Questions
@@ -67,9 +67,9 @@ const FAQPage = () => {
                     {faq.question}
                   </h3>
                   {openIndex === index ? (
-                    <ChevronUp className="w-6 h-6 text-blues" />
+                    <ChevronUp className="w-6 h-6 text-primary" />
                   ) : (
-                    <ChevronDown className="w-6 h-6 text-blues" />
+                    <ChevronDown className="w-6 h-6 text-primary" />
                   )}
                 </button>
                 {openIndex === index && (
@@ -95,7 +95,7 @@ const FAQPage = () => {
           </p>
           <Link
             href="/contact"
-            className="bg-blues text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-300"
+            className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-300"
           >
             Contact Us
           </Link>

@@ -15,7 +15,7 @@ const ContactPage = () => {
   return (
     <div className="bg-gray-100 min-h-screen">
       {/* Hero Section */}
-      <header className="bg-blues text-white">
+      <header className="bg-primary text-white">
         <div className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
          راه های تماس با نوین پلکسی
@@ -109,22 +109,22 @@ const ContactPage = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="bg-white rounded-lg shadow-lg p-6 text-center">
-              <MapPin className="w-12 h-12 mx-auto mb-4 text-blues" />
+              <MapPin className="w-12 h-12 mx-auto mb-4 text-primary" />
               <h3 className="text-xl font-semibold mb-2">Visit Us</h3>
               <p>تهران سبلان جنوبی کوچه عباسی پلاک 27 واحد 2</p>
             </div>
             <div className="bg-white rounded-lg shadow-lg p-6 text-center">
-              <Phone className="w-12 h-12 mx-auto mb-4 text-blues" />
+              <Phone className="w-12 h-12 mx-auto mb-4 text-primary" />
               <h3 className="text-xl font-semibold mb-2">Call Us</h3>
               <p>(021)77258915</p>
             </div>
             <div className="bg-white rounded-lg shadow-lg p-6 text-center">
-              <Mail className="w-12 h-12 mx-auto mb-4 text-blues" />
+              <Mail className="w-12 h-12 mx-auto mb-4 text-primary" />
               <h3 className="text-xl font-semibold mb-2">ایمیل</h3>
               <p>support@novinplexi.com</p>
             </div>
             <div className="bg-white rounded-lg shadow-lg p-6 text-center">
-              <Clock className="w-12 h-12 mx-auto mb-4 text-blues" />
+              <Clock className="w-12 h-12 mx-auto mb-4 text-primary" />
               <h3 className="text-xl font-semibold mb-2">ساعات کاری مجموعه</h3>
               <p>
              شنبه تا چهارشنبه:9:00 الی 20:00
@@ -155,14 +155,14 @@ const ContactPage = () => {
               </h2>
               <div className="space-y-6">
                 <div className="flex items-center">
-                  <MessageCircle className="w-8 h-8 text-blues mr-4" />
+                  <MessageCircle className="w-8 h-8 text-primary mr-4" />
                   <div>
                     <h3 className="text-xl font-semibold">چت انلاین</h3>
                     <p>با متخصصان مجموعه در تماس باشید</p>
                   </div>
                 </div>
                 <div className="flex items-center">
-                  <Headphones className="w-8 h-8 text-blues mr-4" />
+                  <Headphones className="w-8 h-8 text-primary mr-4" />
                   <div>
                     <h3 className="text-xl font-semibold">تماس تلفنی</h3>
                     <p>با مجموعه نوین پلکسی تماس بگیرید</p>
@@ -210,7 +210,7 @@ const ContactPage = () => {
       </section>
 
       {/* Newsletter Signup */}
-      <section className="bg-blues text-white py-16">
+      <section className="bg-primary text-white py-16">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
     با نوین پلکسی بروز بشید و از محصولات و تخفیف های مجموعه با خبر شوید
@@ -226,7 +226,7 @@ const ContactPage = () => {
             />
             <button
               type="submit"
-              className="bg-white text-blues font-bold py-2 px-6 rounded-r-full hover:bg-blue-100 transition duration-300"
+              className="bg-white text-primary font-bold py-2 px-6 rounded-r-full hover:bg-blue-100 transition duration-300"
             >
               <Send className="w-6 h-6" />
             </button>

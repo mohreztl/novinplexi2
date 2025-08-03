@@ -152,25 +152,25 @@ export default function AddressStep({ onAdressChange, adressData, onLocationChan
         <div className="space-y-6">
         {/* هدر با خطوط طلایی */}
         <div className="flex items-center mb-6">
-          <div className="flex-grow border-t border-gold-400"></div>
-          <h2 className="px-4 text-xl font-bold text-blues-800 whitespace-nowrap">
+          <div className="flex-grow border-t border-secondary-400"></div>
+          <h2 className="px-4 text-xl font-bold text-primary-800 whitespace-nowrap">
             اطلاعات آدرس
             <span className="text-sm font-normal text-gray-500 ml-2">(فیلدهای ستاره‌دار الزامی هستند)</span>
           </h2>
-          <div className="flex-grow border-t border-gold-400"></div>
+          <div className="flex-grow border-t border-secondary-400"></div>
         </div>
       
         {/* انتخاب استان و شهر */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-blues-700">
+            <label className="block text-sm font-medium text-primary-700">
               استان <span className="text-red-500">*</span>
             </label>
             <div className="relative">
               <select
                 value={selectedProvince}
                 onChange={handleProvinceChange}
-                className="w-full px-4 py-3 border-2 border-blues-100 rounded-lg focus:outline-none focus:border-blues-500 focus:ring-2 focus:ring-blues-100 appearance-none bg-white"
+                className="w-full px-4 py-3 border-2 border-primary-100 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 appearance-none bg-white"
               >
                 <option value="">انتخاب استان...</option>
                 {provinces.map((province) => (
@@ -180,7 +180,7 @@ export default function AddressStep({ onAdressChange, adressData, onLocationChan
                 ))}
               </select>
               <svg
-                className="absolute left-3 top-3.5 h-5 w-5 text-blues-400 pointer-events-none"
+                className="absolute left-3 top-3.5 h-5 w-5 text-primary-400 pointer-events-none"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -200,14 +200,14 @@ export default function AddressStep({ onAdressChange, adressData, onLocationChan
       
           {/* انتخاب شهر (مشابه استان) */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-blues-700">
+            <label className="block text-sm font-medium text-primary-700">
               شهر <span className="text-red-500">*</span>
             </label>
             <div className="relative">
               <select
                 value={selectedCity}
                 onChange={handleCityChange}
-                className="w-full px-4 py-3 border-2 border-blues-100 rounded-lg focus:outline-none focus:border-blues-500 focus:ring-2 focus:ring-blues-100 appearance-none bg-white"
+                className="w-full px-4 py-3 border-2 border-primary-100 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 appearance-none bg-white"
               >
                 <option value="">انتخاب شهر...</option>
                 {filteredCities.map((city) => (
@@ -217,7 +217,7 @@ export default function AddressStep({ onAdressChange, adressData, onLocationChan
                 ))}
               </select>
               <svg
-                className="absolute left-3 top-3.5 h-5 w-5 text-blues-400 pointer-events-none"
+                className="absolute left-3 top-3.5 h-5 w-5 text-primary-400 pointer-events-none"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -241,7 +241,7 @@ export default function AddressStep({ onAdressChange, adressData, onLocationChan
         {/* آدرس و کدپستی */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-blues-700">
+            <label className="block text-sm font-medium text-primary-700">
               آدرس کامل <span className="text-red-500">*</span>
             </label>
             <div className="relative">
@@ -251,10 +251,10 @@ export default function AddressStep({ onAdressChange, adressData, onLocationChan
                 value={adressData?.street || ""}
                 onChange={handleAdressChange}
                 placeholder="مثال: تهران، خیابان آزادی، پلاک ۱۲۳"
-                className="w-full px-4 py-3 border-2 border-blues-100 rounded-lg focus:outline-none focus:border-blues-500 focus:ring-2 focus:ring-blues-100 pr-10"
+                className="w-full px-4 py-3 border-2 border-primary-100 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 pr-10"
               />
               <svg
-                className="absolute right-3 top-3.5 h-5 w-5 text-blues-400"
+                className="absolute right-3 top-3.5 h-5 w-5 text-primary-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -266,7 +266,7 @@ export default function AddressStep({ onAdressChange, adressData, onLocationChan
           </div>
       
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-blues-700">
+            <label className="block text-sm font-medium text-primary-700">
               کدپستی <span className="text-red-500">*</span>
             </label>
             <input
@@ -275,7 +275,7 @@ export default function AddressStep({ onAdressChange, adressData, onLocationChan
               value={adressData?.postalCode || ""}
               onChange={handleAdressChange}
               placeholder="مثال: 1234567890"
-              className="w-full px-4 py-3 border-2 border-blues-100 rounded-lg focus:outline-none focus:border-blues-500 focus:ring-2 focus:ring-blues-100"
+              className="w-full px-4 py-3 border-2 border-primary-100 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
               maxLength="10"
             />
           </div>
@@ -283,9 +283,9 @@ export default function AddressStep({ onAdressChange, adressData, onLocationChan
       
         {/* آدرس‌های ذخیره شده */}
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-blues-800">آدرس‌های ثبت شده</h3>
+          <h3 className="text-lg font-semibold text-primary-800">آدرس‌های ثبت شده</h3>
           {addresses.length === 0 ? (
-            <div className="text-center p-6 bg-blues-50 rounded-lg">
+            <div className="text-center p-6 bg-primary-50 rounded-lg">
               <p className="text-gray-500">هنوز آدرسی ثبت نکرده‌اید</p>
             </div>
           ) : (
@@ -295,14 +295,14 @@ export default function AddressStep({ onAdressChange, adressData, onLocationChan
                   key={address._id}
                   className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                     selectedAddress?._id === address._id
-                      ? "border-blues-500 bg-blues-50"
-                      : "border-gray-200 hover:border-blues-200"
+                      ? "border-primary-500 bg-primary-50"
+                      : "border-gray-200 hover:border-primary-200"
                   }`}
                   onClick={() => setSelectedAddress(address)}
                 >
                   <div className="flex items-start">
                     <div className="flex-1">
-                      <p className="font-medium text-blues-800">{address.street}</p>
+                      <p className="font-medium text-primary-800">{address.street}</p>
                       <p className="text-sm text-gray-600">
                         {address.city}، {address.province}
                       </p>
@@ -332,7 +332,7 @@ export default function AddressStep({ onAdressChange, adressData, onLocationChan
             className={`px-6 py-2 rounded-lg font-medium transition-colors ${
               saving
                 ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-blues-600 text-white hover:bg-blues-700"
+                : "bg-primary-600 text-white hover:bg-primary-700"
             }`}
           >
             {saving ? (

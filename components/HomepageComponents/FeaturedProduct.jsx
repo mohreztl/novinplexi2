@@ -126,7 +126,7 @@ const FeaturedProduct = () => {
                 </Link>
               </p>
               <div className="flex items-center mb-6">
-                <span className="text-3xl font-bold text-blues">
+                <span className="text-3xl font-bold text-primary">
                   ${featuredWatch1?.price.toLocaleString()}
                 </span>
                 <span className="text-xl text-gray-500 line-through ml-4">
@@ -141,38 +141,38 @@ const FeaturedProduct = () => {
               </div>
               <div className="grid grid-cols-2 gap-4 mb-6 text-sm">
                 <div className="flex items-center">
-                  <Tag className="w-5 h-5 mr-2 text-blues/90" />
+                  <Tag className="w-5 h-5 mr-2 text-primary/90" />
                   <span>
                     <strong>Brand:</strong> {featuredWatch1?.brand}
                   </span>
                 </div>
                 <div className="flex items-center">
-                  <Clock className="w-5 h-5 mr-2 text-blues/90" />
+                  <Clock className="w-5 h-5 mr-2 text-primary/90" />
                   <span>
                     <strong>Movement:</strong> Automatic
                   </span>
                 </div>
                 <div className="flex items-center">
-                  <Droplet className="w-5 h-5 mr-2 text-blues/90" />
+                  <Droplet className="w-5 h-5 mr-2 text-primary/90" />
                   <span>
                     <strong>Water Resistance:</strong> {featuredWatch1?.water}
                   </span>
                 </div>
                 <div className="flex items-center">
-                  <Box className="w-5 h-5 mr-2 text-blues/90" />
+                  <Box className="w-5 h-5 mr-2 text-primary/90" />
                   <span>
                     <strong>Case Material:</strong>{" "}
                     {featuredWatch1?.casematerial}
                   </span>
                 </div>
                 <div className="flex items-center">
-                  <Ruler className="w-5 h-5 mr-2 text-blues/90" />
+                  <Ruler className="w-5 h-5 mr-2 text-primary/90" />
                   <span>
                     <strong>Thickness:</strong> {featuredWatch1?.thickness}
                   </span>
                 </div>
                 <div className="flex items-center">
-                  <Shield className="w-5 h-5 mr-2 text-blues/90" />
+                  <Shield className="w-5 h-5 mr-2 text-primary/90" />
                   <span>
                     <strong>Glass:</strong> {featuredWatch1?.glass}
                   </span>
@@ -201,7 +201,7 @@ const FeaturedProduct = () => {
               <div className="flex space-x-4">
                 <Link
                   href={`/products/brand/patekphilipe`}
-                  className="flex-1 bg-blues text-white px-6 py-3 rounded-full hover:bg-blue-700 transition duration-300 text-center text-lg font-semibold"
+                  className="flex-1 bg-primary text-white px-6 py-3 rounded-full hover:bg-blue-700 transition duration-300 text-center text-lg font-semibold"
                 >
                   Shop Now
                 </Link>

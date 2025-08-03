@@ -208,7 +208,7 @@ const ReviewSection = ({ productId }) => {
                   setUserReview({ ...userReview, comment: e.target.value })
                 }
                 required
-                className="w-full px-4 py-2 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blues/90 transition-all duration-200"
+                className="w-full px-4 py-2 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/90 transition-all duration-200"
                 rows="4"
                 placeholder="Share your thoughts about the product..."
               />
@@ -216,7 +216,7 @@ const ReviewSection = ({ productId }) => {
             <div className="flex space-x-3">
               <Button
                 type="submit"
-                className="px-4 py-2 bg-blues text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blues/90 focus:ring-offset-2 transition-all duration-200"
+                className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-primary/90 focus:ring-offset-2 transition-all duration-200"
               >
                 {editingReview ? "Update Review" : "Submit Review"}
               </Button>
@@ -236,7 +236,7 @@ const ReviewSection = ({ productId }) => {
 
       {loading && (
         <div className="flex justify-center items-center py-8">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blues/90"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary/90"></div>
         </div>
       )}
       {error && <p className="text-red-500 text-center py-4">{error}</p>}
@@ -290,7 +290,7 @@ const ReviewSection = ({ productId }) => {
                 !editingReview && (
                   <button
                     onClick={() => handleEditReview(review)}
-                    className="flex items-center text-blues/90 hover:text-blues transition-colors duration-200"
+                    className="flex items-center text-primary/90 hover:text-primary transition-colors duration-200"
                   >
                     <Pencil className="w-4 h-4 md:w-5 md:h-5 mr-1" />ویرایش نظر
                   </button>

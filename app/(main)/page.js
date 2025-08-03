@@ -1,41 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import axios from "axios";
-
 import Hero from "@/components/home/Hero";
 import ServiceSection from "@/components/home/ServiceSection";
-import TopProductSection from "@/components/home/TopProductSection";
 import CategoriesSection from "@/components/home/CategoriesSection";
-import BlogSection from "@/components/home/BlogSection";
 import Faq from "@/components/home/Faq";
 import FloatingContactButton from "@/components/home/FloatingContactButton";
+import LatestProducts from "@/components/home/LatestProducts";
 
 export default function Home() {
-  const [products, setProducts] = useState([]);
-  const [posts, setPosts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // دریافت محصولات
-        const productsResponse = await axios.get("/api/products");
-        setProducts(productsResponse.data);
-
-        // دریافت پست‌های وبلاگ
-        const postsResponse = await axios.get("/api/posts");
-        setPosts(postsResponse.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
@@ -50,6 +22,9 @@ export default function Home() {
       <section className="py-16">
         {/* <TopProductSection products={products} isLoading={isLoading} /> */}
       </section>
+
+      {/* Latest Products & Categories */}
+      <LatestProducts />
 
       {/* Categories Section */}
       <section className="py-16 bg-gray-50">

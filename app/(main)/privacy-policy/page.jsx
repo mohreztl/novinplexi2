@@ -6,7 +6,7 @@ export default function PrivacyPolicyPage() {
   return (
     <div className="bg-gray-100 min-h-screen">
       {/* Hero Section */}
-      <header className="bg-blues text-white">
+      <header className="bg-primary text-white">
         <div className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
           شرایط و ضوابط
@@ -139,7 +139,7 @@ export default function PrivacyPolicyPage() {
           </p>
           <Link
             href="/contact"
-            className="bg-blues text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-300 inline-block"
+            className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-300 inline-block"
           >
             Contact Us
           </Link>

@@ -48,18 +48,18 @@ export default function InfoStep({ formData, handleChange, onValidationChange })
     return (
         <div className="space-y-6">
         <div className="flex items-center mb-6">
-          <div className="flex-grow border-t border-gold-400"></div>
-          <h2 className="px-4 text-xl font-bold text-blues-800 whitespace-nowrap">
+          <div className="flex-grow border-t border-secondary-400"></div>
+          <h2 className="px-4 text-xl font-bold text-primary-800 whitespace-nowrap">
             اطلاعات شخصی
             <span className="text-sm font-normal text-gray-500 ml-2">(فیلدهای ستاره‌دار الزامی هستند)</span>
           </h2>
-          <div className="flex-grow border-t border-gold-400"></div>
+          <div className="flex-grow border-t border-secondary-400"></div>
         </div>
       
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* فیلد نام */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-blues-700">
+            <label className="block text-sm font-medium text-primary-700">
               نام <span className="text-red-500">*</span>
             </label>
             <div className="relative">
@@ -69,7 +69,7 @@ export default function InfoStep({ formData, handleChange, onValidationChange })
                 value={formData.firstName}
                 onChange={handleInputChange}
                 placeholder="نام خود را وارد کنید"
-                className="w-full px-4 py-3 border-2 border-blues-100 rounded-lg focus:outline-none focus:border-blues-500 focus:ring-2 focus:ring-blues-100 transition-all"
+                className="w-full px-4 py-3 border-2 border-primary-100 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-all"
               />
               {errors.firstName && (
                 <div className="absolute -bottom-5 left-0 text-red-500 text-xs flex items-center">
@@ -84,7 +84,7 @@ export default function InfoStep({ formData, handleChange, onValidationChange })
       
           {/* فیلد نام خانوادگی */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-blues-700">
+            <label className="block text-sm font-medium text-primary-700">
               نام خانوادگی <span className="text-red-500">*</span>
             </label>
             <div className="relative">
@@ -94,7 +94,7 @@ export default function InfoStep({ formData, handleChange, onValidationChange })
                 value={formData.lastName}
                 onChange={handleInputChange}
                 placeholder="نام خانوادگی خود را وارد کنید"
-                className="w-full px-4 py-3 border-2 border-blues-100 rounded-lg focus:outline-none focus:border-blues-500 focus:ring-2 focus:ring-blues-100 transition-all"
+                className="w-full px-4 py-3 border-2 border-primary-100 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-all"
               />
               {/* نمایش خطا  */}
               {errors.lastName && (
@@ -110,7 +110,7 @@ export default function InfoStep({ formData, handleChange, onValidationChange })
       
           {/* فیلد شماره تلفن */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-blues-700">
+            <label className="block text-sm font-medium text-primary-700">
               شماره همراه <span className="text-red-500">*</span>
             </label>
             <div className="relative">
@@ -120,7 +120,7 @@ export default function InfoStep({ formData, handleChange, onValidationChange })
                 value={formData.phoneNumber}
                 onChange={handleInputChange}
                 placeholder="مثال: 09123456789"
-                className="w-full px-4 py-3 border-2 border-blues-100 rounded-lg focus:outline-none focus:border-blues-500 focus:ring-2 focus:ring-blues-100 transition-all pl-12"
+                className="w-full px-4 py-3 border-2 border-primary-100 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-all pl-12"
               />
       <svg className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 
@@ -140,7 +140,7 @@ export default function InfoStep({ formData, handleChange, onValidationChange })
       
           {/* فیلد کد ملی */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-blues-700">
+            <label className="block text-sm font-medium text-primary-700">
               کد ملی <span className="text-red-500">*</span>
             </label>
             <div className="relative">
@@ -150,7 +150,7 @@ export default function InfoStep({ formData, handleChange, onValidationChange })
                 value={formData.nationalId}
                 onChange={handleInputChange}
                 placeholder="مثال: 1234567890"
-                className="w-full px-4 py-3 border-2 border-blues-100 rounded-lg focus:outline-none focus:border-blues-500 focus:ring-2 focus:ring-blues-100 transition-all"
+                className="w-full px-4 py-3 border-2 border-primary-100 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-all"
                 maxLength="10"
               />
               {/* نمایش خطا */}
@@ -167,7 +167,7 @@ export default function InfoStep({ formData, handleChange, onValidationChange })
       
           {/* فیلد ایمیل */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-blues-700">
+            <label className="block text-sm font-medium text-primary-700">
               ایمیل (اختیاری)
             </label>
             <div className="relative">
@@ -177,7 +177,7 @@ export default function InfoStep({ formData, handleChange, onValidationChange })
                 value={formData.email}
                 onChange={handleInputChange}
                 placeholder="example@domain.com"
-                className="w-full px-4 py-3 border-2 border-blues-100 rounded-lg focus:outline-none focus:border-blues-500 focus:ring-2 focus:ring-blues-100 transition-all"
+                className="w-full px-4 py-3 border-2 border-primary-100 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-all"
               />
               <svg className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
@@ -189,7 +189,7 @@ export default function InfoStep({ formData, handleChange, onValidationChange })
       
           {/* فیلد نام شرکت */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-blues-700">
+            <label className="block text-sm font-medium text-primary-700">
               نام شرکت (اختیاری)
             </label>
             <div className="relative">
@@ -199,7 +199,7 @@ export default function InfoStep({ formData, handleChange, onValidationChange })
                 value={formData.company}
                 onChange={handleInputChange}
                 placeholder="در صورت وجود نام شرکت را وارد کنید"
-                className="w-full px-4 py-3 border-2 border-blues-100 rounded-lg focus:outline-none focus:border-blues-500 focus:ring-2 focus:ring-blues-100 transition-all"
+                className="w-full px-4 py-3 border-2 border-primary-100 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-all"
               />
               <svg className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>

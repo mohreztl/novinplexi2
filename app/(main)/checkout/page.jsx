@@ -39,28 +39,28 @@ export default function Checkout() {
       step: 1,
       label: "سبد خرید",
       icon: FaShoppingCart,
-      activeColor: "bg-blues-500",
+      activeColor: "bg-primary-500",
       completedColor: "bg-green-500"
     },
     {
       step: 2,
       label: "اطلاعات کاربری",
       icon: FaUserEdit,
-      activeColor: "bg-blues-500",
+      activeColor: "bg-primary-500",
       completedColor: "bg-green-500"
     },
     {
       step: 3,
       label: "آدرس ارسال",
       icon: FaMapMarkerAlt,
-      activeColor: "bg-blues-500",
+      activeColor: "bg-primary-500",
       completedColor: "bg-green-500"
     },
     {
       step: 4,
       label: "تایید نهایی",
       icon: FaCheckDouble,
-      activeColor: "bg-blues-500",
+      activeColor: "bg-primary-500",
       completedColor: "bg-green-500"
     }
   ];
@@ -154,7 +154,7 @@ export default function Checkout() {
       {/* خط پیشرفت */}
       <div className="absolute top-1/2 left-0 right-0 h-1 bg-gray-200 transform -translate-y-1/2 -z-10">
         <div 
-          className="h-full bg-gradient-to-r from-blues-400 to-green-400 transition-all duration-500"
+          className="h-full bg-gradient-to-r from-primary-400 to-green-400 transition-all duration-500"
           style={{ width: `${((step - 1) / (checkoutSteps.length - 1)) * 100}%` }}
         ></div>
       </div>
@@ -209,7 +209,7 @@ export default function Checkout() {
             px-6 py-3 rounded-lg font-medium transition-all
             ${step === 1 
               ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-              : 'bg-blues-50 text-blues-700 hover:bg-blues-100 hover:shadow-md'
+              : 'bg-primary-50 text-primary-700 hover:bg-primary-100 hover:shadow-md'
             }
           `}
         >
@@ -224,7 +224,7 @@ export default function Checkout() {
               px-6 py-3 rounded-lg font-medium text-white transition-all
               ${!isCurrentStepValid && step !== 1 
                 ? 'bg-gray-300 cursor-not-allowed' 
-                : 'bg-gradient-to-r from-blues-600 to-blues-500 hover:from-blues-700 hover:to-blues-600 hover:shadow-lg'
+                : 'bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 hover:shadow-lg'
               }
             `}
           >
@@ -251,7 +251,7 @@ function StepIcon({ label, Icon, isActive, isCompleted}) {
       <div className="relative">
         {/* حلقه پیشرفت */}
         <div className={`absolute -inset-2 rounded-full animate-pulse ${
-          isActive ? 'bg-blues-100' : 'opacity-0'
+          isActive ? 'bg-primary-100' : 'opacity-0'
         }`}></div>
 
         {/* دایره مرکزی */}
@@ -259,14 +259,14 @@ function StepIcon({ label, Icon, isActive, isCompleted}) {
           isCompleted 
             ? 'bg-green-100 border-green-400 scale-110 shadow-lg' 
             : isActive 
-              ? 'bg-white border-blues-500 scale-125 shadow-xl' 
+              ? 'bg-white border-primary-500 scale-125 shadow-xl' 
               : 'bg-gray-50 border-gray-300'
         }`}>
           <Icon className={`w-6 h-6 transition-colors ${
             isCompleted 
               ? 'text-green-600' 
               : isActive 
-                ? 'text-blues-600' 
+                ? 'text-primary-600' 
                 : 'text-gray-400'
           }`} />
         </div>
@@ -275,7 +275,7 @@ function StepIcon({ label, Icon, isActive, isCompleted}) {
         {!isCompleted && (
           <span className={`absolute -top-2 -right-2 w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold ${
             isActive 
-              ? 'bg-blues-500 text-white' 
+              ? 'bg-primary-500 text-white' 
               : 'bg-gray-300 text-gray-600'
           }`}>
             {stepNumber}
@@ -288,7 +288,7 @@ function StepIcon({ label, Icon, isActive, isCompleted}) {
         isCompleted 
           ? 'text-green-700' 
           : isActive 
-            ? 'text-blues-700' 
+            ? 'text-primary-700' 
             : 'text-gray-500'
       }`}>
         {label}

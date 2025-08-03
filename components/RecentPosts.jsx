@@ -33,15 +33,15 @@ const RecentPosts = ({ limit = 3 }) => {
   return (
     <section className="py-16 bg-white px-4 lg:px-10">
       <div className="flex items-center my-6">
-        <div className="flex-grow border-t border-gold"></div>
+        <div className="flex-grow border-t border-secondary"></div>
         <h2 className="px-4 md:text-5xl text-3xl font-bold text-gray-700">مقالات</h2>
-        <div className="flex-grow border-t border-gold"></div>
+        <div className="flex-grow border-t border-secondary"></div>
       </div>
 
       <div className="container mx-auto">
         {loading ? (
           <div className="text-center py-10">
-            <div className="w-10 h-10 border-4 border-gold border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <div className="w-10 h-10 border-4 border-secondary border-t-transparent rounded-full animate-spin mx-auto"></div>
             <p className="mt-2 text-gray-600">در حال بارگذاری مقالات...</p>
           </div>
         ) : error ? (
@@ -77,7 +77,7 @@ const RecentPosts = ({ limit = 3 }) => {
       {/* محتوای متنی */}
       <div className="p-6 md:p-8">
         {/* دسته‌بندی */}
-        <span className="inline-block mb-4 px-3 py-1 bg-blues/10 text-blues rounded-full text-sm font-medium">
+        <span className="inline-block mb-4 px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
           {post.category}
         </span>
 
@@ -95,13 +95,13 @@ const RecentPosts = ({ limit = 3 }) => {
         <div className="flex items-center justify-between text-gray-500 text-sm">
           <div className="flex items-center gap-2">
             <User className="w-5 h-5 text-gray-400" />
-            <span>نیکودکور</span>
+            <span>نوین پلکسی</span>
           </div>
           
           {/* لینک بیشتر بخوانید */}
           <Link
             href={`/blog/${post._id}`}
-            className="flex items-center text-blues hover:text-blue-800 transition-colors font-medium"
+            className="flex items-center text-primary hover:text-blue-800 transition-colors font-medium"
           >
             ادامه مطلب
             <ChevronLeft className="w-4 h-4 mr-1" />

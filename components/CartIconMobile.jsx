@@ -37,7 +37,7 @@ const CartIconMobile = () => {
                 </p> */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-10 w-10 text-blues hover:text-blues cursor-pointer"
+                  className="h-10 w-10 text-primary hover:text-primary cursor-pointer"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"

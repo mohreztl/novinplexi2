@@ -23,12 +23,6 @@ const userSchema = new mongoose.Schema({
     default: false,
   },
   
-  wishlist: [
-    {
-        type: mongoose.Schema.Types.ObjectId,
-        ref:"Product",
-    }
-  ],
   notificationPreferences: {
     orderUpdates: {type: Boolean, default: true},
     promotions: {type: Boolean, default: false},

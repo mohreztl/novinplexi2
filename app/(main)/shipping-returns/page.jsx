@@ -8,17 +8,17 @@ const ShippingReturnsPage = () => {
     {
       title: "Free Domestic Shipping",
       description: "Enjoy free shipping on all domestic orders over $100.",
-      icon: <Truck className="w-8 h-8 text-blues" />,
+      icon: <Truck className="w-8 h-8 text-primary" />,
     },
     {
       title: "International Shipping",
       description: "We ship worldwide. Rates calculated at checkout.",
-      icon: <DollarSign className="w-8 h-8 text-blues" />,
+      icon: <DollarSign className="w-8 h-8 text-primary" />,
     },
     {
       title: "Processing Time",
       description: "Orders typically ship within 1-2 business days.",
-      icon: <Clock className="w-8 h-8 text-blues" />,
+      icon: <Clock className="w-8 h-8 text-primary" />,
     },
   ];
 
@@ -26,24 +26,24 @@ const ShippingReturnsPage = () => {
     {
       title: "30-Day Returns",
       description: "We offer a 30-day return policy for most items.",
-      icon: <RotateCcw className="w-8 h-8 text-blues" />,
+      icon: <RotateCcw className="w-8 h-8 text-primary" />,
     },
     {
       title: "Condition Requirements",
       description: "Items must be unworn and in original condition with tags.",
-      icon: <Truck className="w-8 h-8 text-blues" />,
+      icon: <Truck className="w-8 h-8 text-primary" />,
     },
     {
       title: "Refund Processing",
       description: "Refunds are typically processed within 5-7 business days.",
-      icon: <DollarSign className="w-8 h-8 text-blues" />,
+      icon: <DollarSign className="w-8 h-8 text-primary" />,
     },
   ];
 
   return (
     <div className="bg-gray-100 min-h-screen">
       {/* Hero Section */}
-      <header className="bg-blues text-white">
+      <header className="bg-primary text-white">
         <div className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
             Shipping & Returns
@@ -120,7 +120,7 @@ const ShippingReturnsPage = () => {
             </p>
             <Link
               href="/contact"
-              className="bg-blues text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-300"
+              className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-300"
             >
               Contact Customer Service
             </Link>

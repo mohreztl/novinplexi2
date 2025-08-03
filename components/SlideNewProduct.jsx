@@ -8,7 +8,7 @@ const SlideNewProduct = () => {
     suffix: "",
   };
   return (
-    <Card className="sm:w-[305px] sm:h-[603px] h-[300px] bg-blues rounded-[50px] flex flex-col items-center">
+    <Card className="sm:w-[305px] sm:h-[603px] h-[300px] bg-primary rounded-[50px] flex flex-col items-center">
       <CardContent className="flex flex-col sm:items-center justify-between h-full py-16">
         <div className="text-4xl text-white text-center [direction:rtl]">
           <span>محصولات شامل تخفیف</span>

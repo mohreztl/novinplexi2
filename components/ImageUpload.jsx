@@ -56,7 +56,7 @@ const ImageUpload = ({ onImageUpload }) => {
       )}
       <button
         onClick={handleUpload}
-        className="mt-2 w-full py-2 bg-blues/90 text-white rounded hover:bg-blues"
+        className="mt-2 w-full py-2 bg-primary/90 text-white rounded hover:bg-primary"
       >
         ارسال تصویر
       </button>

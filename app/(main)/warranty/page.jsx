@@ -17,49 +17,49 @@ import Link from "next/link";
 const WarrantyComponent = () => {
   const warrantyFeatures = [
     {
-      icon: <Shield className="w-8 h-8 text-blues" />,
+      icon: <Shield className="w-8 h-8 text-primary" />,
       title: "2-Year Warranty",
       description:
         "Our watches come with a comprehensive 2-year warranty, ensuring your timepiece is protected against manufacturing defects.",
     },
     {
-      icon: <Clock className="w-8 h-8 text-blues" />,
+      icon: <Clock className="w-8 h-8 text-primary" />,
       title: "Lifetime Movement Guarantee",
       description:
         "Enjoy peace of mind with our lifetime guarantee on the watch movement, covering any functional issues for as long as you own the watch.",
     },
     {
-      icon: <ThumbsUp className="w-8 h-8 text-blues" />,
+      icon: <ThumbsUp className="w-8 h-8 text-primary" />,
       title: "Quality Assurance",
       description:
         "Each watch undergoes rigorous quality checks to meet the highest standards, providing you with a reliable and exquisite timepiece.",
     },
     {
-      icon: <UserCheck className="w-8 h-8 text-blues" />,
+      icon: <UserCheck className="w-8 h-8 text-primary" />,
       title: "Customer Support",
       description:
         "Our dedicated customer support team is available 24/7 to assist you with any queries or concerns regarding your purchase.",
     },
     {
-      icon: <RotateCcw className="w-8 h-8 text-blues" />,
+      icon: <RotateCcw className="w-8 h-8 text-primary" />,
       title: "30-Day Returns",
       description:
         "Not completely satisfied? Return your watch within 30 days for a full refund or exchange, no questions asked.",
     },
     {
-      icon: <Headphones className="w-8 h-8 text-blues" />,
+      icon: <Headphones className="w-8 h-8 text-primary" />,
       title: "Expert Advice",
       description:
         "Our team of horologists is always ready to provide expert advice on watch care, maintenance, and selection.",
     },
     {
-      icon: <FileText className="w-8 h-8 text-blues" />,
+      icon: <FileText className="w-8 h-8 text-primary" />,
       title: "Detailed Documentation",
       description:
         "Each watch comes with comprehensive documentation, including care instructions and warranty information.",
     },
     {
-      icon: <Award className="w-8 h-8 text-blues" />,
+      icon: <Award className="w-8 h-8 text-primary" />,
       title: "Certified Authenticity",
       description:
         "Every timepiece is accompanied by a certificate of authenticity, guaranteeing its genuine craftsmanship.",

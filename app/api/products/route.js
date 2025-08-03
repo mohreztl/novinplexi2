@@ -1,10 +1,10 @@
-import connect from "@/utils/config/dbConnection";
+import dbConnect from "@/utils/config/dbConnection";
 import { Product } from "@/utils/models/Product";
 import { NextResponse } from "next/server";
 export const dynamic = 'force-dynamic';
 
-export async function GET(req, res) {
-  await connect();
+export async function GET() {
+  await dbConnect();
 
   const foundProducts = await Product.find({})
     .populate("user")
@@ -13,8 +13,8 @@ export async function GET(req, res) {
   return NextResponse.json(foundProducts);
 }
 
-export async function POST(req, res) {
-  await connect();
+export async function POST(req) {
+  await dbConnect();
 
   const body = await req.json();
 

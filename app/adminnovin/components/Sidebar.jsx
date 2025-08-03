@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 const itemList = [
   {
     icon: (
-      <ShoppingBagIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-blues rounded-full md:rounded-none md:border-none " />
+      <ShoppingBagIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-primary rounded-full md:rounded-none md:border-none " />
     ),
     name: "داشبورد",
     link: "/adminnovin",
@@ -22,7 +22,7 @@ const itemList = [
 
   {
     icon: (
-      <PresentationChartBarIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-blues rounded-full md:rounded-none md:border-none" />
+      <PresentationChartBarIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-primary rounded-full md:rounded-none md:border-none" />
     ),
     name: " ایجاد محصول جدید ",
     link: "/adminnovin/create",
@@ -30,41 +30,41 @@ const itemList = [
 
   {
     icon: (
-      <ShoppingBagIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-blues rounded-full md:rounded-none md:border-none" />
+      <ShoppingBagIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-primary rounded-full md:rounded-none md:border-none" />
     ),
     name: "محصولات",
     link: "/adminnovin/products",
   },
   {
     icon: (
-      <ShoppingBagIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-blues rounded-full md:rounded-none md:border-none" />
+      <ShoppingBagIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-primary rounded-full md:rounded-none md:border-none" />
     ),
     name: "دسته بندی ها",
     link: "/adminnovin/category",
   },
   {
     icon: (
-      <ShoppingBagIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-blues rounded-full md:rounded-none md:border-none" />
+      <ShoppingBagIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-primary rounded-full md:rounded-none md:border-none" />
     ),
     name: " برند ها",
     link: "/adminnovin/brand",
   },
   {
     icon: (
-      <InboxIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-blues rounded-full md:rounded-none md:border-none" />
+      <InboxIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-primary rounded-full md:rounded-none md:border-none" />
     ),
     name: "سفارشات",
     link: "/adminnovin/orders",
   },
   {
     icon: (
-      <InboxIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-blues rounded-full md:rounded-none md:border-none" />
+      <InboxIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-primary rounded-full md:rounded-none md:border-none" />
     ),
     name: "وبلاگ",
     link: "/adminnovin/blog",
   }, {
     icon: (
-      <InboxIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-blues rounded-full md:rounded-none md:border-none" />
+      <InboxIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-primary rounded-full md:rounded-none md:border-none" />
     ),
     name: "ساخت وبلاگ",
     link: "/adminnovin/blog/create",
@@ -93,9 +93,9 @@ export default function Sidebar() {
           <li key={item.name}>
             <Link
               href={item.link}
-              className="flex items-center space-x-3 p-2 rounded-lg hover:bg-blues hover:text-white transition"
+              className="flex items-center space-x-3 p-2 rounded-lg hover:bg-primary hover:text-white transition"
             >
-              <span className="text-blues">{item.icon}</span>
+              <span className="text-primary">{item.icon}</span>
               <span className="hidden md:inline-block">{item.name}</span>
             </Link>
           </li>

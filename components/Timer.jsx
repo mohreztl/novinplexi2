@@ -38,7 +38,7 @@ const CountdownItem = ({ unit, text }) => {
     <div className="flex h-24 w-1/4 flex-col items-center justify-center gap-1  md:h-36 md:gap-2 border-transparent">
       <div className="relative w-full text-center">
         <div className="flex  overflow-hidden gap-0 ">
-          {unit==="Second" ? (<span className="text-gold  mx-auto text-xl"></span>) : (<span className="text-gold  mx-auto text-xl">:</span>)}
+          {unit==="Second" ? (<span className="text-secondary  mx-auto text-xl"></span>) : (<span className="text-secondary  mx-auto text-xl">:</span>)}
         
           <span
             ref={ref}
@@ -50,7 +50,7 @@ const CountdownItem = ({ unit, text }) => {
         </div>
       </div>
 
-      <span className="text-xs  text-gold md:text-sm lg:text-base">
+      <span className="text-xs  text-secondary md:text-sm lg:text-base">
         {text}
       </span>
     </div>

@@ -36,7 +36,7 @@ const MiniGuarantee = () => {
 const GuaranteeItem = ({ icon, title }) => {
   return (
     <div className="group flex flex-col items-center p-2  bg-opacity-80 backdrop-blur-lg rounded-lg transition-all duration-300 hover:bg-opacity-100 hover:shadow-2xl">
-      <div className="bg-blues mb-1 p-2 rounded-full text-gold group-hover:text-gold/90 group-hover:bg-blues/75 transition-all duration-300 shadow-md">
+      <div className="bg-primary mb-1 p-2 rounded-full text-secondary group-hover:text-secondary/90 group-hover:bg-primary/75 transition-all duration-300 shadow-md">
         {icon}
       </div>
       <p className="md:text-sm text-xs text-center line-clamp-2 mb-2 text-gray-900">{title}</p>

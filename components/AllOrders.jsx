@@ -89,7 +89,7 @@ const Orders = () => {
         </h1>
         {loading ? (
           <div className="flex justify-center items-center h-64">
-            <Loader2 className="w-12 h-12 animate-spin text-blues" />
+            <Loader2 className="w-12 h-12 animate-spin text-primary" />
           </div>
         ) : (
           <div className="space-y-4">
@@ -172,7 +172,7 @@ const Orders = () => {
                           key={index}
                           className="flex items-center space-x-3 bg-gray-50 p-3 rounded-md"
                         >
-                          <Package className="w-6 h-6 text-blues flex-shrink-0" />
+                          <Package className="w-6 h-6 text-primary flex-shrink-0" />
                           <div className="flex-grow">
                             {productItem.product ? (
                               <Link
@@ -180,7 +180,7 @@ const Orders = () => {
                                 passHref
                               >
                                 <div className="cursor-pointer hover:bg-gray-100 p-2 rounded-md transition-colors duration-200">
-                                  <p className="font-medium text-blues hover:underline">
+                                  <p className="font-medium text-primary hover:underline">
                                     {productItem.product.name}
                                   </p>
                                   <p className="text-sm text-gray-600">
@@ -206,7 +206,7 @@ const Orders = () => {
               <button
                 onClick={handlePrevPage}
                 disabled={page === 1}
-                className="flex items-center space-x-2 bg-blues text-white px-4 py-2 rounded disabled:bg-gray-300 transition-colors duration-200"
+                className="flex items-center space-x-2 bg-primary text-white px-4 py-2 rounded disabled:bg-gray-300 transition-colors duration-200"
               >
                 <ChevronLeft className="w-5 h-5" />
                 <span className="hidden sm:inline">Previous</span>
@@ -217,7 +217,7 @@ const Orders = () => {
               <button
                 onClick={handleNextPage}
                 disabled={!hasMore}
-                className="flex items-center space-x-2 bg-blues text-white px-4 py-2 rounded disabled:bg-gray-300 transition-colors duration-200"
+                className="flex items-center space-x-2 bg-primary text-white px-4 py-2 rounded disabled:bg-gray-300 transition-colors duration-200"
               >
                 <span className="hidden sm:inline">Next</span>
                 <ChevronRight className="w-5 h-5" />

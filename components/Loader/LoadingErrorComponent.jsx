@@ -6,7 +6,7 @@ const LoadingErrorComponent = ({ loading, error }) => {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-100">
         <div className="text-center">
-          <Loader2 className="h-12 w-12 animate-spin text-blues/90 mx-auto" />
+          <Loader2 className="h-12 w-12 animate-spin text-primary/90 mx-auto" />
           <p className="mt-4 text-gray-700 font-semibold">Loading...</p>
         </div>
       </div>

@@ -30,7 +30,7 @@ const  Blog = () => {
   return (
     <div className="bg-gray-100 min-h-screen">
       {/* Hero Section */}
-      <header className="bg-blues text-white">
+      <header className="bg-primary text-white">
         <div className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
          مقالات نوین پلکسی
@@ -73,7 +73,7 @@ const  Blog = () => {
                 </div>
                 <Link
                   href={`/blog/${firstBlog?._id}`}
-                  className="bg-blues text-white px-4 py-2 rounded hover:bg-blues/80 transition duration-300 "
+                  className="bg-primary text-white px-4 py-2 rounded hover:bg-primary/80 transition duration-300 "
                 >
                  بیشتر بخوانید
                 </Link>
@@ -112,12 +112,12 @@ const  Blog = () => {
                     {/* <span>{post.author}</span> */}
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-blues font-semibold">
+                    <span className="text-sm text-primary font-semibold">
                       {post.category}
                     </span>
                     <Link
                       href={`/blog/${post?._id}`}
-                      className="text-blues hover:text-blue-800 transition duration-300 flex items-center"
+                      className="text-primary hover:text-blue-800 transition duration-300 flex items-center"
                     >
                      بیشتر بخوانید <ChevronLeft className="w-4 h-4 ml-1" />
                     </Link>

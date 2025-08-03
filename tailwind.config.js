@@ -27,35 +27,35 @@ export const theme = {
   
   extend: {
     colors: {
-      blues: {
-        DEFAULT: '#31508c',
-        50: '#f0f5ff',
-        100: '#e0eaff',
-        200: '#c7d7fe',
-        300: '#a5b8fd',
-        400: '#8193fa',
-        500: '#6370f5',
-        600: '#4a50e7',
-        700: '#3b3cd3',
-        800: '#31508c', // رنگ اصلی
-        900: '#172554', // تیره‌تر
-        950: '#0f172a'
+      primary: {
+        DEFAULT: '#2563eb', // blue-600
+        50: '#eff6ff',
+        100: '#dbeafe',
+        200: '#bfdbfe',
+        300: '#93c5fd',
+        400: '#60a5fa',
+        500: '#3b82f6',
+        600: '#2563eb', // رنگ اصلی
+        700: '#1d4ed8',
+        800: '#1e40af',
+        900: '#1e3a8a',
+        950: '#172554'
       },
       
-      // پالت رنگ طلایی (gold)
-      gold: {
-        DEFAULT: '#ffd700',
-        50: '#fffdf0',
-        100: '#fff9c2',
-        200: '#fff38a',
-        300: '#ffe74d',
-        400: '#ffd700', // رنگ اصلی (DEFAULT)
-        500: '#e6c300',
-        600: '#ccaa00',
-        700: '#b38f00',
-        800: '#997500',
-        900: '#806000',
-        950: '#4d3a00'
+      // پالت رنگ بنفش (secondary)
+      secondary: {
+        DEFAULT: '#4f46e5', // indigo-600
+        50: '#eef2ff',
+        100: '#e0e7ff',
+        200: '#c7d2fe',
+        300: '#a5b4fc',
+        400: '#818cf8',
+        500: '#6366f1',
+        600: '#4f46e5', // رنگ اصلی (DEFAULT)
+        700: '#4338ca',
+        800: '#3730a3',
+        900: '#312e81',
+        950: '#1e1b4b'
       },
       border: "hsl(var(--border))",
       colorOne: "#6482AD",
@@ -68,17 +68,9 @@ export const theme = {
       ring: "hsl(var(--ring))",
       background: "hsl(var(--background))",
       foreground: "hsl(var(--foreground))",
-      primary: {
-        DEFAULT: "hsl(var(--primary))",
-        foreground: "hsl(var(--primary-foreground))",
-      },
 
       boxShadow: {
         neon: "0 0 15px #3498db", // Change the color to your desired neon color
-      },
-      secondary: {
-        DEFAULT: "hsl(var(--secondary))",
-        foreground: "hsl(var(--secondary-foreground))",
       },
       destructive: {
         DEFAULT: "hsl(var(--destructive))",

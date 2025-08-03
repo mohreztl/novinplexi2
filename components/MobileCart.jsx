@@ -166,7 +166,7 @@ const MobileCart = ({ isOpen, onClose }) => {
                 <div className="space-y-3">
                   <button
                     onClick={handleCheckout}
-                    className="w-full bg-blues text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200"
+                    className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200"
                   >
                   تکمیل خرید
                   </button>
