@@ -1,8 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSession } from "next-auth/react";
-import useCartStore from "@/store/cartStore.js";
-import { Trash2, ShoppingCart, Plus, Minus, Lock } from "lucide-react";
+import useCartStore from "@/store/cartStore";
+import { Trash2, ShoppingCart, Plus, Minus } from "lucide-react";
 import Image from "next/image";
 
 const CartStep = () => {

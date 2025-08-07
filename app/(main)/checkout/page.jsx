@@ -1,11 +1,11 @@
 'use client';
 
 import React,{ useState, useEffect } from 'react';
-import CartStep from "@/components/checkout/CartStep.jsx";
-import InfoStep from "@/components/checkout/InfoStep.jsx";
-import AdressStep from "@/components/checkout/AdressStep.jsx";
+import CartStep from "@/components/checkout/CartStep";
+import InfoStep from "@/components/checkout/InfoStep";
+import AdressStep from "@/components/checkout/AdressStep";
 import ReviewStep from "@/components/checkout/ReviewStep";
-import useCartStore from "@/store/cartStore.js";
+import useCartStore from "@/store/cartStore";
 import { FaShoppingCart, FaUser, FaMapMarkerAlt, FaCheckCircle, FaCheckDouble,FaUserEdit} from 'react-icons/fa';
 import { useSession } from "next-auth/react";
 import axios from 'axios';
