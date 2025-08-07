@@ -7,8 +7,7 @@ import Image from "next/image";
 
 const CartStep = () => {
   const { data: session } = useSession();
-  const userId = session?.user?._id;
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading] = useState(false);
   const {
     items,
     removeItem,
