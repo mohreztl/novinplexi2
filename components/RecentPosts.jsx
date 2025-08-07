@@ -100,7 +100,7 @@ const RecentPosts = ({ limit = 3 }) => {
           
           {/* لینک بیشتر بخوانید */}
           <Link
-            href={`/blog/${post._id}`}
+            href={`/blog/${post.slug || post._id}`}
             className="flex items-center text-primary hover:text-blue-800 transition-colors font-medium"
           >
             ادامه مطلب

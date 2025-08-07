@@ -264,9 +264,8 @@ const SearchDrawer = ({
 
                           <div className="mt-2 flex items-baseline gap-2">
                             <span className="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                              {item.price.toLocaleString()}
+                              {new Intl.NumberFormat('fa-IR').format(item.price)} تومان
                             </span>
-                            <span className="text-sm text-gray-500">تومان</span>
                           </div>
                         </div>
 

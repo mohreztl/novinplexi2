@@ -1,13 +1,5 @@
-// /app/shop/layout.tsx
-import SidebarProduct from "@/components/products/SidebarProduct"
-
-export default function ShopLayout({ children }) {
+export default function ProductsLayout({ children }) {
   return (
-    
-     
-   
-  
-      <main>{children}</main>
-
+    <main>{children}</main>
   );
 }

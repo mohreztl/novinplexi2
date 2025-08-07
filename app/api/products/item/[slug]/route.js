@@ -1,5 +1,5 @@
 import dbConnect from "@/utils/config/dbConnection";
-import { Product } from "@/utils/models/Product";
+import Product from "@/models/Product";
 import { NextResponse } from "next/server";
 
 export const dynamic = 'force-dynamic';
@@ -24,11 +24,11 @@ export async function GET(req, { params }) {
       }
     }
     
-    // اگر هنوز پیدا نشد، سعی می‌کنیم با name پیدا کنیم
+    // اگر هنوز پیدا نشد، سعی می‌کنیم با title پیدا کنیم
     if (!product) {
       // دکد کردن URL encoding برای نام فارسی
       const decodedSlug = decodeURIComponent(slug);
-      product = await Product.findOne({ name: decodedSlug });
+      product = await Product.findOne({ title: decodedSlug });
     }
 
     if (!product) {

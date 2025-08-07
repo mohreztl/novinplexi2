@@ -1,27 +1,35 @@
 import { NextResponse } from "next/server";
-import connect from "@/utils/config/dbConnection";
-import { Product } from "@/utils/models/Product";
+import dbConnect from "@/utils/config/dbConnection";
+import Product from "@/models/Product";
 
 export async function GET(req, { params }) {
-  await connect();
+  await dbConnect();
   const { slug } = params;
 
   try {
-    const product = await Product.findOne({slug});
+    // ابتدا بر اساس slug جستجو کنیم
+    let product = await Product.findOne({ slug });
+    
+    // اگر پیدا نشد، ممکن است ID باشد
+    if (!product && slug.match(/^[0-9a-fA-F]{24}$/)) {
+      product = await Product.findById(slug);
+    }
+    
     if (!product) {
       return NextResponse.json({ error: "product not found" }, { status: 404 });
     }
     return NextResponse.json(product);
   } catch (error) {
+    console.error("Error fetching product:", error);
     return NextResponse.json(
-      { error: "errot fetching product" },
+      { error: "error fetching product" },
       { status: 500 }
     );
   }
 }
 
 export async function PUT(req, { params }) {
-  await connect();
+  await dbConnect();
   const { slug } = params;
   const body = await req.json();
 
@@ -38,15 +46,16 @@ export async function PUT(req, { params }) {
 
     return NextResponse.json(updatedProduct);
   } catch (error) {
+    console.error("Error updating product:", error);
     return NextResponse.json(
-      { error: "errot updating product" },
+      { error: "error updating product" },
       { status: 500 }
     );
   }
 }
 
 export async function DELETE(req, { params }) {
-  await connect();
+  await dbConnect();
   const { slug } = params;
 
   try {
@@ -58,8 +67,9 @@ export async function DELETE(req, { params }) {
 
     return NextResponse.json({message: "product deleted sucessfully"});
   } catch (error) {
+    console.error("Error deleting product:", error);
     return NextResponse.json(
-      { error: "errot deleting product" },
+      { error: "error deleting product" },
       { status: 500 }
     );
   }

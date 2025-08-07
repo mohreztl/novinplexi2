@@ -16,7 +16,7 @@ const Product = ({ filteredProducts }) => {
                 >
                     {/* برچسب‌های محصول */}
                     <div className="absolute top-4 left-4 z-10 flex gap-2">
-                        {product.isNew && (
+                        {product.isNewProduct && (
                             <span className="bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">
                                 جدید
                             </span>

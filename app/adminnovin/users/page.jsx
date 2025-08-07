@@ -89,7 +89,7 @@ export default function UsersManagement() {
       id: 1,
       name: "علی محمدی",
       email: "ali@example.com",
-      phone: "09123456789",
+      phone: "09055669567",
       avatar: "/profile_result.webp",
       totalOrders: 12,
       totalSpent: 15400000,

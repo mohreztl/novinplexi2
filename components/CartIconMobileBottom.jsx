@@ -33,7 +33,7 @@ const CartIconMobileBottom = () => {
                 </p> */}
                 <ShoppingCart className="w-7 h-7" />
                 {itemCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-[#ffd700] text-[#31508c] text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border border-white">
+                  <span className="absolute -top-2 -right-2 bg-secondary text-slate-100 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border border-white">
                   {itemCount > 9 ? "9+" : itemCount}
                 </span>
                 )}

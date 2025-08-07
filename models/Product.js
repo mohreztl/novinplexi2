@@ -9,6 +9,10 @@ const variantSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  thickness: {
+    type: String,
+    required: true
+  },
   price: {
     type: Number,
     required: true
@@ -23,6 +27,11 @@ const productSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true
+  },
+  slug: {
+    type: String,
+    required: true,
+    unique: true
   },
   description: {
     type: String,
@@ -53,7 +62,10 @@ const productSchema = new mongoose.Schema({
   sizes: [{
     type: String
   }],
-  isNew: {
+  thicknesses: [{
+    type: String
+  }],
+  isNewProduct: {
     type: Boolean,
     default: false
   },

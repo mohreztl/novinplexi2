@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ShoppingCart, Minus, Plus } from "lucide-react";
 import MiniGuarantee from "./MiniGuarantee";
 import useCartStore from "@/store/cartStore";
+import { formatPrice } from "@/utils/formatPrice";
 
 const ProdDetailsPrice = ({
   product,
@@ -23,8 +24,13 @@ const ProdDetailsPrice = ({
     addItem(product, quantity);
   };
 
-  function formatPrice(price) {
-    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // اگر product وجود نداره، چیزی render نکن
+  if (!product) {
+    return (
+      <div className="md:w-1/2 px-4 sm:px-8 pb-8 sm:pt-20">
+        <div className="text-center">در حال بارگذاری...</div>
+      </div>
+    );
   }
 
   return (
@@ -41,7 +47,7 @@ const ProdDetailsPrice = ({
           </span>
           <div className="flex items-center flex-wrap mb-6">
             <p className="text-xl sm:text-2xl font-semibold text-green-400 mr-2 sm:mr-4 antialiased">
-              {formatPrice(product.price)} تومان
+              {formatPrice(product.price)}
             </p>
             {product.originalPrice && product.originalPrice > product.price && (
               <>

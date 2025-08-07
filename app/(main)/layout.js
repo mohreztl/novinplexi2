@@ -3,9 +3,9 @@ import "../globals.css";
 
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/home/Footer";
-import MobileBottomNav from "@/components/MobileBottomNav"
+import MobileBottomNav from "@/components/MobileBottomNav";
 import AuthProvider from "@/components/AuthProvider";
-
+import FloatingContactButton from "@/components/home/FloatingContactButton";
 
 export const metadata = {
   title: "نوین پلکسی",
@@ -31,7 +31,8 @@ export default function RootLayout({ children }) {
             {children}
           </main>
           <Footer className="p-0" />
-          {/* <MobileBottomNav /> */}
+          <FloatingContactButton/>
+          <MobileBottomNav />
         </AuthProvider>
       </body>
   

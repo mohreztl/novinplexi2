@@ -3,7 +3,7 @@ import "./globals.css";
 import localFont from 'next/font/local';
 import { Toaster } from 'sonner';
 import Script from 'next/script';
-import Navbar from "@/components/Navbar/Navbar";
+
 export const metadata = {
   title: "-نوین پلکسی",
   description: "نوین پلکسی، فروشگاه آنلاین دکوراسیون خانگی، ارائه‌دهنده انواع کاغذ دیواری، موکت تایلی، کفپوش و دیگر محصولات دکوراتیو برای ایجاد فضایی زیبا و مدرن در منزل شما. با کیفیت بالا و قیمت مناسب، خانه‌ای شیک و متفاوت بسازید. ارسال سریع و خدمات مشاوره تخصصی",
@@ -16,12 +16,12 @@ export const metadata = {
 const yekanBakh = localFont({
   src: [
     {
-      path: "../fonts/YekanBakh/YekanBakh-Regular.woff2",
+      path: "../fonts/YekanBakh/IRANSansXFaNum-Regular.woff2",
       weight: '400',
       style: 'normal',
     },
     {
-      path: "../fonts/YekanBakh/YekanBakh-Bold.woff2",
+      path: "../fonts/YekanBakh/IRANSansXFaNum-Bold.woff2",
       weight: '700',
       style: 'normal',
     },
@@ -60,9 +60,9 @@ export default function RootLayout({ children }) {
       
        <body className={yekanBakh.variable}>
          <AuthProvider>
-           <div className="min-h-screen flex flex-col">
+           <div >
            
-             <main className="flex-1">
+             <main>
                {children}
              </main>
            </div>

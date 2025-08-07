@@ -43,7 +43,7 @@ export default function CategoryPage({ params }) {
 
   return (
     <div className="mx-auto mt-10 px-4 max-w-screen-xl">
-      <h1 className="text-xl font-bold mb-6 text-center text-[#31508c]">
+      <h1 className="text-xl font-bold mb-6 text-center text-primary">
         محصولات دسته {data.title}
       </h1>
 
@@ -68,7 +68,7 @@ export default function CategoryPage({ params }) {
                 href={`/category/${params.slug}?page=${pageNum}`}
                 className={`px-4 py-2 rounded-lg border transition-all duration-200 ${
                   data.currentPage === pageNum
-                    ? 'bg-[#31508c] text-white'
+                    ? 'bg-primary text-white'
                     : 'bg-white text-black hover:bg-gray-200'
                 }`}
               >

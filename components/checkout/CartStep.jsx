@@ -19,7 +19,7 @@ const CartStep = () => {
   } = useCartStore();
 
   function formatPrice(price) {
-    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return new Intl.NumberFormat('fa-IR').format(price) + ' تومان';
   }
 
   const handleQuantityChange = (itemId, newQuantity) => {
@@ -99,7 +99,7 @@ const CartStep = () => {
               </div>
               <div className="flex items-center space-x-4 mt-4 md:mt-0">
                 <span className="font-bold text-lg text-secondary-600">
-                  {formatPrice(item.price * (item.quantity || 1))} تومان
+                  {formatPrice(item.price * (item.quantity || 1))}
                 </span>
                 <button
                   onClick={() => removeItem(item._id)}
@@ -120,7 +120,7 @@ const CartStep = () => {
             <div className="flex justify-between items-center pt-2">
               <span className="text-lg text-primary-800">مجموع سبد خرید:</span>
               <span className="font-bold text-xl text-secondary-600">
-                {formatPrice(getTotalPrice())} تومان
+                {formatPrice(getTotalPrice())}
               </span>
             </div>
           </div>

@@ -72,7 +72,7 @@ const  Blog = () => {
                   <span>{firstBlog?.category}</span>
                 </div>
                 <Link
-                  href={`/blog/${firstBlog?._id}`}
+                  href={`/blog/${firstBlog?.slug || firstBlog?._id}`}
                   className="bg-primary text-white px-4 py-2 rounded hover:bg-primary/80 transition duration-300 "
                 >
                  بیشتر بخوانید
@@ -116,7 +116,7 @@ const  Blog = () => {
                       {post.category}
                     </span>
                     <Link
-                      href={`/blog/${post?._id}`}
+                      href={`/blog/${post?.slug || post?._id}`}
                       className="text-primary hover:text-blue-800 transition duration-300 flex items-center"
                     >
                      بیشتر بخوانید <ChevronLeft className="w-4 h-4 ml-1" />

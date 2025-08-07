@@ -24,7 +24,7 @@ const CartIcon = () => {
     <div className="relative cursor-pointer group">
     <div 
       onClick={() => setCart(!cart)}
-      className="p-1 rounded-full hover:bg-[#31508c]/10 transition-colors"
+      className="p-1 rounded-full hover:bg-primary/10 transition-colors"
     >
       <svg
         width="32"
@@ -32,7 +32,7 @@ const CartIcon = () => {
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="text-[#31508c] group-hover:text-[#ffd700] transition-colors"
+        className="text-primary group-hover:text-secondary transition-colors"
       >
         <path
           d="M6 2L3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6L18 2H6Z"
@@ -49,7 +49,7 @@ const CartIcon = () => {
       </svg>
       
       {itemCount > 0 && (
-        <span className="absolute -top-1 -right-1 bg-[#ffd700] text-[#31508c] text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center border border-white">
+        <span className="absolute -top-1 -right-1 bg-secondary text-slate-100 text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center border border-white">
           {itemCount}
         </span>
       )}

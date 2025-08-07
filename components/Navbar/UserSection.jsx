@@ -88,7 +88,7 @@ const UserSection = ({ session }) => {
                   </motion.div>
                   
                   <span className="text-base font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent group-hover:text-white transition-all duration-300">
-                    ورود | ثبت نام
+                    ورود 
                   </span>
                   
                   <motion.div
@@ -158,7 +158,7 @@ const UserSection = ({ session }) => {
       </AnimatePresence>
 
       {/* Welcome message for new users */}
-      {!session && mounted && (
+      {/* {!session && mounted && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -170,7 +170,7 @@ const UserSection = ({ session }) => {
             عضو جدید هستید؟ خوش آمدید!
           </span>
         </motion.div>
-      )}
+      )} */}
     </motion.div>
   );
 };

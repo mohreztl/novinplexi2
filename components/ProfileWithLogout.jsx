@@ -15,7 +15,7 @@ const ProfileWithLogout = ({ user }) => {
         onMouseLeave={() => setIsHovered(false)}
       >
         {/* تصویر پروفایل کاربر */}
-        <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#31508c] hover:border-[#ffd700] transition-all duration-200 cursor-pointer mx-auto">
+        <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-primary hover:border-secondary transition-all duration-200 cursor-pointer mx-auto">
           <Image
             src={user?.image || "/profile_result.webp"}
             width={40}
@@ -32,14 +32,14 @@ const ProfileWithLogout = ({ user }) => {
             <div className="p-1">
               <Link
                 href="/profile"
-                className="block px-4 py-2 text-sm text-[#31508c] hover:bg-[#31508c]/10 rounded-md transition-colors text-center"
+                className="block px-4 py-2 text-sm text-primary hover:bg-primary/10 rounded-md transition-colors text-center"
               >
                 حساب کاربری
               </Link>
               
               <Button
                 onClick={() => signOut()}
-                className="w-full mt-1 bg-gradient-to-r from-[#ffd700] to-[#ffc800] hover:from-[#ffc800] hover:to-[#ffb700] text-[#31508c] font-medium text-sm py-2 transition-all"
+                className="w-full mt-1 bg-gradient-to-r from-secondary to-[#ffc800] hover:from-[#ffc800] hover:to-[#ffb700] text-primary font-medium text-sm py-2 transition-all"
               >
                 خروج
               </Button>

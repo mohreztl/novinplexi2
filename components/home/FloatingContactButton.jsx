@@ -41,7 +41,7 @@ const FloatingContactButton = () => {
               <>
                 {/* دکمه واتس‌اپ */}
                 <motion.a
-                  href="https://wa.me/989123456789"
+                  href="https://wa.me/989055669567"
                   target="_blank"
                   rel="noopener noreferrer"
                   initial={{ opacity: 0, scale: 0.5, y: 20 }}
@@ -59,7 +59,7 @@ const FloatingContactButton = () => {
 
                 {/* دکمه تماس */}
                 <motion.a
-                  href="tel:+989123456789"
+                  href="tel:+989055669567"
                   initial={{ opacity: 0, scale: 0.5, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.5, y: 20 }}
@@ -89,7 +89,7 @@ const FloatingContactButton = () => {
           >
             <motion.div
               animate={{ rotate: isExpanded ? 0 : 0 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.1 }}
             >
               {isExpanded ? (
                 <FiX className="text-white text-2xl" />

@@ -10,7 +10,7 @@ export default function NotFound() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-[#f8f9fa] to-[#e9ecef] text-center px-6">
       {/* عنوان 404 با انیمیشن */}
       <motion.h1
-        className="text-7xl font-extrabold text-[#31508c] mb-4"
+        className="text-7xl font-extrabold text-primary mb-4"
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.6 }}
@@ -43,7 +43,7 @@ export default function NotFound() {
         transition={{ delay: 0.6 }}
       >
         <Link href="/" passHref>
-          <Button className="bg-[#ffd700] text-[#31508c] hover:bg-yellow-400 text-lg px-6 py-2 rounded-2xl shadow-md">
+          <Button className="bg-secondary text-primary hover:bg-yellow-400 text-lg px-6 py-2 rounded-2xl shadow-md">
             <ArrowLeft className="ml-2" size={20} />
             بازگشت به صفحه اصلی
           </Button>

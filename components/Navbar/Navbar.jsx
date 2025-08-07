@@ -1,8 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { motion, AnimatePresence } from "framer-motion";
+import {motion, AnimatePresence } from "framer-motion"
 import axios from "axios";
+
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -29,9 +30,6 @@ import ServiceDrawer from "./ServiceDrawer";
 import AdminDrawer from "./AdminDrawer";
 import MobileMenu from "./MobileMenu";
 import UserSection from "./UserSection";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import Loader from "../ui/Loader";
 import useMobileMenuStore from "@/store/useMobileMenuStore";
 
 // Contact Section Component for Mega Menus
@@ -232,9 +230,9 @@ const Navbar = () => {
         }`}
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-20 items-center justify-between">
+          <div className="md:flex h-20 items-center justify-between">
             {/* Logo */}
-            <Link href="/" className=" space-x-1 z-30">
+            <Link href="/" className=" space-x-1 z-30 hidden lg:block">
            
                
                 <Image
@@ -250,9 +248,7 @@ const Navbar = () => {
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex lg:items-center lg:space-x-reverse lg:space-x-6">
-              <NavbarLink href="/" icon={Sparkles}>
-                صفحه اصلی
-              </NavbarLink>
+             
               
               <div className="mega-menu-container relative">
                 <NavbarLink
@@ -303,7 +299,7 @@ const Navbar = () => {
               </div>
 
               <NavbarLink href="/about">
-                درباره ما
+               مقالات
               </NavbarLink>
               
               <NavbarLink href="/contact">
@@ -313,42 +309,62 @@ const Navbar = () => {
 
             {/* Search and Actions */}
             <div className="flex items-center gap-4">
-              {/* Desktop Search */}
-              <div className="hidden lg:block">
-                <div className="group relative">
-                  <Input
-                    type="text"
-                    placeholder="جستجو محصولات..."
-                    className="w-64 rounded-full border-2 border-gray-200 bg-gray-50 py-2.5 pl-11 pr-4 text-sm transition-all focus:border-blue-600 focus:bg-white focus:shadow-lg focus:w-72"
-                    value={searchTerm.search}
-                    onChange={(e) => setSearchTerm({ search: e.target.value })}
-                    onFocus={() => setSearchOpen(true)}
-                  />
-                  <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400 transition-colors group-focus-within:text-blue-600" />
-                </div>
+              {/* Mobile Number (Desktop) */}
+              <div className="hidden lg:flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-full border border-blue-100">
+                <Phone className="h-4 w-4 text-blue-600" />
+                <a href="tel:+989055669567" className="text-sm font-medium text-blue-700 hover:text-blue-800 transition-colors">
+                  ۰۹05-566-9567
+                </a>
               </div>
 
-              {/* Mobile Search */}
+              {/* Search Icon (Desktop Only) */}
               <button
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-all hover:bg-blue-600 hover:text-white lg:hidden"
+                className="hidden lg:flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-all hover:bg-blue-600 hover:text-white"
                 onClick={() => setSearchOpen(true)}
               >
                 <Search className="h-5 w-5" />
               </button>
 
-              {/* Cart Icon */}
-              <CartIcon />
+              {/* Cart Icon (Desktop Only) */}
+              <div className="hidden lg:block">
+                <CartIcon />
+              </div>
 
-              {/* User Section */}
-              <UserSection session={session} admin={admin} setAdmin={setAdmin} />
+              {/* User Section (Desktop Only) */}
+              <div className="hidden lg:block">
+                <UserSection session={session} admin={admin} setAdmin={setAdmin} />
+              </div>
 
-              {/* Mobile Menu Button */}
-              <button
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-all hover:bg-blue-600 hover:text-white lg:hidden"
-                onClick={() => openMenu()}
-              >
-                {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-              </button>
+              {/* Mobile Layout: Menu - Logo - Phone */}
+              <div className="flex lg:hidden items-center justify-between w-full h-full pt-5">
+                {/* Mobile Menu Button (Right) */}
+                <button
+                  className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-all hover:bg-blue-600 hover:text-white"
+                  onClick={() => openMenu()}
+                >
+                  {isOpen ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}
+                </button>
+
+                {/* Logo (Center) - Mobile */}
+                <Link href="/" className="flex items-center">
+                  <Image
+                    src="/logo1.svg"
+                    alt="نوین پلکسی"
+                    width={62}
+                    height={62}
+                    className="h-12 w-auto"
+                  />
+                </Link>
+
+                {/* Phone Number (Left) */}
+                <a 
+                  href="tel:+989055669567" 
+                  className="flex items-center gap-2 px-3 py-2 bg-blue-50 rounded-full border border-blue-100"
+                >
+                  <Phone className="h-4 w-4 text-blue-600" />
+                  <span className="text-sm font-medium text-blue-700">۰905566956</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>

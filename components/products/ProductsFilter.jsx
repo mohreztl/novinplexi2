@@ -15,6 +15,13 @@ import {
   ChevronUp
 } from "lucide-react";
 
+const formatPrice = (price) => {
+  if (!price && price !== 0) {
+    return '0';
+  }
+  return new Intl.NumberFormat('fa-IR').format(price) + ' تومان';
+};
+
 const ProductsFilter = ({ 
   categories, 
   filters, 
@@ -162,8 +169,8 @@ const ProductsFilter = ({
                     className="w-full"
                   />
                   <div className="flex justify-between text-sm text-gray-600">
-                    <span>{formatPrice(filters.priceRange[0])} تومان</span>
-                    <span>{formatPrice(filters.priceRange[1])} تومان</span>
+                    <span>{formatPrice(filters.priceRange[0])}</span>
+                    <span>{formatPrice(filters.priceRange[1])}</span>
                   </div>
                 </motion.div>
               )}

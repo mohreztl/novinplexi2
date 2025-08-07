@@ -48,21 +48,21 @@ href:"#",
             href={item.href}
             className={`flex flex-col items-center justify-center w-full h-full relative transition-colors ${
               isActive(item.href)
-                ? "text-[#31508c]"
-                : "text-gray-500 hover:text-[#31508c]"
+                ? "text-primary"
+                : "text-gray-500 hover:text-primary"
             }`}
           >
             <div className="relative">
               {isActive(item.href) ? item.activeIcon : item.icon}
               {item.badge > 0 && (
-                <span className="absolute -top-2 -right-2 bg-[#ffd700] text-[#31508c] text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border border-white">
+                <span className="absolute -top-2 -right-2 bg-secondary text-primary text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border border-white">
                   {item.badge > 9 ? "9+" : item.badge}
                 </span>
               )}
             </div>
             <span className="text-[12px] mt-1">{item.name}</span>
             {isActive(item.href) && (
-              <div className="absolute top-0 w-1/2 h-1 bg-[#31508c] rounded-b-full" />
+              <div className="absolute top-0 w-1/2 h-1 bg-primary rounded-b-full" />
             )}
           </Link>
         ))}
@@ -71,14 +71,14 @@ href:"#",
           onClick={openMenu}
           className={`flex flex-col items-center justify-center w-full h-full transition-colors ${
             pathname === "/menu"
-              ? "text-[#31508c]"
-              : "text-gray-500 hover:text-[#31508c]"
+              ? "text-primary"
+              : "text-gray-500 hover:text-primary"
           }`}
         >
           <Menu className="w-6 h-6" />
           <span className="text-[10px] mt-1">منو</span>
           {pathname === "/menu" && (
-            <div className="absolute top-0 w-1/2 h-1 bg-[#31508c] rounded-b-full" />
+            <div className="absolute top-0 w-1/2 h-1 bg-primary rounded-b-full" />
           )}
         </button>
       </div>

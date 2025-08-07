@@ -11,7 +11,6 @@ import { Badge } from "@/components/ui/badge";
 import { 
   ArrowLeft, 
   Star, 
-  Heart, 
   ShoppingCart,
   Package,
   TrendingUp,
@@ -51,7 +50,7 @@ const LatestProducts = () => {
   };
 
   const formatPrice = (price) => {
-    return parseInt(price || 0).toLocaleString();
+    return new Intl.NumberFormat('fa-IR').format(price || 0) + ' تومان';
   };
 
   if (loading) {
@@ -177,11 +176,6 @@ const LatestProducts = () => {
                       جدید
                     </Badge>
 
-                    {/* دکمه علاقه‌مندی */}
-                    <button className="absolute top-3 left-3 p-2 bg-white/80 backdrop-blur-sm rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-white">
-                      <Heart className="w-4 h-4 text-gray-600 hover:text-red-500" />
-                    </button>
-
                     {/* overlay برای نمایش دکمه‌ها */}
                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                       <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
@@ -213,11 +207,11 @@ const LatestProducts = () => {
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col">
                         <span className="text-lg font-bold text-blue-600">
-                          {formatPrice(product.originalPrice)} تومان
+                          {formatPrice(product.originalPrice)}
                         </span>
                         {product.price && product.price !== product.originalPrice && (
                           <span className="text-sm text-gray-500 line-through">
-                            {formatPrice(product.price)} تومان
+                            {formatPrice(product.price)}
                           </span>
                         )}
                       </div>

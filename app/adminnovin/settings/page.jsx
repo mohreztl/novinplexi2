@@ -55,7 +55,7 @@ export default function SiteSettings() {
     storeDescription: "فروشگاه محصولات دکوراسیون داخلی",
     email: "info@nikodecor.com",
     phone: "021-12345678",
-    mobile: "09123456789",
+    mobile: "09055669567",
     address: "تهران، خیابان ولیعصر، ...",
     
     // شبکه‌های اجتماعی

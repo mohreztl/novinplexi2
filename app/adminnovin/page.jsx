@@ -4,8 +4,7 @@ import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { FiBox, FiUsers, FiFileText, FiSettings, FiShoppingBag, FiGrid } from "react-icons/fi";
+import { FiBox, FiFileText, FiSettings, FiShoppingBag, FiGrid } from "react-icons/fi";
 
 export default function AdminDashboard() {
   const { data: session } = useSession();
@@ -78,21 +77,16 @@ export default function AdminDashboard() {
     <div className="p-6 bg-gray-100 min-h-screen">
       {/* Welcome Section */}
       <div className="mb-8">
-        <motion.h1 
-          className="text-3xl font-bold text-gray-800 mb-2"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
+        <h1 className="text-3xl font-bold text-gray-800 mb-2">
           خوش آمدید {session?.user?.name}! 👋
-        </motion.h1>
+        </h1>
         <p className="text-gray-600">به پنل مدیریت نوین پلکسی خوش آمدید. در اینجا می‌توانید محتوای سایت را مدیریت کنید.</p>
       </div>
 
       {/* Quick Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {menuItems.map((item, index) => (
-          <motion.div
+          <div
             key={item.title}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -114,7 +108,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
             </Link>
-          </motion.div>
+          </div>
         ))}
       </div>
 

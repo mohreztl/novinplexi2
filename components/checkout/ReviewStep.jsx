@@ -39,7 +39,7 @@ export default function ReviewStep({ formData, addressData, items, totalPrice, s
                         {items.map(item => (
                             <div key={item._id} className="flex justify-between">
                                 <span>{item.name}</span>
-                                <span>{item.quantity} × {item.price.toLocaleString()} تومان</span>
+                                <span>{item.quantity} × {new Intl.NumberFormat('fa-IR').format(item.price)} تومان</span>
                             </div>
                         ))}
                     </div>
@@ -48,7 +48,7 @@ export default function ReviewStep({ formData, addressData, items, totalPrice, s
                 <div className="mt-4 bg-white rounded-lg p-4 shadow-sm">
                     <div className="flex justify-between font-bold">
                         <span>مجموع کل:</span>
-                        <span>{(totalPrice + shippingCost).toLocaleString()} تومان</span>
+                        <span>{new Intl.NumberFormat('fa-IR').format(totalPrice + shippingCost)} تومان</span>
                     </div>
                 </div>
             </div>

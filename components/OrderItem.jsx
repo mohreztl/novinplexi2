@@ -2,11 +2,8 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { PackageOpen,Eye, } from 'lucide-react';
 import Link from "next/link";
+import { formatPrice } from "@/utils/formatPrice";
 const OrderItem = ({ order }) => {
-  // Function to safely format the total
-  function formatPrice(price) {
-    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
   const statusLabels = {
     PENDING: "در حال بررسی",
     PAID: "تایید پرداخت",
@@ -53,7 +50,7 @@ const OrderItem = ({ order }) => {
       <div className="space-y-1">
         <p className="text-gray-500">مبلغ کل</p>
         <p className="font-medium text-secondary-600">
-          {formatPrice(order.total)} تومان
+          {formatPrice(order.total)}
         </p>
       </div>
 

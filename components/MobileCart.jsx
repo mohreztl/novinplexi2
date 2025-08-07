@@ -3,6 +3,7 @@ import useCartStore from "@/store/cartStore";
 import Image from "next/image";
 import { Trash2, ShoppingCart, X, Minus, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { formatPrice } from "@/utils/formatPrice";
 
 const MobileCart = ({ isOpen, onClose }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -48,9 +49,6 @@ const MobileCart = ({ isOpen, onClose }) => {
         <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-gray-900"></div>
       </div>
     );
-  }
-  function formatPrice(price) {
-    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
   return (
     <AnimatePresence>
@@ -133,7 +131,7 @@ const MobileCart = ({ isOpen, onClose }) => {
                       </div>
                       <div className="text-right">
                         <p className="font-bold text-sm text-gray-800">
-                          {formatPrice((item.price * (item.quantity || 1)))}تومان
+                          {formatPrice((item.price * (item.quantity || 1)))}
                         </p>
                         <button
                           onClick={() => removeItem(item._id)}
@@ -149,7 +147,7 @@ const MobileCart = ({ isOpen, onClose }) => {
                   <div className="flex justify-between text-sm mb-2">
                     <span>Subtotal:</span>
                     <span className="font-semibold">
-                      {formatPrice(getTotalPrice())}تومان
+                      {formatPrice(getTotalPrice())}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm mb-2">
@@ -160,7 +158,7 @@ const MobileCart = ({ isOpen, onClose }) => {
                   </div>
                   <div className="flex justify-between text-lg font-bold mt-4">
                     <span>مجموع:</span>
-                    <span>{formatPrice(getTotalPrice())}تومان</span>
+                    <span>{formatPrice(getTotalPrice())}</span>
                   </div>
                 </div>
                 <div className="space-y-3">

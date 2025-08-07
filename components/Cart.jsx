@@ -3,6 +3,7 @@ import useCartStore from "../store/cartStore";
 import Image from "next/image";
 import { Trash2, ShoppingCart, Minus, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { formatPrice } from "@/utils/formatPrice";
 
 const Cart = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -39,10 +40,6 @@ const Cart = () => {
   const handleCheckout = () => {
     window.location.href = "/checkout";
   };
-//جدا کردن قیمت
-  function formatPrice(price) {
-    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -111,7 +108,7 @@ const Cart = () => {
                   </div>
                   <div className="text-right">
                     <p className="font-bold text-sm text-gray-800">
-                      تومان{formatPrice((item.price * item.quantity))}
+                      {formatPrice((item.price * item.quantity))}
                     </p>
                     <button
                       onClick={(e) => handleRemove(e, item._id)}
@@ -128,7 +125,7 @@ const Cart = () => {
             <div className="flex justify-between text-sm mb-2">
               <span>مجموع قیمت:</span>
               <span className="font-semibold">
-               {formatPrice(getTotalPrice())} تومان
+               {formatPrice(getTotalPrice())}
               </span>
             </div>
             <div className="flex justify-between text-sm mb-2">
@@ -137,7 +134,7 @@ const Cart = () => {
             </div>
             <div className="flex justify-between text-lg font-bold mt-4">
               <span>مجموع قیمت:</span>
-              <span>{formatPrice(getTotalPrice())} تومان</span>
+              <span>{formatPrice(getTotalPrice())}</span>
             </div>
           </div>
           <div className="space-y-3">
