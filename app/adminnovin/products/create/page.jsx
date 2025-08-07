@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useToast } from "@/components/ui/use-toast";
 import ImagesList from "@/components/ImagesList";
 
 // اسکیمای اعتبارسنجی
@@ -54,6 +55,7 @@ const CreateProduct = () => {
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [imagePath, setImagePath] = useState([]);
+  const { toast } = useToast();
 
   // فرم و اعتبارسنجی
   const {
@@ -142,12 +144,12 @@ const CreateProduct = () => {
 
   // ارسال فرم
   const onSubmit = async (data) => {
-    console.log("Form Data:", data);
-    console.log("ImagePath State:", imagePath);
+    // console.log("Form Data:", data);
+    // console.log("ImagePath State:", imagePath);
     
     // بررسی اینکه آیا تصاویر موجود است
     if (!data.images || data.images.length === 0) {
-      console.error("No images in form data");
+      // console.error("No images in form data");
       return;
     }
     
@@ -165,7 +167,14 @@ const CreateProduct = () => {
         router.push("/");
       }
     } catch (error) {
-      console.error("Error creating product:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error("Error creating product:", error);
+      }
+      toast({
+        title: "خطا",
+        description: "خطا در ایجاد محصول. لطفاً دوباره تلاش کنید.",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
