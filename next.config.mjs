@@ -8,7 +8,6 @@ const __dirname = dirname(__filename);
 
 const nextConfig = {
   reactStrictMode: true,
-  output: "standalone",
   eslint: {
     ignoreDuringBuilds: true,
   },
