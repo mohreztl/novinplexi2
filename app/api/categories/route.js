@@ -1,13 +1,13 @@
-export const dynamic = 'force-dynamic';
-
 import { NextResponse } from "next/server";
-import dbConnect from "@/lib/db";
-import { Category } from "@/models/Category";
+import { connectToDB } from "@/lib/db";
+import Category from "@/models/Category";
+
+export const dynamic = 'force-dynamic';
 
 // GET: دریافت همه دسته‌بندی‌ها
 export async function GET() {
   try {
-    await dbConnect(); // اتصال به دیتابیس
+    await connectToDB(); // اتصال به دیتابیس
     
     const parents = await Category.find({ parent: null }).lean();
     const categories = await Promise.all(
@@ -30,6 +30,8 @@ export async function GET() {
 // POST: ساخت دسته جدید
 export async function POST(req) {
   try {
+    await connectToDB();
+    
     const body = await req.json();
     const { title, slug, icon, parent } = body;
 
@@ -42,14 +44,19 @@ export async function POST(req) {
 
     return NextResponse.json({ success: true, category: newCategory });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ success: false, message: "خطا در ایجاد دسته‌بندی" }, { status: 500 });
+    console.error("POST Error:", error);
+    return NextResponse.json({ 
+      success: false, 
+      message: "خطا در ایجاد دسته‌بندی" 
+    }, { status: 500 });
   }
 }
 
 // PATCH: آپدیت یک دسته‌بندی
 export async function PATCH(req) {
   try {
+    await connectToDB();
+    
     const body = await req.json();
     const { id, title, slug, icon, parent } = body;
 
@@ -65,29 +72,43 @@ export async function PATCH(req) {
 
     return NextResponse.json({ success: true, category: updatedCategory });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ success: false, message: "خطا در بروزرسانی دسته‌بندی" }, { status: 500 });
+    console.error("PATCH Error:", error);
+    return NextResponse.json({ 
+      success: false, 
+      message: "خطا در بروزرسانی دسته‌بندی" 
+    }, { status: 500 });
   }
 }
 
 // DELETE: حذف یک دسته‌بندی
 export async function DELETE(req) {
   try {
+    await connectToDB();
+    
     const body = await req.json();
     const { id } = body;
 
     const deletedCategory = await Category.findByIdAndDelete(id);
 
     if (!deletedCategory) {
-      return NextResponse.json({ success: false, message: "دسته‌بندی پیدا نشد" }, { status: 404 });
+      return NextResponse.json({ 
+        success: false, 
+        message: "دسته‌بندی پیدا نشد" 
+      }, { status: 404 });
     }
 
-    // زیر مجموعه‌ها رو هم حذف کن (اختیاری، بستگی به استراتژی پروژه داره)
+    // زیر مجموعه‌ها رو هم حذف کن
     await Category.deleteMany({ parent: id });
 
-    return NextResponse.json({ success: true, message: "دسته‌بندی با موفقیت حذف شد" });
+    return NextResponse.json({ 
+      success: true, 
+      message: "دسته‌بندی با موفقیت حذف شد" 
+    });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ success: false, message: "خطا در حذف دسته‌بندی" }, { status: 500 });
+    console.error("DELETE Error:", error);
+    return NextResponse.json({ 
+      success: false, 
+      message: "خطا در حذف دسته‌بندی" 
+    }, { status: 500 });
   }
 }

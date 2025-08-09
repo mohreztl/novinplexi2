@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false, // غیرفعال کردن strict mode برای جلوگیری از hydration issues
   poweredByHeader: false,
   compress: true,
   generateEtags: true,

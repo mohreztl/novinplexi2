@@ -6,6 +6,7 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import { PWAPrompt } from '@/components/PWAPrompt';
 import { CookieConsent } from '@/components/CookieConsent';
 import { OrganizationSchema, WebsiteSchema } from '@/components/SEO/StructuredData';
+import NoSSR from '@/components/NoSSR';
 
 export const metadata = {
   title: {
@@ -123,8 +124,10 @@ export default function RootLayout({ children }) {
             </main>
           </div>
           <Toaster position="top-center" richColors />
-          <PWAPrompt />
-          <CookieConsent />
+          <NoSSR>
+            <PWAPrompt />
+            <CookieConsent />
+          </NoSSR>
         </AuthProvider>
         
         {/* SEO Schema Markup */}

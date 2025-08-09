@@ -1,11 +1,11 @@
-import dbConnect from "@/lib/db";
-import { Product } from "@/models/Product";
+import { connectToDB } from "@/lib/db";
+import Product from "@/models/Product";
 import { NextResponse } from "next/server";
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    await dbConnect();
+    await connectToDB();
 
     const foundProducts = await Product.find({})
       .sort({ createdAt: -1 });
@@ -20,11 +20,11 @@ export async function GET() {
   }
 }
 
-export async function POST(req) {
+export async function POST(request) {
   try {
-    await dbConnect();
+    await connectToDB();
 
-    const body = await req.json();
+    const body = await request.json();
 
     const {
       title,
@@ -52,12 +52,10 @@ export async function POST(req) {
       published
     });
 
-    const savedProduct = await newProduct.save();
-
     return NextResponse.json({
       message: "Product created successfully",
       success: true,
-      product: savedProduct,
+      product: newProduct,
     });
   } catch (error) {
     console.error('Error creating product:', error);
