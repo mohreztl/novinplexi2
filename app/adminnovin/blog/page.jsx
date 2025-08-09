@@ -53,9 +53,9 @@ export default function AdminBlogListPage() {
       const data = await response.json();
       
       if (data.success) {
-        setBlogs(data.blogs);
+        setBlogs(data.data);
         setTotalPages(data.pagination.totalPages);
-        setTotalBlogs(data.pagination.totalBlogs);
+        setTotalBlogs(data.pagination.totalItems);
       }
     } catch (error) {
       console.error('خطا در دریافت مقالات:', error);

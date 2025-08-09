@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { X, Send } from "lucide-react";
 import RichTextEditor from "@/components/editor/RichTextEditor";
+import ImagesList from "@/components/ImagesList";
 import axios from "axios";
 
 const CATEGORIES = [
@@ -139,7 +140,11 @@ export default function CreateBlog() {
     try {
       const response = await axios.post("/api/blog", {
         ...formData,
-        author: session.user._id
+        author: {
+          name: session.user.name || 'نوین پلکسی',
+          avatar: session.user.image || '/default-avatar.png',
+          bio: 'نویسنده مقالات نوین پلکسی'
+        }
       });
 
       if (response.status === 200 || response.status === 201) {
@@ -147,6 +152,7 @@ export default function CreateBlog() {
       }
     } catch (error) {
       console.error("Error creating blog:", error);
+      alert("خطا در ایجاد مقاله");
     } finally {
       setIsLoading(false);
     }
@@ -241,14 +247,22 @@ export default function CreateBlog() {
 
               <div>
                 <label className="block text-sm font-medium mb-2">تصویر شاخص *</label>
-                <Input
-                  name="featuredImage"
-                  value={formData.featuredImage}
-                  onChange={handleInputChange}
-                  placeholder="لینک تصویر شاخص"
-                  type="url"
-                  required
+                <ImagesList
+                  onImageSelect={(imageUrl) => {
+                    setFormData(prev => ({
+                      ...prev,
+                      featuredImage: imageUrl
+                    }));
+                  }}
+                  selectedImage={formData.featuredImage}
+                  maxSelection={1}
+                  showUpload={true}
                 />
+                {formData.featuredImage && (
+                  <div className="mt-2">
+                    <p className="text-sm text-green-600">تصویر انتخاب شده: {formData.featuredImage.split('/').pop()}</p>
+                  </div>
+                )}
               </div>
             </div>
 

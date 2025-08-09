@@ -19,7 +19,6 @@ import {
   Heading3,
   Undo,
   Redo,
-  Type,
   Palette
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -51,11 +50,40 @@ const RichTextEditor = ({ value, onChange, placeholder = "محتوای مقال�
     }
   };
 
-  const insertImage = () => {
-    const url = prompt('آدرس تصویر را وارد کنید:');
-    if (url) {
-      execCommand('insertImage', url);
-    }
+  const insertImage = async () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.multiple = false;
+    
+    input.onchange = async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      try {
+        const formData = new FormData();
+        formData.append('files', file);
+        
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.success && result.urls && result.urls.length > 0) {
+          const imageUrl = result.urls[0];
+          execCommand('insertImage', imageUrl);
+        } else {
+          alert('خطا در آپلود تصویر');
+        }
+      } catch (error) {
+        console.error('خطا در آپلود تصویر:', error);
+        alert('خطا در آپلود تصویر');
+      }
+    };
+    
+    input.click();
   };
 
   const insertLink = () => {

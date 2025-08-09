@@ -55,15 +55,25 @@ export default function ProductPage() {
         const productData = res.data;
         setProduct(productData);
         
-        // Set default selections
-        if (productData.colors?.length > 0) {
-          setSelectedColor(productData.colors[0].code);
-        }
-        if (productData.sizes?.length > 0) {
-          setSelectedSize(productData.sizes[0]);
-        }
-        if (productData.thicknesses?.length > 0) {
-          setSelectedThickness(productData.thicknesses[0]);
+        // Set default selections based on variations
+        if (productData.variations?.length > 0) {
+          // رنگ پیش‌فرض
+          const colorVariation = productData.variations.find(v => v.type === "رنگ");
+          if (colorVariation?.options?.length > 0) {
+            setSelectedColor(colorVariation.options[0].name);
+          }
+          
+          // سایز پیش‌فرض
+          const sizeVariation = productData.variations.find(v => v.type === "اندازه");
+          if (sizeVariation?.options?.length > 0) {
+            setSelectedSize(sizeVariation.options[0].name);
+          }
+          
+          // ضخامت پیش‌فرض
+          const thicknessVariation = productData.variations.find(v => v.type === "ضخامت");
+          if (thicknessVariation?.options?.length > 0) {
+            setSelectedThickness(thicknessVariation.options[0].name);
+          }
         }
       } catch (err) {
         console.error("Error fetching product:", err);
@@ -78,13 +88,30 @@ export default function ProductPage() {
     }
   }, [slug]);
 
-  // Update selected variant when color, size or thickness changes
+  // Update selected variant when selections change
   useEffect(() => {
-    if (product && selectedColor && selectedSize && selectedThickness) {
-      const variant = product.variants?.find(
-        v => v.color === selectedColor && v.size === selectedSize && v.thickness === selectedThickness
-      );
-      setSelectedVariant(variant);
+    if (product && product.variations) {
+      // محاسبه قیمت نهایی بر اساس انتخاب‌ها
+      let totalPrice = parseInt(product.originalPrice) || 0;
+      
+      // اضافه کردن قیمت‌های متغیرها
+      product.variations.forEach(variation => {
+        let selectedOption = null;
+        
+        if (variation.type === "رنگ" && selectedColor) {
+          selectedOption = variation.options.find(opt => opt.name === selectedColor);
+        } else if (variation.type === "اندازه" && selectedSize) {
+          selectedOption = variation.options.find(opt => opt.name === selectedSize);
+        } else if (variation.type === "ضخامت" && selectedThickness) {
+          selectedOption = variation.options.find(opt => opt.name === selectedThickness);
+        }
+        
+        if (selectedOption && selectedOption.price) {
+          totalPrice += parseInt(selectedOption.price) || 0;
+        }
+      });
+      
+      setSelectedVariant({ price: totalPrice });
     }
   }, [selectedColor, selectedSize, selectedThickness, product]);
 
@@ -92,7 +119,7 @@ export default function ProductPage() {
     if (selectedVariant) {
       return selectedVariant.price;
     }
-    return product?.basePrice || 0;
+    return parseInt(product?.originalPrice) || 0;
   };
 
   const getDiscountedPrice = () => {
@@ -347,8 +374,95 @@ export default function ProductPage() {
               </CardContent>
             </Card>
 
-            {/* Color Selection */}
-            {product.colors?.length > 0 && (
+            {/* Product Variations - New System */}
+            {product.variations?.map((variation, index) => (
+              <div key={index} className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {variation.type}:
+                  </h3>
+                  {((variation.type === "رنگ" && selectedColor) ||
+                    (variation.type === "اندازه" && selectedSize) ||
+                    (variation.type === "ضخامت" && selectedThickness)) && (
+                    <Badge variant="outline" className="text-sm">
+                      {variation.type === "رنگ" ? selectedColor :
+                       variation.type === "اندازه" ? selectedSize :
+                       selectedThickness}
+                    </Badge>
+                  )}
+                </div>
+                
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
+                  {variation.options?.map((option, optIndex) => {
+                    const isSelected = 
+                      (variation.type === "رنگ" && selectedColor === option.name) ||
+                      (variation.type === "اندازه" && selectedSize === option.name) ||
+                      (variation.type === "ضخامت" && selectedThickness === option.name);
+                    
+                    const handleSelect = () => {
+                      if (variation.type === "رنگ") {
+                        setSelectedColor(option.name);
+                      } else if (variation.type === "اندازه") {
+                        setSelectedSize(option.name);
+                      } else if (variation.type === "ضخامت") {
+                        setSelectedThickness(option.name);
+                      }
+                    };
+
+                    return (
+                      <motion.button
+                        key={optIndex}
+                        onClick={handleSelect}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`relative p-3 rounded-lg border-2 font-medium transition-all duration-200 ${
+                          isSelected
+                            ? 'border-primary-500 bg-primary-50 text-primary-700 shadow-md'
+                            : 'border-gray-300 hover:border-gray-400 bg-white text-gray-700'
+                        }`}
+                      >
+                        <div className="flex flex-col items-center gap-1">
+                          <span className="text-sm font-medium text-center">{option.name}</span>
+                          {option.price && parseInt(option.price) > 0 && (
+                            <span className="text-xs text-green-600 font-bold">
+                              +{formatPrice(parseInt(option.price))}
+                            </span>
+                          )}
+                        </div>
+                        {isSelected && (
+                          <motion.div 
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            className="absolute -top-1 -right-1 w-4 h-4 bg-primary-500 rounded-full flex items-center justify-center"
+                          >
+                            <CheckCircle className="w-3 h-3 text-white" />
+                          </motion.div>
+                        )}
+                      </motion.button>
+                    );
+                  })}
+                </div>
+                
+                {/* Price breakdown for this variation */}
+                {variation.options?.some(opt => opt.price && parseInt(opt.price) > 0) && (
+                  <div className="bg-gray-50 p-3 rounded-lg">
+                    <p className="text-xs text-gray-600 mb-2">قیمت‌های اضافی این {variation.type}:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {variation.options.map((opt, idx) => (
+                        opt.price && parseInt(opt.price) > 0 && (
+                          <span key={idx} className="text-xs bg-white px-2 py-1 rounded border">
+                            {opt.name}: +{formatPrice(parseInt(opt.price))}
+                          </span>
+                        )
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+
+            {/* Legacy Color Selection - fallback */}
+            {!product.variations?.find(v => v.type === "رنگ") && product.colors?.length > 0 && (
               <div className="space-y-3">
                 <h3 className="text-lg font-semibold text-gray-900">رنگ:</h3>
                 <div className="flex flex-wrap gap-3">
@@ -378,8 +492,8 @@ export default function ProductPage() {
               </div>
             )}
 
-            {/* Size Selection */}
-            {product.sizes?.length > 0 && (
+            {/* Legacy Size Selection - fallback */}
+            {!product.variations?.find(v => v.type === "اندازه") && product.sizes?.length > 0 && (
               <div className="space-y-3">
                 <h3 className="text-lg font-semibold text-gray-900">سایز:</h3>
                 <div className="flex flex-wrap gap-3">
@@ -400,8 +514,8 @@ export default function ProductPage() {
               </div>
             )}
 
-            {/* Thickness Selection */}
-            {product.thicknesses?.length > 0 && (
+            {/* Legacy Thickness Selection - fallback */}
+            {!product.variations?.find(v => v.type === "ضخامت") && product.thicknesses?.length > 0 && (
               <div className="space-y-3">
                 <h3 className="text-lg font-semibold text-gray-900">ضخامت:</h3>
                 <div className="flex flex-wrap gap-3">

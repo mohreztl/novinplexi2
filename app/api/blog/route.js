@@ -12,11 +12,15 @@ export async function GET(request) {
     const limit = parseInt(searchParams.get('limit')) || 10;
     const category = searchParams.get('category');
     const search = searchParams.get('search');
+    const status = searchParams.get('status');
     
     // ساخت query
     const query = {};
     if (category) {
       query.category = category;
+    }
+    if (status) {
+      query.status = status;
     }
     if (search) {
       query.$or = [
@@ -32,7 +36,6 @@ export async function GET(request) {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
-      .populate('author', 'name email')
       .lean();
     
     const total = await Blog.countDocuments(query);
