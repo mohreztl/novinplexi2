@@ -1,0 +1,49 @@
+{
+  "name": "نوین پلکسی - فروشگاه آنلاین دکوراسیون خانگی",
+  "short_name": "نوین پلکسی",
+  "description": "فروشگاه آنلاین دکوراسیون خانگی، کاغذ دیواری، موکت و کفپوش",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "fa",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["shopping", "lifestyle", "business"],
+  "shortcuts": [
+    {
+      "name": "محصولات",
+      "short_name": "محصولات",
+      "description": "مشاهده محصولات",
+      "url": "/products",
+      "icons": [{ "src": "/favicon-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "مقالات",
+      "short_name": "مقالات",
+      "description": "مطالعه مقالات",
+      "url": "/blog",
+      "icons": [{ "src": "/favicon-96x96.png", "sizes": "96x96" }]
+    }
+  ]
+}

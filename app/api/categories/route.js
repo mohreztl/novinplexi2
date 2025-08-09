@@ -1,35 +1,13 @@
 export const dynamic = 'force-dynamic';
 
 import { NextResponse } from "next/server";
-import mongoose from "mongoose";
-import Category from "@/utils/models/Category";
-
-// کش کردن اتصال به دیتابیس
-let cached = global.mongoose;
-if (!cached) cached = global.mongoose = { conn: null };
-
-async function connectToDB() {
-  if (cached.conn) return cached.conn;
-  
-  // تنظیمات اتصال
-  const opts = {
-    bufferCommands: false,
-  };
-
-  try {
-    cached.conn = await mongoose.connect(process.env.MONGO_URI, opts);
-    console.log("Connected to MongoDB");
-    return cached.conn;
-  } catch (error) {
-    console.error("MongoDB connection error:", error);
-    throw error;
-  }
-}
+import dbConnect from "@/lib/db";
+import { Category } from "@/models/Category";
 
 // GET: دریافت همه دسته‌بندی‌ها
 export async function GET() {
   try {
-    await connectToDB(); // اتصال به دیتابیس
+    await dbConnect(); // اتصال به دیتابیس
     
     const parents = await Category.find({ parent: null }).lean();
     const categories = await Promise.all(

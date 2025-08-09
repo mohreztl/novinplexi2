@@ -2,21 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  .shadow-neon {
-    --tw-shadow-color: #1B1A55;
-    /* Neon green */
-    box-shadow: 0 0 .5rem var(--tw-shadow-color),
-      0 0 2rem var(--tw-shadow-color),
-      0 0 2rem var(--tw-shadow-color),
-      0 0 2rem var(--tw-shadow-color),
-      0 0 2rem var(--tw-shadow-color);
-  }
-}
-
-
-
+/* Critical CSS optimizations */
 @layer base {
+  /* Font display optimization */
+  @font-face {
+    font-family: 'IRANSansXFaNum';
+    font-display: swap;
+  }
+
+  /* Critical styles */
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior: none;
+  }
+
+  /* Improve CLS (Cumulative Layout Shift) */
+  img, video {
+    height: auto;
+    max-width: 100%;
+  }
+
+  /* Preload critical resources */
+  link[rel="preload"] {
+    as: font;
+    crossorigin: anonymous;
+  }
+
   :root {
     --blue: rgba(49, 80, 140, 1);
     --background: 0 0% 100%;

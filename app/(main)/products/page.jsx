@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { OptimizedImage } from "@/components/ui/OptimizedImage";
 import {
   Select,
   SelectContent,
@@ -53,7 +53,17 @@ export default function ProductsPage() {
   const fetchCategories = async () => {
     try {
       const response = await axios.get("/api/categories");
-      setCategories(response.data);
+      if (response.data.success) {
+        // فلت کردن دسته‌بندی‌ها (والدین و فرزندان)
+        const flatCategories = [];
+        response.data.categories.forEach(parent => {
+          flatCategories.push(parent);
+          if (parent.children && parent.children.length > 0) {
+            flatCategories.push(...parent.children);
+          }
+        });
+        setCategories(flatCategories);
+      }
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
@@ -66,7 +76,7 @@ export default function ProductsPage() {
     // فیلتر جستجو
     if (searchTerm) {
       filtered = filtered.filter(product =>
-        product.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.description?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
@@ -74,14 +84,14 @@ export default function ProductsPage() {
     // فیلتر دسته‌بندی
     if (selectedCategory) {
       filtered = filtered.filter(product =>
-        product.categories === selectedCategory
+        product.category === selectedCategory
       );
     }
 
     // فیلتر قیمت
     if (priceRange.min || priceRange.max) {
       filtered = filtered.filter(product => {
-        const price = parseInt(product.price) || 0;
+        const price = parseInt(product.basePrice) || 0;
         const min = priceRange.min ? parseInt(priceRange.min) : 0;
         const max = priceRange.max ? parseInt(priceRange.max) : Infinity;
         return price >= min && price <= max;
@@ -91,13 +101,13 @@ export default function ProductsPage() {
     // مرتب‌سازی
     switch (sortBy) {
       case "price-low":
-        filtered.sort((a, b) => (parseInt(a.price) || 0) - (parseInt(b.price) || 0));
+        filtered.sort((a, b) => (parseInt(a.basePrice) || 0) - (parseInt(b.basePrice) || 0));
         break;
       case "price-high":
-        filtered.sort((a, b) => (parseInt(b.price) || 0) - (parseInt(a.price) || 0));
+        filtered.sort((a, b) => (parseInt(b.basePrice) || 0) - (parseInt(a.basePrice) || 0));
         break;
       case "name":
-        filtered.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+        filtered.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
         break;
       case "newest":
       default:
@@ -137,20 +147,13 @@ export default function ProductsPage() {
 
     addItem({
       id: product._id,
-      name: product.name,
-      price: product.price,
+      name: product.title,
+      price: product.basePrice,
       image: product.images?.[0] || "/placeholder.webp",
       quantity: 1
     });
     
     toast.success("محصول به سبد خرید اضافه شد");
-  };
-
-  const calculateDiscount = (original, current) => {
-    if (original && current && original > current) {
-      return Math.round(((original - current) / original) * 100);
-    }
-    return 0;
   };
 
   if (loading) {
@@ -352,23 +355,23 @@ export default function ProductsPage() {
                   {/* Product Image */}
                   <div className="relative aspect-square overflow-hidden">
                     <Link href={`/product/${product.slug || product._id}`}>
-                      <Image
+                      <OptimizedImage
                         src={product.images?.[0] || "/placeholder.webp"}
-                        alt={product.name}
+                        alt={product.title}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     </Link>
                     
                     {/* Discount Badge */}
-                    {calculateDiscount(product.originalPrice, product.price) > 0 && (
+                    {product.variants && product.variants.length > 0 && product.variants[0].price < product.basePrice && (
                       <Badge className="absolute top-4 right-4 bg-red-500 text-white">
-                        {calculateDiscount(product.originalPrice, product.price)}% تخفیف
+                        {Math.round(((product.basePrice - product.variants[0].price) / product.basePrice) * 100)}% تخفیف
                       </Badge>
                     )}
 
                     {/* Stock Status */}
-                    {product.stock === 0 && (
+                    {product.variants && product.variants.every(v => v.stock === 0) && (
                       <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                         <Badge variant="destructive" className="text-lg">ناموجود</Badge>
                       </div>
@@ -387,7 +390,7 @@ export default function ProductsPage() {
                       {/* Product Title */}
                       <Link href={`/product/${product.slug || product._id}`}>
                         <h3 className="font-semibold text-gray-900 hover:text-primary-600 transition-colors line-clamp-2">
-                          {product.name}
+                          {product.title}
                         </h3>
                       </Link>
 
@@ -402,18 +405,20 @@ export default function ProductsPage() {
                       {/* Price */}
                       <div className="flex items-center justify-between">
                         <div className="space-y-1">
-                          {calculateDiscount(product.originalPrice, product.price) > 0 ? (
+                          {product.variants && product.variants.length > 0 ? (
                             <>
                               <div className="font-bold text-green-600">
-                                {formatPrice(product.price)}
+                                {formatPrice(Math.min(...product.variants.map(v => v.price)))}
                               </div>
-                              <div className="text-sm text-gray-500 line-through">
-                                {formatPrice(product.originalPrice)}
-                              </div>
+                              {Math.min(...product.variants.map(v => v.price)) < product.basePrice && (
+                                <div className="text-sm text-gray-500 line-through">
+                                  {formatPrice(product.basePrice)}
+                                </div>
+                              )}
                             </>
                           ) : (
                             <div className="font-bold text-gray-900">
-                              {formatPrice(product.price)}
+                              {formatPrice(product.basePrice)}
                             </div>
                           )}
                         </div>
@@ -421,7 +426,7 @@ export default function ProductsPage() {
                         <Button
                           size="sm"
                           onClick={() => handleAddToCart(product)}
-                          disabled={product.stock === 0}
+                          disabled={product.variants && product.variants.every(v => v.stock === 0)}
                           className="flex items-center gap-2"
                         >
                           <ShoppingCart className="w-4 h-4" />
@@ -438,9 +443,9 @@ export default function ProductsPage() {
                     <div className="flex gap-4">
                       <div className="relative w-24 h-24 rounded-lg overflow-hidden">
                         <Link href={`/product/${product.slug || product._id}`}>
-                          <Image
+                          <OptimizedImage
                             src={product.images?.[0] || "/placeholder.webp"}
-                            alt={product.name}
+                            alt={product.title}
                             fill
                             className="object-cover"
                           />
@@ -451,23 +456,25 @@ export default function ProductsPage() {
                         <div className="flex justify-between items-start">
                           <Link href={`/product/${product.slug || product._id}`}>
                             <h3 className="font-semibold text-gray-900 hover:text-primary-600 transition-colors">
-                              {product.name}
+                              {product.title}
                             </h3>
                           </Link>
                           
                           <div className="text-right">
-                            {calculateDiscount(product.originalPrice, product.price) > 0 ? (
+                            {product.variants && product.variants.length > 0 ? (
                               <>
                                 <div className="font-bold text-green-600">
-                                  {formatPrice(product.price)}
+                                  {formatPrice(Math.min(...product.variants.map(v => v.price)))}
                                 </div>
-                                <div className="text-sm text-gray-500 line-through">
-                                  {formatPrice(product.originalPrice)}
-                                </div>
+                                {Math.min(...product.variants.map(v => v.price)) < product.basePrice && (
+                                  <div className="text-sm text-gray-500 line-through">
+                                    {formatPrice(product.basePrice)}
+                                  </div>
+                                )}
                               </>
                             ) : (
                               <div className="font-bold text-gray-900">
-                                {formatPrice(product.price)}
+                                {formatPrice(product.basePrice)}
                               </div>
                             )}
                           </div>
@@ -488,7 +495,7 @@ export default function ProductsPage() {
                           <Button
                             size="sm"
                             onClick={() => handleAddToCart(product)}
-                            disabled={product.stock === 0}
+                            disabled={product.variants && product.variants.every(v => v.stock === 0)}
                             className="flex items-center gap-2"
                           >
                             <ShoppingCart className="w-4 h-4" />
