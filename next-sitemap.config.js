@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: process.env.SITE_URL || 'https://nikodecor.com',
+  siteUrl: process.env.SITE_URL || 'https://novinplexi.ir',
   generateRobotsTxt: false, // robots.txt را دستی ایجاد کردیم
   generateIndexSitemap: true,
   exclude: [

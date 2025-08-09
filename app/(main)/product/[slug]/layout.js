@@ -15,10 +15,10 @@ export async function generateMetadata({ params }) {
       openGraph: {
         title: product.name,
         description: product.description.slice(0, 140),
-        url: `https://nikodecor.com/product/${product.slug}`,
+        url: `https://novinplexi.ir/product/${product.slug}`,
         images: [
           {
-            url: product.images?.[0] || "https://nikodecor.com/default-image.jpg",
+            url: product.images?.[0] || "https://novinplexi.ir/default-image.jpg",
             width: 800,
             height: 600,
             alt: product.name || "محصول نوین پلکسی",
@@ -32,7 +32,7 @@ export async function generateMetadata({ params }) {
         product_old_price: product.originalPrice || product.price,
         availability: "instock",
         guarantee: "12 ماه ضمانت کیفیت",
-        image: product.images?.[0] || "https://nikodecor.com/default-image.jpg",
+        image: product.images?.[0] || "https://novinplexi.ir/default-image.jpg",
       },
     };
   } catch (error) {
@@ -43,10 +43,10 @@ export async function generateMetadata({ params }) {
       openGraph: {
         title: "محصول ناموجود",
         description: "محصول مورد نظر یافت نشد.",
-        url: "https://nikodecor.com/",
+        url: "https://novinplexi.ir/",
         images: [
           {
-            url: "https://nikodecor.com/default-image.jpg",
+            url: "https://novinplexi.ir/default-image.jpg",
             width: 800,
             height: 600,
             alt: "محصول ناموجود",
@@ -60,7 +60,7 @@ export async function generateMetadata({ params }) {
         product_old_price: "0",
         availability: "outofstock",
         guarantee: "ناموجود",
-        image: "https://nikodecor.com/default-image.jpg",
+        image: "https://novinplexi.ir/default-image.jpg",
       },
     };
   }

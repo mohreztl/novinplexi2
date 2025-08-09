@@ -23,7 +23,7 @@ export const metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://nikodecor.com'),
+  metadataBase: new URL('https://novinplexi.ir'),
   alternates: {
     canonical: '/',
     languages: {
@@ -33,7 +33,7 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "fa_IR",
-    url: "https://nikodecor.com",
+    url: "https://novinplexi.ir",
     siteName: "نوین پلکسی",
     title: "نوین پلکسی - فروشگاه آنلاین دکوراسیون خانگی",
     description: "نوین پلکسی، فروشگاه آنلاین دکوراسیون خانگی، ارائه‌دهنده انواع کاغذ دیواری، موکت تایلی، کفپوش و دیگر محصولات دکوراتیو",

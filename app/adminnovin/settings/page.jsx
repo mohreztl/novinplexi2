@@ -53,7 +53,7 @@ export default function SiteSettings() {
     // اطلاعات فروشگاه
     storeName: "نوین پلکسی",
     storeDescription: "فروشگاه محصولات دکوراسیون داخلی",
-    email: "info@nikodecor.com",
+    email: "info@novinplexi.ir",
     phone: "021-12345678",
     mobile: "09055669567",
     address: "تهران، خیابان ولیعصر، ...",
@@ -61,7 +61,7 @@ export default function SiteSettings() {
     // شبکه‌های اجتماعی
     instagram: "nikodecor",
     telegram: "nikodecor",
-    website: "www.nikodecor.com",
+    website: "www.novinplexi.ir",
     
     // تنظیمات ارسال
     freeShippingThreshold: "1000000",

@@ -70,7 +70,7 @@ NEXTAUTH_SECRET=your-secret-key-here
 NEXTAUTH_URL=http://localhost:3000
 
 # Site
-SITE_URL=https://nikodecor.com
+SITE_URL=https://novinplexi.ir
 NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
 
 # Liara S3
@@ -197,8 +197,8 @@ CMD ["npm", "start"]
 
 ## 📞 تماس با ما
 
-- 🌐 Website: [nikodecor.com](https://nikodecor.com)
-- 📧 Email: info@nikodecor.com
+- 🌐 Website: [novinplexi.ir](https://novinplexi.ir)
+- 📧 Email: info@novinplexi.ir
 - 📱 Instagram: [@novinplexi](https://instagram.com/novinplexi)
 
 ---

@@ -60,12 +60,23 @@ function validateFile(file) {
 // GET method to check API status
 export async function GET() {
   try {
+    // Check environment variables
+    const envCheck = {
+      LIARA_ENDPOINT: !!process.env.LIARA_ENDPOINT,
+      LIARA_ACCESS_KEY: !!process.env.LIARA_ACCESS_KEY,
+      LIARA_SECRET_KEY: !!process.env.LIARA_SECRET_KEY,
+      LIARA_BUCKET_NAME: !!process.env.LIARA_BUCKET_NAME,
+      LIARA_REGION: !!process.env.LIARA_REGION
+    };
+
     return NextResponse.json({
       success: true,
       message: 'Upload API is working',
       maxFileSize: `${MAX_FILE_SIZE / 1024 / 1024}MB`,
       allowedTypes: ALLOWED_TYPES,
-      bucket: BUCKET_NAME
+      bucket: BUCKET_NAME,
+      environment: process.env.NODE_ENV,
+      envVariables: envCheck
     });
   } catch (error) {
     return NextResponse.json(

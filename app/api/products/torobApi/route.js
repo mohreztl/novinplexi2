@@ -28,7 +28,7 @@ const allProducts=products.map(product => ({
   price:product.price ? product.price : product.originalPrice,
   availability: 'instock',
   old_price: product.originalPrice,
-  page_url: `https://nikodecor.com/product/${product.slug}`
+  page_url: `https://novinplexi.ir/product/${product.slug}`
 }));
 return NextResponse.json({
   success: true,

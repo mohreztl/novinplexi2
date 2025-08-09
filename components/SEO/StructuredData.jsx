@@ -6,8 +6,8 @@ export function OrganizationSchema() {
     "@type": "Organization",
     "name": "نوین پلکسی",
     "alternateName": "Novin Plexi",
-    "url": "https://nikodecor.com",
-    "logo": "https://nikodecor.com/logo.svg",
+    "url": "https://novinplexi.ir",
+    "logo": "https://novinplexi.ir/logo.svg",
     "description": "فروشگاه آنلاین دکوراسیون خانگی، ارائه‌دهنده انواع کاغذ دیواری، موکت تایلی، کفپوش",
     "address": {
       "@type": "PostalAddress",
@@ -41,14 +41,14 @@ export function WebsiteSchema() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "نوین پلکسی",
-    "url": "https://nikodecor.com",
+    "url": "https://novinplexi.ir",
     "description": "فروشگاه آنلاین دکوراسیون خانگی، ارائه‌دهنده انواع کاغذ دیواری، موکت تایلی، کفپوش",
     "inLanguage": "fa-IR",
     "potentialAction": {
       "@type": "SearchAction",
       "target": {
         "@type": "EntryPoint",
-        "urlTemplate": "https://nikodecor.com/search?q={search_term_string}"
+        "urlTemplate": "https://novinplexi.ir/search?q={search_term_string}"
       },
       "query-input": "required name=search_term_string"
     }
@@ -81,7 +81,7 @@ export function ProductSchema({ product }) {
     },
     "offers": {
       "@type": "Offer",
-      "url": `https://nikodecor.com/products/${product.slug || product._id}`,
+      "url": `https://novinplexi.ir/products/${product.slug || product._id}`,
       "priceCurrency": "IRR",
       "price": product.price,
       "priceValidUntil": new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -127,14 +127,14 @@ export function ArticleSchema({ article }) {
       "name": "نوین پلکسی",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://nikodecor.com/logo.svg"
+        "url": "https://novinplexi.ir/logo.svg"
       }
     },
     "datePublished": article.publishedAt || article.createdAt,
     "dateModified": article.updatedAt || article.createdAt,
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": `https://nikodecor.com/blog/${article.slug || article._id}`
+      "@id": `https://novinplexi.ir/blog/${article.slug || article._id}`
     }
   };
 
