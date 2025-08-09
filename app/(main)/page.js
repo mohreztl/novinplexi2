@@ -7,14 +7,6 @@ import WhyChooseUs from "@/components/WhyChooseUs";
 import LatestProducts from "@/components/LatestProducts";
 import LatestBlogPosts from "@/components/LatestBlogPosts";
 import Loading from "@/components/ui/Loading";
-// import ServiceSection from "@/components/home/ServiceSection";
-// import CategoriesSection from "@/components/home/CategoriesSection";
-// import Faq from "@/components/home/Faq";
-// import FloatingContactButton from "@/components/home/FloatingContactButton";
-// import LatestProducts from "@/components/home/LatestProducts";
-// import HomeBlogSection from "@/components/HomepageComponents/HomeBlogSection";
-// import SimpleProductCategories from "@/components/SimpleProductCategories";
-// import ProductCategories from "@/components/ProductCategories";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
