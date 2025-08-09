@@ -149,7 +149,7 @@ setLoading(true);
         setError("Error signing in");
         setLoading(false);
       } else {
-        router.push("/dashboard");
+        router.push(callbackUrl.includes('/adminnovin') ? '/adminnovin' : '/');
       }
     }
     }
@@ -167,14 +167,20 @@ setLoading(true);
     if (response.ok) {
       setLoading(false);
      
-     await signIn("credentials", {
+     const signInResult = await signIn("credentials", {
       
  phoneNumber,
  code:verificationCode,
         redirect: false,
       //  isRegistering:true,
       });
-      alert('ورود موفقیت‌آمیز!');
+      
+      if (signInResult?.error) {
+        setError("خطا در ورود به سیستم");
+      } else {
+        // Check if user is admin and redirect accordingly
+        router.push(callbackUrl.includes('/adminnovin') ? '/adminnovin' : '/');
+      }
     } else {
       setLoading(false);
       setError(result.message);

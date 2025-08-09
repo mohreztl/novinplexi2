@@ -33,13 +33,22 @@ export async function middleware(req) {
     headers.set('Content-Encoding', 'gzip');
   }
 
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const token = await getToken({ 
+    req, 
+    secret: process.env.NEXTAUTH_SECRET,
+    secureCookie: process.env.NEXTAUTH_URL?.startsWith("https://") ?? false 
+  });
 
   // مسیرهایی که فقط ادمین‌ها اجازه دسترسی دارند
   const adminPaths = ["/api/admin", "/dashboard/admin", "/adminnovin"];
   
   if (adminPaths.some((path) => req.nextUrl.pathname.startsWith(path))) {
+    console.log('Admin path accessed:', req.nextUrl.pathname);
+    console.log('Token exists:', !!token);
+    console.log('User is admin:', token?.admin);
+    
     if (!token || !token.admin) {
+      console.log('Redirecting to login because:', !token ? 'no token' : 'not admin');
       return NextResponse.redirect(new URL("/login", req.url));
     }
   }

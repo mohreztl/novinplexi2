@@ -126,6 +126,9 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "nikoodecor.storage.c2.liara.space",
+      },  {
+        protocol: "https",
+        hostname: "storage.c2.liara.space",
       },
     
     ],
