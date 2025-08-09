@@ -36,11 +36,11 @@ export async function middleware(req) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
   // مسیرهایی که فقط ادمین‌ها اجازه دسترسی دارند
-  const adminPaths = ["/api/admin", "/dashboard/admin"];
+  const adminPaths = ["/api/admin", "/dashboard/admin", "/adminnovin"];
   
   if (adminPaths.some((path) => req.nextUrl.pathname.startsWith(path))) {
-    if (!token || token.role !== "admin") {
-      return NextResponse.redirect(new URL("/403", req.url));
+    if (!token || !token.admin) {
+      return NextResponse.redirect(new URL("/login", req.url));
     }
   }
 

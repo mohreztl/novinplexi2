@@ -13,7 +13,17 @@ export async function GET() {
     const categories = await Promise.all(
       parents.map(async (parent) => {
         const children = await Category.find({ parent: parent._id }).lean();
-        return { ...parent, children };
+        // Map fields for backward compatibility
+        return { 
+          ...parent, 
+          title: parent.name, // backward compatibility
+          icon: parent.image, // backward compatibility
+          children: children.map(child => ({
+            ...child,
+            title: child.name,
+            icon: child.image
+          }))
+        };
       })
     );
 
@@ -33,12 +43,39 @@ export async function POST(req) {
     await connectToDB();
     
     const body = await req.json();
-    const { title, slug, icon, parent } = body;
+    console.log('Received data:', body); // برای debugging
+    
+    // Map the incoming data to model fields
+    const { title, name, slug, icon, image, type, parent, description } = body;
+    
+    // Use title as name if name is not provided, or vice versa
+    const categoryName = name || title;
+    const categoryType = type || 'product'; // default type
+    const categoryImage = image || icon;
+    
+    if (!categoryName) {
+      return NextResponse.json({ 
+        success: false, 
+        message: "نام دسته‌بندی الزامی است" 
+      }, { status: 400 });
+    }
+
+    if (!categoryType) {
+      return NextResponse.json({ 
+        success: false, 
+        message: "نوع دسته‌بندی الزامی است" 
+      }, { status: 400 });
+    }
+
+    // Generate slug if not provided
+    const categorySlug = slug || categoryName.replace(/\s+/g, '-').toLowerCase();
 
     const newCategory = await Category.create({
-      title,
-      slug,
-      icon,
+      name: categoryName,
+      slug: categorySlug,
+      type: categoryType,
+      image: categoryImage,
+      description: description || '',
       parent: parent || null,
     });
 
@@ -47,7 +84,7 @@ export async function POST(req) {
     console.error("POST Error:", error);
     return NextResponse.json({ 
       success: false, 
-      message: "خطا در ایجاد دسته‌بندی" 
+      message: `خطا در ایجاد دسته‌بندی: ${error.message}` 
     }, { status: 500 });
   }
 }
@@ -58,11 +95,23 @@ export async function PATCH(req) {
     await connectToDB();
     
     const body = await req.json();
-    const { id, title, slug, icon, parent } = body;
+    const { id, title, name, slug, icon, image, type, parent, description } = body;
+
+    // Map the incoming data to model fields
+    const categoryName = name || title;
+    const categoryType = type || 'product';
+    const categoryImage = image || icon;
 
     const updatedCategory = await Category.findByIdAndUpdate(
       id,
-      { title, slug, icon, parent: parent || null },
+      { 
+        name: categoryName,
+        slug: slug || categoryName?.replace(/\s+/g, '-').toLowerCase(),
+        type: categoryType,
+        image: categoryImage,
+        description: description || '',
+        parent: parent || null 
+      },
       { new: true }
     );
 
@@ -75,7 +124,7 @@ export async function PATCH(req) {
     console.error("PATCH Error:", error);
     return NextResponse.json({ 
       success: false, 
-      message: "خطا در بروزرسانی دسته‌بندی" 
+      message: `خطا در بروزرسانی دسته‌بندی: ${error.message}` 
     }, { status: 500 });
   }
 }

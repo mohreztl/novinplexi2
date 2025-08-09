@@ -38,7 +38,7 @@ import Image from "next/image";
 
 export default function AdminCategoriesPage() {
   const [categories, setCategories] = useState([]);
-  const [form, setForm] = useState({ title: "", slug: "", icon: "", parent: "" });
+  const [form, setForm] = useState({ title: "", slug: "", icon: "", parent: "", type: "product" });
   const [loading, setLoading] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [formErrors, setFormErrors] = useState({});
@@ -80,14 +80,22 @@ export default function AdminCategoriesPage() {
     setFormErrors({});
 
     try {
+      const categoryData = {
+        name: form.title, // تبدیل title به name
+        slug: form.slug,
+        type: form.type,
+        image: form.icon, // تبدیل icon به image
+        parent: form.parent || null
+      };
+
       if (editingId) {
-        await axios.patch("/api/categories", { id: editingId, ...form });
+        await axios.patch("/api/categories", { id: editingId, ...categoryData });
         toast.success("دسته‌بندی با موفقیت ویرایش شد");
       } else {
-        await axios.post("/api/categories", form);
+        await axios.post("/api/categories", categoryData);
         toast.success("دسته‌بندی با موفقیت اضافه شد");
       }
-      setForm({ title: "", slug: "", icon: "", parent: "" });
+      setForm({ title: "", slug: "", icon: "", parent: "", type: "product" });
       setEditingId(null);
       fetchCategories();
     } catch (error) {
@@ -201,6 +209,24 @@ export default function AdminCategoriesPage() {
                   onChange={(e) => setForm({ ...form, icon: e.target.value })}
                   placeholder="https://example.com/icon.png"
                 />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">
+                  نوع دسته‌بندی
+                </label>
+                <Select 
+                  value={form.type} 
+                  onValueChange={(value) => setForm({ ...form, type: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="انتخاب نوع دسته‌بندی" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="product">محصول</SelectItem>
+                    <SelectItem value="service">خدمات</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">

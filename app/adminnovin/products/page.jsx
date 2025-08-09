@@ -281,12 +281,12 @@ const Page = () => {
                       />
                     </div>
                   </TableCell>
-                  <TableCell className="font-medium">{product.name}</TableCell>
+                  <TableCell className="font-medium">{product.title || product.name}</TableCell>
                   <TableCell>{product.category}</TableCell>
                   <TableCell>
-                    {product.price.toLocaleString("fa-IR")}
+                    {(product.basePrice || product.price || 0).toLocaleString("fa-IR")} تومان
                   </TableCell>
-                  <TableCell>{product.stock}</TableCell>
+                  <TableCell>{product.stock || 0}</TableCell>
                   <TableCell>
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-medium ${

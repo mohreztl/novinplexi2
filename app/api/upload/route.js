@@ -12,6 +12,9 @@ const s3Client = new S3Client({
     secretAccessKey: process.env.LIARA_SECRET_KEY,
   },
   forcePathStyle: true,
+  requestTimeout: 30000, // 30 seconds
+  maxAttempts: 3,
+  retryMode: 'adaptive'
 });
 
 const BUCKET_NAME = process.env.LIARA_BUCKET_NAME;
@@ -117,7 +120,7 @@ export async function POST(request) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    // Upload to S3
+    // Upload to S3 with timeout handling
     const upload = new Upload({
       client: s3Client,
       params: {
@@ -131,11 +134,19 @@ export async function POST(request) {
           uploadedAt: new Date().toISOString(),
           fileSize: file.size.toString()
         }
-      }
+      },
+      queueSize: 4, // Number of concurrent uploads
+      partSize: 1024 * 1024 * 5, // 5MB parts
+      leavePartsOnError: false
     });
 
-    // Execute upload with progress tracking
-    const result = await upload.done();
+    // Execute upload with timeout
+    const uploadPromise = upload.done();
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Upload timeout after 60 seconds')), 60000);
+    });
+
+    const result = await Promise.race([uploadPromise, timeoutPromise]);
 
     // Generate public URL
     const publicUrl = `${process.env.LIARA_ENDPOINT}/${BUCKET_NAME}/${uniqueFilename}`;
@@ -171,11 +182,11 @@ export async function POST(request) {
       );
     }
 
-    if (error.name === 'NetworkError') {
+    if (error.name === 'NetworkError' || error.code === 'ECONNRESET' || error.code === 'ETIMEDOUT') {
       return NextResponse.json(
         { 
           success: false, 
-          error: 'خطا در اتصال به سرور S3. لطفاً اتصال اینترنت را بررسی کنید' 
+          error: 'خطا در اتصال به سرور S3. لطفاً اتصال اینترنت را بررسی کنید و دوباره تلاش کنید' 
         },
         { status: 503 }
       );
@@ -188,6 +199,16 @@ export async function POST(request) {
           error: 'باکت S3 یافت نشد. لطفاً نام باکت را بررسی کنید' 
         },
         { status: 404 }
+      );
+    }
+
+    if (error.message && error.message.includes('timeout')) {
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: 'زمان آپلود به اتمام رسید. لطفاً دوباره تلاش کنید' 
+        },
+        { status: 408 }
       );
     }
 

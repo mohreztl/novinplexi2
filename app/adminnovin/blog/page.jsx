@@ -75,12 +75,12 @@ export default function AdminBlogListPage() {
   };
 
   const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
+    setSelectedCategory(category === 'all' ? '' : category);
     setCurrentPage(1);
   };
 
   const handleStatusChange = (status) => {
-    setSelectedStatus(status);
+    setSelectedStatus(status === 'all' ? '' : status);
     setCurrentPage(1);
   };
 
@@ -221,7 +221,7 @@ export default function AdminBlogListPage() {
                 <SelectValue placeholder="انتخاب دسته‌بندی" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">همه دسته‌ها</SelectItem>
+                <SelectItem value="all">همه دسته‌ها</SelectItem>
                 {CATEGORIES.map((category) => (
                   <SelectItem key={category} value={category}>
                     {category}
@@ -235,7 +235,7 @@ export default function AdminBlogListPage() {
                 <SelectValue placeholder="انتخاب وضعیت" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">همه وضعیت‌ها</SelectItem>
+                <SelectItem value="all">همه وضعیت‌ها</SelectItem>
                 {STATUS_OPTIONS.map((status) => (
                   <SelectItem key={status.value} value={status.value}>
                     {status.label}

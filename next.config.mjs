@@ -16,6 +16,7 @@ const nextConfig = {
   experimental: {
     optimizeCss: true,
     optimizePackageImports: ['lucide-react', '@heroicons/react', '@radix-ui/react-icons'],
+    serverComponentsExternalPackages: ["mongoose"],
     turbo: {
       rules: {
         '*.svg': {
@@ -112,6 +113,10 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "nikoodecor.storage.c2.liara.space",
+      },
+        {
+        protocol: "https",
+        hostname: "novinplexi.storage.c2.liara.space",
       },
     ],
   },
