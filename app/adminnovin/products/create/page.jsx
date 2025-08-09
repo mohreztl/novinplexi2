@@ -6,11 +6,24 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 import * as z from "zod";
-import { Loader2, X, Plus } from "lucide-react";
+import { 
+  Loader2, 
+  X, 
+  Plus, 
+  Package, 
+  ImageIcon, 
+  DollarSign, 
+  Settings, 
+  Tag,
+  Search,
+  Save,
+  ArrowRight
+} from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -206,26 +219,30 @@ const CreateProduct = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-8 w-full">
-      <div className="max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden border border-indigo-100">
-        <div className="bg-gradient-to-r from-indigo-600 to-blue-600 py-6 px-8">
-          <h1 className="text-center text-white text-3xl font-bold">
-            ثبت محصول جدید
-          </h1>
-        </div>
-        
-        <form 
-          onSubmit={handleSubmit(onSubmit)} 
-          className="px-6 py-8 space-y-8"
-        >
-          {/* بخش اطلاعات پایه محصول */}
-          <div className="border-b border-gray-200 pb-8">
-            <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
-              <div className="w-2 h-8 bg-indigo-600 rounded-full mr-3"></div>
-              اطلاعات پایه محصول
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-8">
+      <div className="max-w-6xl mx-auto px-4">
+        {/* Header Section */}
+        <Card className="mb-8 border-0 shadow-lg bg-gradient-to-r from-indigo-600 to-purple-600">
+          <CardHeader className="text-center py-8">
+            <CardTitle className="text-3xl font-bold text-white flex items-center justify-center gap-3">
+              <Package className="w-8 h-8" />
+              ایجاد محصول جدید
+            </CardTitle>
+            <p className="text-indigo-100 mt-2">محصول خود را با جزئیات کامل ایجاد کنید</p>
+          </CardHeader>
+        </Card>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+          {/* اطلاعات پایه */}
+          <Card className="shadow-lg border-0">
+            <CardHeader className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white">
+              <CardTitle className="flex items-center gap-3">
+                <Tag className="w-5 h-5" />
+                اطلاعات پایه محصول
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   نام محصول *
@@ -302,14 +319,18 @@ const CreateProduct = () => {
                 )}
               </div>
             </div>
-          </div>
+              </CardContent>
+            </Card>
           
           {/* بخش تصاویر محصول */}
-          <div className="border-b border-gray-200 pb-8">
-            <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
-              <div className="w-2 h-8 bg-indigo-600 rounded-full mr-3"></div>
-              تصاویر محصول
-            </h2>
+          <Card className="shadow-lg border-0">
+            <CardHeader className="bg-gradient-to-r from-green-500 to-teal-500 text-white">
+              <CardTitle className="flex items-center gap-3">
+                <ImageIcon className="w-5 h-5" />
+                تصاویر محصول
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-8">
             
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -357,14 +378,18 @@ const CreateProduct = () => {
                 ))}
               </div>
             </div>
-          </div>
+            </CardContent>
+          </Card>
           
           {/* بخش متغیرهای محصول */}
-          <div className="border-b border-gray-200 pb-8">
-            <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
-              <div className="w-2 h-8 bg-indigo-600 rounded-full mr-3"></div>
-              متغیرهای محصول
-            </h2>
+          <Card className="shadow-lg border-0">
+            <CardHeader className="bg-gradient-to-r from-orange-500 to-red-500 text-white">
+              <CardTitle className="flex items-center gap-3">
+                <Settings className="w-5 h-5" />
+                متغیرهای محصول
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-8">
             
             <div className="space-y-8">
               {watch("variations")?.map((variation, variationIndex) => (
@@ -445,14 +470,18 @@ const CreateProduct = () => {
                 </p>
               </div>
             </div>
-          </div>
+            </CardContent>
+          </Card>
           
           {/* بخش توضیحات */}
-          <div className="border-b border-gray-200 pb-8">
-            <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
-              <div className="w-2 h-8 bg-indigo-600 rounded-full mr-3"></div>
-              توضیحات محصول
-            </h2>
+          <Card className="shadow-lg border-0">
+            <CardHeader className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+              <CardTitle className="flex items-center gap-3">
+                <Package className="w-5 h-5" />
+                توضیحات محصول
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-8">
             
             <div className="space-y-6">
               <div>
@@ -494,14 +523,18 @@ const CreateProduct = () => {
                 )}
               </div>
             </div>
-          </div>
+            </CardContent>
+          </Card>
           
           {/* بخش قیمت‌گذاری */}
-          <div>
-            <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
-              <div className="w-2 h-8 bg-indigo-600 rounded-full mr-3"></div>
-              قیمت‌گذاری پایه
-            </h2>
+          <Card className="shadow-lg border-0">
+            <CardHeader className="bg-gradient-to-r from-emerald-500 to-green-500 text-white">
+              <CardTitle className="flex items-center gap-3">
+                <DollarSign className="w-5 h-5" />
+                قیمت‌گذاری پایه
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-8">
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -521,14 +554,18 @@ const CreateProduct = () => {
                 )}
               </div>
             </div>
-          </div>
+            </CardContent>
+          </Card>
           
           {/* بخش SEO */}
-          <div>
-            <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
-              <div className="w-2 h-8 bg-green-600 rounded-full mr-3"></div>
-              تنظیمات SEO
-            </h2>
+          <Card className="shadow-lg border-0">
+            <CardHeader className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white">
+              <CardTitle className="flex items-center gap-3">
+                <Search className="w-5 h-5" />
+                تنظیمات SEO
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-8">
             
             <div className="grid grid-cols-1 gap-6">
               <div>
@@ -570,29 +607,38 @@ const CreateProduct = () => {
                 />
               </div>
             </div>
-          </div>
+            </CardContent>
+          </Card>
           
           {/* دکمه ثبت */}
-          <div className="flex justify-end pt-8">
-            <Button
-              type="submit"
-              className="bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 px-8 py-6 text-lg font-medium text-white shadow-lg transition-all"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  در حال ثبت...
-                </>
-              ) : (
-                "ثبت محصول"
-              )}
-            </Button>
-          </div>
+          <Card className="shadow-lg border-0">
+            <CardContent className="p-6">
+              <div className="flex justify-center">
+                <Button
+                  type="submit"
+                  className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 px-12 py-4 text-lg font-medium text-white shadow-lg transition-all flex items-center gap-3"
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      در حال ثبت...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-5 h-5" />
+                      ثبت محصول
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </form>
       </div>
     </div>
   );
-};
+}
 
 export default CreateProduct;
