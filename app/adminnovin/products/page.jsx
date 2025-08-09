@@ -145,13 +145,13 @@ const Page = () => {
   return (
     <div className="p-6">
       <div className="mb-6">
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-6 ml-6">
           <h1 className="text-2xl font-bold">مدیریت محصولات</h1>
           <Button
             onClick={() => router.push("/adminnovin/products/create")}
             className="gap-2"
           >
-            <PlusCircle className="w-4 h-4" />
+            <PlusCircle className="w-6 h-6" />
             افزودن محصول جدید
           </Button>
         </div>
@@ -304,7 +304,7 @@ const Page = () => {
                         variant="ghost"
                         size="icon"
                         onClick={() =>
-                          router.push(`/adminnovin/products/edit/${product.slug}`)
+                          router.push(`/adminnovin/products/editProduct/${product.slug}`)
                         }
                       >
                         <Edit2 className="w-4 h-4" />
