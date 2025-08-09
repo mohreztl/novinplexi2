@@ -82,6 +82,22 @@ const productSchema = new mongoose.Schema({
     value: String
   }],
   tags: [String],
+  seo: {
+    metaTitle: {
+      type: String,
+      maxLength: 60
+    },
+    metaDescription: {
+      type: String,
+      maxLength: 160
+    },
+    keywords: [{
+      type: String
+    }],
+    focusKeyword: {
+      type: String
+    }
+  },
   isPublished: {
     type: Boolean,
     default: true

@@ -1,13 +1,13 @@
 // src/app/api/products/route.js
 import { NextResponse } from 'next/server';
-import connect from "@/utils/config/dbConnection";
-import { Product } from "@/utils/models/Product";
+import { connectToDB } from "@/lib/db";
+import Product from "@/models/Product";
 
-export async function GET(req) {
+export async function GET(request) {
   try {
-    await connect();
+    await connectToDB();
 
-    const { searchParams } = new URL(req.url);
+    const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page')) || 1;
     const limit = parseInt(searchParams.get('limit')) || 100;
 
@@ -41,4 +41,7 @@ return NextResponse.json({
     return NextResponse.json({ success: false, message: 'Failed to fetch products', error: error.message }, { status: 500 });
   }
 }
+
+// Add dynamic export to handle query parameters
+export const dynamic = 'force-dynamic';
 

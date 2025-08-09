@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { X, Upload, Eye, Save, Send } from "lucide-react";
+import { X, Send } from "lucide-react";
 import RichTextEditor from "@/components/editor/RichTextEditor";
 import axios from "axios";
 
@@ -364,21 +364,6 @@ export default function CreateBlog() {
               >
                 {isLoading ? "در حال ذخیره..." : formData.status === 'published' ? 'انتشار مقاله' : 'ذخیره پیش‌نویس'}
                 <Send size={16} />
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
-  );
-              >
-                انصراف
-              </Button>
-              <Button
-                type="submit"
-                disabled={isLoading}
-              >
-                {isLoading ? "در حال ایجاد..." : "ایجاد مقاله"}
               </Button>
             </div>
           </form>

@@ -47,6 +47,11 @@ const productSchema = z.object({
       ).min(1, "حداقل یک گزینه الزامی است"),
     })
   ).min(1, "حداقل یک متغیر الزامی است"),
+  seo: z.object({
+    metaTitle: z.string().optional(),
+    metaDescription: z.string().optional(),
+    focusKeyword: z.string().optional(),
+  }).optional(),
 });
 
 const CreateProduct = () => {
@@ -88,8 +93,19 @@ const CreateProduct = () => {
           options: [
             { name: "", price: "0" }
           ]
+        },
+        {
+          type: "ضخامت",
+          options: [
+            { name: "", price: "0" }
+          ]
         }
-      ]
+      ],
+      seo: {
+        metaTitle: "",
+        metaDescription: "",
+        focusKeyword: "",
+      }
     },
   });
 
@@ -354,7 +370,7 @@ const CreateProduct = () => {
                 <div key={variationIndex} className="border border-gray-200 rounded-lg p-6">
                   <div className="flex justify-between items-center mb-4">
                     <h3 className="font-medium text-gray-700">
-                      {variation.type === "رنگ" ? "رنگ" : "اندازه"}
+                      {variation.type === "رنگ" ? "رنگ" : variation.type === "اندازه" ? "اندازه" : "ضخامت"}
                     </h3>
                   </div>
                   
@@ -497,6 +513,55 @@ const CreateProduct = () => {
                     {errors.originalPrice.message}
                   </p>
                 )}
+              </div>
+            </div>
+          </div>
+          
+          {/* بخش SEO */}
+          <div>
+            <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
+              <div className="w-2 h-8 bg-green-600 rounded-full mr-3"></div>
+              تنظیمات SEO
+            </h2>
+            
+            <div className="grid grid-cols-1 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  عنوان SEO (Meta Title)
+                </label>
+                <Input
+                  placeholder="عنوان برای موتورهای جستجو (حداکثر 60 کاراکتر)"
+                  maxLength={60}
+                  {...register("seo.metaTitle")}
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  {watch("seo.metaTitle")?.length || 0}/60 کاراکتر
+                </p>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  توضیحات SEO (Meta Description)
+                </label>
+                <Textarea
+                  rows={3}
+                  placeholder="توضیحی کوتاه برای موتورهای جستجو (حداکثر 160 کاراکتر)"
+                  maxLength={160}
+                  {...register("seo.metaDescription")}
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  {watch("seo.metaDescription")?.length || 0}/160 کاراکتر
+                </p>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  کلمه کلیدی اصلی
+                </label>
+                <Input
+                  placeholder="کلمه کلیدی اصلی محصول"
+                  {...register("seo.focusKeyword")}
+                />
               </div>
             </div>
           </div>
