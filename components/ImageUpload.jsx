@@ -19,7 +19,7 @@ const ImageUpload = ({ onImageUpload }) => {
     }
 
     const formData = new FormData();
-    formData.append("image", image);
+    formData.append("file", image);
 
     try {
       const response = await fetch("/api/upload", {
@@ -28,14 +28,15 @@ const ImageUpload = ({ onImageUpload }) => {
       });
 
       const data = await response.json();
-      if (response.ok) {
+      if (data.success) {
         // ارسال مسیر تصویر به والد
-        onImageUpload(data.signedUrl);
+        onImageUpload(data.url);
       } else {
-        alert("خطا در آپلود تصویر.");
+        alert(`خطا در آپلود تصویر: ${data.error}`);
       }
     } catch (error) {
-      alert("خطا در آپلود تصویر.");
+      console.error('Upload error:', error);
+      alert("خطا در آپلود تصویر: " + error.message);
     }
   };
 

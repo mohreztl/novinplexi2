@@ -76,36 +76,38 @@ const ImagesList = ({ onImageSelect, maxSelection = 1 }) => {
   };
 
   const onDrop = async (acceptedFiles) => {
-    const formData = new FormData();
-    acceptedFiles.forEach((file) => {
-      formData.append("files", file);
-    });
-
     try {
       setIsUploading(true);
       setUploadProgress(0);
       
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
+      // آپلود فایل‌ها یکی یکی چون API تک فایل می‌پذیرد
+      const uploadPromises = acceptedFiles.map(async (file) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        
+        const response = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+        
+        const data = await response.json();
+        if (!data.success) {
+          throw new Error(data.error || 'خطا در آپلود');
+        }
+        return data.url;
       });
-
-      const data = await response.json();
       
-      if (response.ok) {
-        setUploadedImages((prev) => [...prev, ...data.urls]);
-        setUploadProgress(100);
-        setTimeout(() => {
-          setUploadProgress(0);
-          setIsUploading(false);
+      const uploadedUrls = await Promise.all(uploadPromises);
+      setUploadedImages((prev) => [...prev, ...uploadedUrls]);
+      setUploadProgress(100);
+      setTimeout(() => {
+        setUploadProgress(0);
+        setIsUploading(false);
         }, 1000);
-      } else {
-        throw new Error(data.message || 'خطا در آپلود');
-      }
     } catch (error) {
       setIsUploading(false);
       setUploadProgress(0);
-      setError("خطا در آپلود تصویر");
+      setError("خطا در آپلود تصویر: " + (error.message || 'نامشخص'));
       console.error('Error uploading file:', error);
     }
   };
