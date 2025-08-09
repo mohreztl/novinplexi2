@@ -50,11 +50,11 @@ const ImagesList = ({ onImageSelect, maxSelection = 1 }) => {
 
   // فیلتر کردن تصاویر بر اساس جستجو
   const filteredObjects = objects.filter(file => 
-    file.Key?.toLowerCase().includes(searchTerm.toLowerCase())
+    file?.Key?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const filteredUploadedImages = uploadedImages.filter(url => 
-    url.toLowerCase().includes(searchTerm.toLowerCase())
+    url && typeof url === 'string' && url.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const toggleSelection = (image) => {
@@ -62,7 +62,7 @@ const ImagesList = ({ onImageSelect, maxSelection = 1 }) => {
       // برای انتخاب تک تصویر
       setSelectedFile([image]);
       if (onImageSelect) {
-        onImageSelect(image);
+        onImageSelect([image]); // همیشه آرایه پاس می‌دهیم
         closeModal();
       }
     } else {
@@ -98,7 +98,9 @@ const ImagesList = ({ onImageSelect, maxSelection = 1 }) => {
       });
       
       const uploadedUrls = await Promise.all(uploadPromises);
-      setUploadedImages((prev) => [...prev, ...uploadedUrls]);
+      // فیلتر کردن URL های معتبر
+      const validUrls = uploadedUrls.filter(url => url && typeof url === 'string');
+      setUploadedImages((prev) => [...prev, ...validUrls]);
       setUploadProgress(100);
       setTimeout(() => {
         setUploadProgress(0);
@@ -128,7 +130,9 @@ const ImagesList = ({ onImageSelect, maxSelection = 1 }) => {
   };
   
   const handleFileSelect = () => {
-    onImageSelect(selectedFile);
+    // اطمینان از آرایه بودن
+    const files = Array.isArray(selectedFile) ? selectedFile : [selectedFile].filter(Boolean);
+    onImageSelect(files);
     closeModal();
   };
 

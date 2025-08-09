@@ -338,8 +338,10 @@ const CreateProduct = () => {
               </label>
               <ImagesList 
                 onImageSelect={(images) => {
-                  setImagePath(images);
-                  setValue("images", images);
+                  // اطمینان از آرایه بودن
+                  const imageArray = Array.isArray(images) ? images : [images].filter(Boolean);
+                  setImagePath(imageArray);
+                  setValue("images", imageArray);
                 }}
                 maxImages={8}
               />
@@ -355,7 +357,7 @@ const CreateProduct = () => {
                 تصاویر انتخاب شده
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                {imagePath.map((url, index) => (
+                {Array.isArray(imagePath) && imagePath.map((url, index) => (
                   <div
                     key={index}
                     className="relative group border border-gray-200 rounded-lg overflow-hidden"
