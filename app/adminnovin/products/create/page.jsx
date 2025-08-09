@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import ImagesList from "@/components/ImagesList";
+import RichTextEditor from "@/components/RichTextEditor";
 
 // اسکیمای اعتبارسنجی
 const productSchema = z.object({
@@ -475,11 +476,16 @@ const CreateProduct = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   توضیحات کامل *
                 </label>
-                <Textarea
-                  rows={5}
-                  className={errors.fullDescription ? "border-red-500" : ""}
-                  placeholder="توضیحات کامل محصول"
-                  {...register("fullDescription")}
+                <Controller
+                  name="fullDescription"
+                  control={control}
+                  render={({ field }) => (
+                    <RichTextEditor
+                      value={field.value}
+                      onChange={field.onChange}
+                      placeholder="توضیحات کامل محصول را وارد کنید..."
+                    />
+                  )}
                 />
                 {errors.fullDescription && (
                   <p className="mt-1 text-sm text-red-500">
