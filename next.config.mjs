@@ -113,22 +113,21 @@ const nextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
  
     remotePatterns: [
-      {
+          {
         protocol: "https",
-        hostname: "pedantic-rubin-qm8c7f3qt.storage.c2.liara.space",
+        hostname: "novinplexi.storage.c2.liara.space",
       },
+
       {
         protocol: "https",
         hostname: "cdn.pixabay.com",
       },
+
       {
         protocol: "https",
         hostname: "nikoodecor.storage.c2.liara.space",
       },
-        {
-        protocol: "https",
-        hostname: "novinplexi.storage.c2.liara.space",
-      },
+    
     ],
   },
   experimental: {
