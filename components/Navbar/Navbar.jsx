@@ -1,9 +1,8 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, memo } from "react";
 import { useSession } from "next-auth/react";
-import {motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
-
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -23,13 +22,18 @@ import {
   Wrench,
   ChevronRight
 } from "lucide-react";
-import CartIcon from "../CartIcon";
-import SearchDrawer from "./SearchDrawer";
-import ProductDrawer from "./ProductDrawer";
-import ServiceDrawer from "./ServiceDrawer";
-import AdminDrawer from "./AdminDrawer";
-import MobileMenu from "./MobileMenu";
-import UserSection from "./UserSection";
+
+// Lazy load heavy components
+import dynamic from 'next/dynamic';
+
+const CartIcon = dynamic(() => import("../CartIcon"), { ssr: false });
+const SearchDrawer = dynamic(() => import("./SearchDrawer"), { ssr: false });
+const ProductDrawer = dynamic(() => import("./ProductDrawer"), { ssr: false });
+const ServiceDrawer = dynamic(() => import("./ServiceDrawer"), { ssr: false });
+const AdminDrawer = dynamic(() => import("./AdminDrawer"), { ssr: false });
+const MobileMenu = dynamic(() => import("./MobileMenu"), { ssr: false });
+const UserSection = dynamic(() => import("./UserSection"), { ssr: false });
+
 import useMobileMenuStore from "@/store/useMobileMenuStore";
 
 // Contact Section Component for Mega Menus

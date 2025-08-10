@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import axios from 'axios';
@@ -13,7 +13,7 @@ import useCartStore from '@/store/cartStore';
 import { toast } from 'sonner';
 import { useSession } from 'next-auth/react';
 
-const LatestProducts = () => {
+const LatestProducts = memo(() => {
   const [activeCategory, setActiveCategory] = useState('all');
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -22,7 +22,7 @@ const LatestProducts = () => {
   const addItem = useCartStore((state) => state.addItem);
   const { data: session } = useSession();
 
-  // Fetch data from API
+  // Fetch data from API with error handling
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -266,6 +266,8 @@ const LatestProducts = () => {
       </div>
     </section>
   );
-};
+});
+
+LatestProducts.displayName = 'LatestProducts';
 
 export default LatestProducts;

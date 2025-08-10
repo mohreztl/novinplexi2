@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Store , User, Menu, List } from "lucide-react";
+import { Home, Store, User, Menu } from "lucide-react";
 import useMobileMenuStore from "@/store/useMobileMenuStore";
-import CartIconMobileBottom from "./CartIconMobileBottom"
-export default function MobileBottomNav({ cartCount = 0 }) {
+import CartIconMobileBottom from "./CartIconMobileBottom";
+import { memo } from "react";
+
+const MobileBottomNav = memo(({ cartCount = 0 }) => {
   const openMenu = useMobileMenuStore((state) => state.openMenu);
   const pathname = usePathname();
   const isActive = (path) => pathname === path;
@@ -14,58 +16,67 @@ export default function MobileBottomNav({ cartCount = 0 }) {
     {
       name: "خانه",
       href: "/",
-      icon: <Home className="w-6 h-6" />,
-      activeIcon: <Home className="w-6 h-6" />,
+      icon: Home,
+      activeIcon: Home,
     },
     {
       name: "فروشگاه",
       href: "/products",
-      icon: <Store  className="w-6 h-6" />,
-      activeIcon: <Store  className="w-6 h-6" />,
+      icon: Store,
+      activeIcon: Store,
     },
     {
       name: "سبد خرید",
-href:"#",
-      icon: <CartIconMobileBottom />,
-      activeIcon: <CartIconMobileBottom />,
+      href: "#",
+      icon: () => <CartIconMobileBottom />,
+      activeIcon: () => <CartIconMobileBottom />,
       badge: cartCount,
     },
     {
       name: "پروفایل",
       href: "/profile",
-      icon: <User className="w-6 h-6" />,
-      activeIcon: <User className="w-6 h-6" />,
+      icon: User,
+      activeIcon: User,
     },
   ];
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 shadow-lg z-50 md:hidden">
       <div className="flex justify-around items-center h-16 px-2">
-        {navItems.map((item, index) => (
+        {navItems.map((item, index) => {
+          const IconComponent = isActive(item.href) ? item.activeIcon : item.icon;
+          const isCurrentActive = isActive(item.href);
           
-          <Link
-            key={index}
-            href={item.href}
-            className={`flex flex-col items-center justify-center w-full h-full relative transition-colors ${
-              isActive(item.href)
-                ? "text-primary"
-                : "text-gray-500 hover:text-primary"
-            }`}
-          >
-            <div className="relative">
-              {isActive(item.href) ? item.activeIcon : item.icon}
-              {item.badge > 0 && (
-                <span className="absolute -top-2 -right-2 bg-secondary text-primary text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border border-white">
-                  {item.badge > 9 ? "9+" : item.badge}
-                </span>
+          return (
+            <Link
+              key={index}
+              href={item.href}
+              className={`flex flex-col items-center justify-center w-full h-full relative transition-colors ${
+                isCurrentActive
+                  ? "text-primary"
+                  : "text-gray-500 hover:text-primary"
+              }`}
+              prefetch={false}
+            >
+              <div className="relative">
+                {typeof IconComponent === 'function' ? (
+                  <IconComponent />
+                ) : (
+                  <IconComponent className="w-6 h-6" />
+                )}
+                {item.badge > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-secondary text-primary text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border border-white">
+                    {item.badge > 9 ? "9+" : item.badge}
+                  </span>
+                )}
+              </div>
+              <span className="text-[12px] mt-1">{item.name}</span>
+              {isCurrentActive && (
+                <div className="absolute top-0 w-1/2 h-1 bg-primary rounded-b-full" />
               )}
-            </div>
-            <span className="text-[12px] mt-1">{item.name}</span>
-            {isActive(item.href) && (
-              <div className="absolute top-0 w-1/2 h-1 bg-primary rounded-b-full" />
-            )}
-          </Link>
-        ))}
+            </Link>
+          );
+        })}
 
         <button
           onClick={openMenu}
@@ -84,4 +95,8 @@ href:"#",
       </div>
     </nav>
   );
-}
+});
+
+MobileBottomNav.displayName = 'MobileBottomNav';
+
+export default MobileBottomNav;

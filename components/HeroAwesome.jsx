@@ -74,22 +74,22 @@ const HeroAwesome = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-slate-900/30" />
       </div>
 
-      {/* Animated Background Elements */}
+      {/* Animated Background Elements - Reduced for performance */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-gradient-to-br from-blue-500/20 to-indigo-500/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-gradient-to-br from-indigo-500/20 to-blue-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-gradient-to-br from-blue-500/10 to-indigo-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-gradient-to-br from-indigo-500/10 to-blue-500/5 rounded-full blur-3xl" />
         
-        {/* Floating particles */}
+        {/* Reduced floating particles */}
         <div className="absolute inset-0">
-          {Array.from({ length: 15 }, (_, i) => (
+          {Array.from({ length: 8 }, (_, i) => (
             <div
               key={i}
-              className="absolute w-1 h-1 bg-blue-400 rounded-full animate-pulse"
+              className="absolute w-1 h-1 bg-blue-400/60 rounded-full"
               style={{
-                left: `${20 + i * 5}%`,
-                top: `${30 + (i % 4) * 10}%`,
-                animationDelay: `${i * 0.5}s`,
-                animationDuration: `${3 + Math.random() * 2}s`
+                left: `${20 + i * 8}%`,
+                top: `${30 + (i % 3) * 15}%`,
+                animationDelay: `${i * 0.8}s`,
+                animationDuration: `${4 + Math.random() * 2}s`
               }}
             />
           ))}

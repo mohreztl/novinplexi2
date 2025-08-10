@@ -1,75 +1,51 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import HeroAwesome from "@/components/HeroAwesome";
-import ProductCategoriesAwesome from "@/components/ProductCategoriesAwesome";
-import WhyChooseUs from "@/components/WhyChooseUs";
-import LatestProducts from "@/components/LatestProducts";
-import LatestBlogPosts from "@/components/LatestBlogPosts";
-import Loading from "@/components/ui/Loading";
+import { Suspense } from "react";
+import dynamic from "next/dynamic";
+
+// Lazy load components for better performance
+const HeroAwesome = dynamic(() => import("@/components/HeroAwesome"), {
+  loading: () => <div className="h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900" />
+});
+
+const ProductCategoriesAwesome = dynamic(() => import("@/components/ProductCategoriesAwesome"), {
+  loading: () => <div className="h-96 bg-gray-50 animate-pulse" />
+});
+
+const WhyChooseUs = dynamic(() => import("@/components/WhyChooseUs"), {
+  loading: () => <div className="h-96 bg-white animate-pulse" />
+});
+
+const LatestProducts = dynamic(() => import("@/components/LatestProducts"), {
+  loading: () => <div className="h-96 bg-gray-50 animate-pulse" />
+});
+
+const LatestBlogPosts = dynamic(() => import("@/components/LatestBlogPosts"), {
+  loading: () => <div className="h-96 bg-white animate-pulse" />
+});
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // Simulate loading time
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (isLoading) {
-    return <Loading isLoading={isLoading} />;
-  }
-
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Hero Section */}
+      {/* Hero Section - Priority load */}
       <HeroAwesome />
 
-      {/* Product Categories Section */}
-      <ProductCategoriesAwesome />
+      {/* Other sections - Lazy loaded */}
+      <Suspense fallback={<div className="h-96 bg-gray-50 animate-pulse" />}>
+        <ProductCategoriesAwesome />
+      </Suspense>
 
-      {/* Why Choose Us Section */}
-      <WhyChooseUs />
+      <Suspense fallback={<div className="h-96 bg-white animate-pulse" />}>
+        <WhyChooseUs />
+      </Suspense>
 
-      {/* Latest Products Section */}
-      <LatestProducts />
+      <Suspense fallback={<div className="h-96 bg-gray-50 animate-pulse" />}>
+        <LatestProducts />
+      </Suspense>
 
-      {/* Latest Blog Posts Section */}
-      <LatestBlogPosts />
-
-      {/* Service Section */}
-      {/* <section className="py-16 bg-gray-50">
-        <ServiceSection />
-      </section> */}
-
-      {/* Top Products Section */}
-      
-
-      {/* Latest Products & Categories */}
-      {/* <LatestProducts /> */}
-
-      {/* Categories Section */}
-      {/* <section className="py-16 bg-gray-50">
-        <CategoriesSection />
-      </section> */}
-
-      {/* Blog Section */}
-      {/* <HomeBlogSection /> */}
-
-      {/* FAQ Section */}
-      {/* <section className="py-16 bg-gray-50">
-        <Faq />
-      </section> */}
-
-      {/* Floating Contact Button */}
-      {/* <FloatingContactButton /> */}
-
-      {/* Additional Content */}
-    
+      <Suspense fallback={<div className="h-96 bg-white animate-pulse" />}>
+        <LatestBlogPosts />
+      </Suspense>
     </div>
   );
 }

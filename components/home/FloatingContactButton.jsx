@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiPhone, FiMessageSquare, FiX } from 'react-icons/fi';
 
@@ -8,23 +8,31 @@ const FloatingContactButton = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
-  const toggleMenu = () => {
-    setIsExpanded(!isExpanded);
-  };
+  const toggleMenu = useCallback(() => {
+    setIsExpanded(prev => !prev);
+  }, []);
 
-  // مخفی کردن دکمه هنگام اسکرول
+  // مخفی کردن دکمه هنگام اسکرول - بهینه‌سازی شده
   useEffect(() => {
     let lastScrollY = window.scrollY;
+    let timeoutId;
     
     const handleScroll = () => {
-      if (Math.abs(window.scrollY - lastScrollY) > 50) {
-        setIsVisible(window.scrollY < lastScrollY);
-        lastScrollY = window.scrollY;
-      }
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        const scrollDiff = Math.abs(window.scrollY - lastScrollY);
+        if (scrollDiff > 50) {
+          setIsVisible(window.scrollY < lastScrollY);
+          lastScrollY = window.scrollY;
+        }
+      }, 50); // Throttle scroll events
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   return (

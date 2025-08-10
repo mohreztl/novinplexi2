@@ -1,4 +1,5 @@
 import React from 'react';
+import dynamic from 'next/dynamic';
 import {
   FiMail,
   FiPhone,
@@ -9,6 +10,12 @@ import {
   FiYoutube,
   FiLinkedin
 } from 'react-icons/fi';
+
+// Lazy load non-critical components
+const TrustBadges = dynamic(() => import('./TrustBadges'), {
+  loading: () => <div className="h-20 animate-pulse bg-gray-200 rounded-lg" />,
+  ssr: false
+});
 
 function Footer() {
   return (
@@ -29,19 +36,19 @@ function Footer() {
               تخصص ما در طراحی و تولید محصولات با کیفیت از جنس Plexiglas/Acrylic. با بیش از ۱۵ سال تجربه در صنعت پلیمرهای شفاف.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="bg-gray-800 hover:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+              <a href="#" className="bg-gray-800 hover:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center transition-colors" aria-label="Facebook">
                 <FiFacebook className="w-5 h-5" />
               </a>
-              <a href="#" className="bg-gray-800 hover:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+              <a href="#" className="bg-gray-800 hover:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center transition-colors" aria-label="Instagram">
                 <FiInstagram className="w-5 h-5" />
               </a>
-              <a href="#" className="bg-gray-800 hover:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+              <a href="#" className="bg-gray-800 hover:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center transition-colors" aria-label="Twitter">
                 <FiTwitter className="w-5 h-5" />
               </a>
-              <a href="#" className="bg-gray-800 hover:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+              <a href="#" className="bg-gray-800 hover:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center transition-colors" aria-label="Youtube">
                 <FiYoutube className="w-5 h-5" />
               </a>
-              <a href="#" className="bg-gray-800 hover:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+              <a href="#" className="bg-gray-800 hover:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center transition-colors" aria-label="LinkedIn">
                 <FiLinkedin className="w-5 h-5" />
               </a>
             </div>
@@ -93,21 +100,10 @@ function Footer() {
               </li>
             </ul>
 
-            {/* نمادهای اعتماد */}
+            {/* نمادهای اعتماد - Lazy loaded */}
             <div className="mt-8">
               <h4 className="font-medium mb-4">نمادهای اعتماد</h4>
-              <div className="flex space-x-4">
-                <div className="bg-gray-800 rounded-lg p-3 flex items-center justify-center">
-                  <div className="bg-white text-gray-900 font-bold text-xs p-2 rounded">
-                    نماد اعتماد الکترونیک
-                  </div>
-                </div>
-                <div className="bg-gray-800 rounded-lg p-3 flex items-center justify-center">
-                  <div className="bg-white text-gray-900 font-bold text-xs p-2 rounded">
-                    نماد ساماندهی
-                  </div>
-                </div>
-              </div>
+              <TrustBadges />
             </div>
           </div>
         </div>
