@@ -103,7 +103,7 @@ const HeroAwesome = () => {
           <div className="flex flex-col items-center justify-center text-center max-w-4xl mx-auto">
             
             {/* Content Section */}
-            <div className="animate-fade-in-up">
+            <div className="animate-fade-in-up opacity-0" style={{animationFillMode: 'forwards'}}>
               {/* Brand Badge */}
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 backdrop-blur-sm border border-blue-300/30 rounded-full mb-6 animate-slide-down">
                 <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>
@@ -200,11 +200,11 @@ const HeroAwesome = () => {
         @keyframes fade-in-up {
           from {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translate3d(0, 20px, 0);
           }
           to {
             opacity: 1;
-            transform: translateY(0);
+            transform: translate3d(0, 0, 0);
           }
         }
 
@@ -251,7 +251,8 @@ const HeroAwesome = () => {
         }
 
         .animate-fade-in-up {
-          animation: fade-in-up 0.8s ease-out forwards;
+          animation: fade-in-up 0.6s ease-out forwards;
+          will-change: opacity, transform;
         }
 
         .animate-slide-down {

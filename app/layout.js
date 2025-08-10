@@ -7,6 +7,7 @@ import { PWAPrompt } from '@/components/PWAPrompt';
 import { CookieConsent } from '@/components/CookieConsent';
 import { OrganizationSchema, WebsiteSchema } from '@/components/SEO/StructuredData';
 import NoSSR from '@/components/NoSSR';
+import FontPreloader from '@/components/FontPreloader';
 
 export const metadata = {
   title: {
@@ -90,10 +91,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="fa" dir="rtl" className={yekanBakh.variable}>
       <head>
+        <FontPreloader />
+        
         {/* Preconnect to external domains */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="preconnect" href="https://nikoodecor.storage.c2.liara.space" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://storage.c2.liara.space" crossOrigin="anonymous" />
         
         {/* DNS Prefetch */}
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
@@ -127,17 +130,16 @@ export default function RootLayout({ children }) {
           <NoSSR>
             <PWAPrompt />
             <CookieConsent />
+            {/* Google Analytics - Lazy loaded */}
+            {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+              <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+            )}
           </NoSSR>
         </AuthProvider>
         
         {/* SEO Schema Markup */}
         <OrganizationSchema />
         <WebsiteSchema />
-        
-        {/* Google Analytics */}
-        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
-          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
-        )}
       </body>      
     </html>
   );

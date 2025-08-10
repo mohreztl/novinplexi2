@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const nextConfig = {
-  reactStrictMode: false, // غیرفعال کردن strict mode برای جلوگیری از hydration issues
+  reactStrictMode: false,
   poweredByHeader: false,
   compress: true,
   generateEtags: true,
@@ -17,6 +17,8 @@ const nextConfig = {
     optimizeCss: true,
     optimizePackageImports: ['lucide-react', '@heroicons/react', '@radix-ui/react-icons'],
     serverComponentsExternalPackages: ["mongoose"],
+    ppr: false, // Partial Pre-rendering
+    webpackBuildWorker: true,
     turbo: {
       rules: {
         '*.svg': {
@@ -27,11 +29,18 @@ const nextConfig = {
     },
   },
 
-  // Compiler optimizations
+  // Modern compilation target for better performance
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
+    styledComponents: false,
   },
 
+  // SWC compilation options
+  swcMinify: true,
+  
+  // Modern browser target
+  target: 'server',
+  
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -39,7 +48,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
 
-  // Headers for caching and security
+  // Headers for caching, security and preconnect
   async headers() {
     return [
       {
@@ -60,6 +69,11 @@ const nextConfig = {
           {
             key: 'X-DNS-Prefetch-Control',
             value: 'on',
+          },
+          // Preconnect to external services
+          {
+            key: 'Link',
+            value: '<https://fonts.googleapis.com>; rel=preconnect; crossorigin, <https://www.googletagmanager.com>; rel=preconnect; crossorigin, <https://storage.c2.liara.space>; rel=preconnect; crossorigin',
           },
         ],
       },
@@ -86,7 +100,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=300, s-maxage=300',
+            value: 'no-cache, no-store, must-revalidate',
           },
           { key: "Access-Control-Allow-Credentials", value: "true" },
           { key: "Access-Control-Allow-Origin", value: "*" },
@@ -144,7 +158,31 @@ const nextConfig = {
     JWT_SECRET: process.JWT_SECRET,
   },
 
-  webpack: (config) => {
+  webpack: (config, { dev, isServer }) => {
+    // Optimize bundle splitting
+    if (!dev && !isServer) {
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: {
+          chunks: 'all',
+          cacheGroups: {
+            vendor: {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'vendors',
+              chunks: 'all',
+            },
+            common: {
+              name: 'common',
+              minChunks: 2,
+              chunks: 'all',
+              enforce: true,
+            },
+          },
+        },
+      };
+    }
+
+    // Resolve aliases
     config.resolve.alias["@"] = resolve(__dirname);
     config.resolve.alias["@/utils"] = resolve(__dirname, "utils");
     config.resolve.alias["@/utils/models"] = resolve(
@@ -152,6 +190,7 @@ const nextConfig = {
       "utils",
       "models"
     );
+    
     return config;
   },
 };

@@ -8,6 +8,17 @@
   @font-face {
     font-family: 'IRANSansXFaNum';
     font-display: swap;
+    font-style: normal;
+    font-weight: 400;
+    src: url('/fonts/YekanBakh/IRANSansXFaNum-Regular.woff2') format('woff2');
+  }
+
+  @font-face {
+    font-family: 'IRANSansXFaNum';
+    font-display: swap;
+    font-style: normal;
+    font-weight: 700;
+    src: url('/fonts/YekanBakh/IRANSansXFaNum-Bold.woff2') format('woff2');
   }
 
   /* Critical styles */
@@ -23,12 +34,22 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overscroll-behavior: none;
+    /* Prevent layout shifts */
+    min-height: 100vh;
   }
 
   /* Improve CLS (Cumulative Layout Shift) */
   img, video {
     height: auto;
     max-width: 100%;
+    /* Reserve space to prevent layout shifts */
+    aspect-ratio: attr(width) / attr(height);
+  }
+
+  /* Animation performance */
+  * {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
   }
 
   /* Preload critical resources */

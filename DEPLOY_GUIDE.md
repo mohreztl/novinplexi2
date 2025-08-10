@@ -10,7 +10,7 @@ NEXTAUTH_SECRET="7@m=:6M%d0j![Io"
 NEXTAUTH_URL=https://your-domain.com
 
 # Database
-MONGO_URI=mongodb://root:cPcANHjf2BicckVFQpbbV4tp@himalayas.liara.cloud:33321/my-app?authSource=admin
+my-app?authSource=admin
 JWT_SECRET=7@m=:6M%d0j![Ioa
 
 # Site URLs (جایگزین your-domain.com با دامنه واقعی)
