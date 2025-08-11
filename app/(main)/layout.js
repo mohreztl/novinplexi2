@@ -19,22 +19,20 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-   
-      
-      <body className= "bg-[#FFFFFF] !overflow-x-hidden font-yekanbakh " 
+      <body className="bg-[#FFFFFF] !overflow-x-hidden font-yekanbakh" 
       suppressContentEditableWarning
       suppressHydrationWarning>
-     
         <AuthProvider>
-          <Navbar />
-          <main>
-            {children}
-          </main>
-          <Footer className="p-0" />
+          <div className="flex flex-col min-h-screen">
+            <Navbar />
+            <main className="flex-1">
+              {children}
+            </main>
+            <Footer className="p-0" />
+          </div>
           <FloatingContactButton/>
           <MobileBottomNav />
         </AuthProvider>
       </body>
-  
   );
 }

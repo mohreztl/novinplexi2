@@ -1,51 +1,69 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import OptimizedLoading from "@/components/ui/OptimizedLoading";
+import Loading from "@/components/ui/Loading";
 
 // Lazy load components for better performance
 const HeroAwesome = dynamic(() => import("@/components/HeroAwesome"), {
-  loading: () => <div className="h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900" />
+  loading: () => <OptimizedLoading type="hero" height="h-screen" />
 });
 
 const ProductCategoriesAwesome = dynamic(() => import("@/components/ProductCategoriesAwesome"), {
-  loading: () => <div className="h-96 bg-gray-50 animate-pulse" />
+  loading: () => <OptimizedLoading type="categories" height="h-96" />
 });
 
 const WhyChooseUs = dynamic(() => import("@/components/WhyChooseUs"), {
-  loading: () => <div className="h-96 bg-white animate-pulse" />
+  loading: () => <OptimizedLoading type="features" height="h-96" />
 });
 
 const LatestProducts = dynamic(() => import("@/components/LatestProducts"), {
-  loading: () => <div className="h-96 bg-gray-50 animate-pulse" />
+  loading: () => <OptimizedLoading type="products" height="h-96" />
 });
 
 const LatestBlogPosts = dynamic(() => import("@/components/LatestBlogPosts"), {
-  loading: () => <div className="h-96 bg-white animate-pulse" />
+  loading: () => <OptimizedLoading type="blog" height="h-96" />
 });
 
 export default function Home() {
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+  useEffect(() => {
+    // نمایش loading اولیه برای 1.5 ثانیه
+    const timer = setTimeout(() => {
+      setIsInitialLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // نمایش Loading کامپوننت در ابتدا
+  if (isInitialLoading) {
+    return <Loading isLoading={true} />;
+  }
+
   return (
-    <div className="flex flex-col min-h-screen">
+    <>
       {/* Hero Section - Priority load */}
       <HeroAwesome />
 
-      {/* Other sections - Lazy loaded */}
-      <Suspense fallback={<div className="h-96 bg-gray-50 animate-pulse" />}>
+      {/* Other sections - Lazy loaded with optimized skeletons */}
+      <Suspense fallback={<OptimizedLoading type="categories" height="h-96" />}>
         <ProductCategoriesAwesome />
       </Suspense>
 
-      <Suspense fallback={<div className="h-96 bg-white animate-pulse" />}>
+      <Suspense fallback={<OptimizedLoading type="features" height="h-96" />}>
         <WhyChooseUs />
       </Suspense>
 
-      <Suspense fallback={<div className="h-96 bg-gray-50 animate-pulse" />}>
+      <Suspense fallback={<OptimizedLoading type="products" height="h-96" />}>
         <LatestProducts />
       </Suspense>
 
-      <Suspense fallback={<div className="h-96 bg-white animate-pulse" />}>
+      <Suspense fallback={<OptimizedLoading type="blog" height="h-96" />}>
         <LatestBlogPosts />
       </Suspense>
-    </div>
+    </>
   );
 }
