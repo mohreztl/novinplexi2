@@ -50,17 +50,18 @@ const productSchema = z.object({
     .regex(/^\d+$/, "قیمت باید عددی باشد"),
   price: z.string().optional(),
   images: z.array(z.string()).min(1, "حداقل یک تصویر الزامی است"),
+  // Variations are optional
   variations: z.array(
     z.object({
-      type: z.string().min(1, "نوع متغیر الزامی است"),
+      type: z.string(),
       options: z.array(
         z.object({
-          name: z.string().min(1, "نام گزینه الزامی است"),
-          price: z.string().min(1, "قیمت الزامی است"),
+          name: z.string(),
+          price: z.string(),
         })
-      ).min(1, "حداقل یک گزینه الزامی است"),
+      )
     })
-  ).min(1, "حداقل یک متغیر الزامی است"),
+  ).optional(),
   seo: z.object({
     metaTitle: z.string().optional(),
     metaDescription: z.string().optional(),
@@ -185,21 +186,31 @@ const CreateProduct = () => {
     
     try {
       setIsLoading(true);
+      // Map form values to API fields
       const productData = {
-        ...data,
-        images: data.images, // استفاده از data.images به جای imagePath
-        user: session?.user?._id,
+        title: data.name,
+        slug: data.slug,
+        description: data.description,
+        basePrice: Number(data.originalPrice),
+        images: data.images,
+        category: data.categories,
+        // Provide minimal variants array to satisfy schema
+        variants: [],
+        // default flags
+        featured: false,
+        published: true
       };
 
       const response = await axios.post("/api/products", productData);
       
       if (response.status === 200 || response.status === 201) {
-        router.push("/");
+        console.log('Product created:', response.data.product);
+        // Redirect to admin products list after creation
+        router.push('/adminnovin/products');
+        return;
       }
     } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error("Error creating product:", error);
-      }
+  console.error("Error creating product:", error);
       toast({
         title: "خطا",
         description: "خطا در ایجاد محصول. لطفاً دوباره تلاش کنید.",
