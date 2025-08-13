@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import {
+  Search,
   Loader2,
   ArrowUpDown,
   Edit2,
@@ -15,6 +16,7 @@ import {
   DollarSign
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -48,6 +50,7 @@ const Page = () => {
   const { toast } = useToast();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -61,20 +64,8 @@ const Page = () => {
 
   const fetchProducts = useCallback(async () => {
     try {
-      setLoading(true);
       const response = await axios.get("/api/products");
-      
-      console.log('API Response:', response.data); // اضافه کردن log
-      
-      // تصحیح دریافت data از response
-      let filteredProducts = [];
-      if (response.data?.products && Array.isArray(response.data.products)) {
-        filteredProducts = response.data.products;
-      } else if (Array.isArray(response.data)) {
-        filteredProducts = response.data;
-      }
-
-      console.log('Filtered Products:', filteredProducts); // اضافه کردن log
+      let filteredProducts = Array.isArray(response.data) ? response.data : [];
 
       // فیلتر بر اساس دسته‌بندی با حفاظت از خطا
       if (categoryFilter && categoryFilter !== "all") {
@@ -124,11 +115,38 @@ const Page = () => {
       };
       setStats(newStats);
 
-      // مرتب‌سازی بسیار ساده و ایمن
-      if (sortBy === "newest") {
-        filteredProducts.reverse(); // فقط ترتیب را معکوس کن
+      // مرتب‌سازی با حفاظت از خطا
+      try {
+        filteredProducts.sort((a, b) => {
+          try {
+            if (!a || !b) return 0;
+            
+            if (sortBy === "newest") {
+              const dateA = a.createdAt ? new Date(a.createdAt) : new Date(0);
+              const dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
+              return dateB - dateA;
+            } else if (sortBy === "oldest") {
+              const dateA = a.createdAt ? new Date(a.createdAt) : new Date(0);
+              const dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
+              return dateA - dateB;
+            } else if (sortBy === "priceHigh") {
+              const priceA = a.basePrice || a.price || 0;
+              const priceB = b.basePrice || b.price || 0;
+              return priceB - priceA;
+            } else if (sortBy === "priceLow") {
+              const priceA = a.basePrice || a.price || 0;
+              const priceB = b.basePrice || b.price || 0;
+              return priceA - priceB;
+            }
+            return 0;
+          } catch (sortError) {
+            console.error('Error in sort comparison:', sortError, a, b);
+            return 0;
+          }
+        });
+      } catch (sortError) {
+        console.error('Error sorting products:', sortError);
       }
-      // سایر sorting ها فعلاً غیرفعال
 
       setProducts(filteredProducts);
     } catch (error) {
@@ -176,6 +194,73 @@ const Page = () => {
       setProductToDelete(null);
     }
   };
+
+  // فیلتر محصولات با حفاظت کامل از خطاهای toLowerCase
+  const filteredProducts = (() => {
+    try {
+      // اطمینان از اینکه products یک آرایه است
+      if (!Array.isArray(products)) {
+        console.warn('Products is not an array:', products);
+        return [];
+      }
+
+      return products.filter((prod) => {
+        try {
+          // بررسی اولیه محصول
+          if (!prod || typeof prod !== 'object') {
+            return false;
+          }
+
+          // بررسی searchTerm و تبدیل ایمن به string
+          let searchQuery = '';
+          try {
+            if (searchTerm && typeof searchTerm === 'string') {
+              searchQuery = searchTerm.trim().toLowerCase();
+            }
+          } catch (searchError) {
+            console.error('Error processing searchTerm:', searchError);
+            searchQuery = '';
+          }
+
+          // اگر جستجو خالی است، همه محصولات را نشان بده
+          if (!searchQuery) {
+            return true;
+          }
+
+          // تبدیل ایمن title و _id به lowercase
+          let productTitle = '';
+          let productId = '';
+
+          try {
+            if (prod.title && typeof prod.title === 'string') {
+              productTitle = prod.title.toLowerCase();
+            }
+          } catch (titleError) {
+            console.error('Error processing title:', titleError, prod.title);
+          }
+
+          try {
+            if (prod._id && typeof prod._id === 'string') {
+              productId = prod._id.toLowerCase();
+            }
+          } catch (idError) {
+            console.error('Error processing _id:', idError, prod._id);
+          }
+
+          // جستجو در title و id
+          return productTitle.includes(searchQuery) || productId.includes(searchQuery);
+
+        } catch (productError) {
+          console.error('Error filtering individual product:', productError, prod);
+          return false;
+        }
+      });
+
+    } catch (filterError) {
+      console.error('Critical error in filteredProducts:', filterError);
+      return [];
+    }
+  })();
 
   // All dialog handling is done through onOpenChange
 
@@ -256,7 +341,17 @@ const Page = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="relative">
+          <Search className="absolute right-3 top-2.5 h-4 w-4 text-gray-500" />
+          <Input
+            placeholder="جستجوی محصول..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-4 pr-10"
+          />
+        </div>
+
         <Select value={categoryFilter} onValueChange={setCategoryFilter}>
           <SelectTrigger>
             <SelectValue placeholder="فیلتر دسته‌بندی" />
@@ -306,8 +401,8 @@ const Page = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {products && products.length > 0 ? (
-                products.map((product) => {
+              {filteredProducts && filteredProducts.length > 0 ? (
+                filteredProducts.map((product) => {
                   // اطمینان از وجود product و _id
                   if (!product || !product._id) {
                     return null;

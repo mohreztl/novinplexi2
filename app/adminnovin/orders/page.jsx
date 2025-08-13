@@ -134,9 +134,16 @@ const OrdersPage = () => {
   };
 
   const filteredOrders = orders.filter(
-    (order) =>
-      order.orderNumber.toString().includes(searchTerm) ||
-      order.customer.name.toLowerCase().includes(searchTerm.toLowerCase())
+    (order) => {
+      try {
+        return order.orderNumber.toString().includes(searchTerm) ||
+               (order.customer?.name && typeof order.customer.name === 'string' &&
+                order.customer.name.toLowerCase().includes(searchTerm.toLowerCase()));
+      } catch (error) {
+        console.error('Error filtering orders:', error);
+        return false;
+      }
+    }
   );
 
   return (

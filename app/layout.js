@@ -8,6 +8,8 @@ import { CookieConsent } from '@/components/CookieConsent';
 import { OrganizationSchema, WebsiteSchema } from '@/components/SEO/StructuredData';
 import NoSSR from '@/components/NoSSR';
 import FontPreloader from '@/components/FontPreloader';
+import MobileBottomNav from "@/components/MobileBottomNav";
+import FloatingContactButton from "@/components/home/FloatingContactButton";
 
 export const metadata = {
   title: {
@@ -133,15 +135,13 @@ export default function RootLayout({ children }) {
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
       </head>
       
-      <body className={`${yekanBakh.variable} antialiased`}>
+      <body className={`${yekanBakh.variable} `}>
         <AuthProvider>
-          <div className="min-h-screen">
-            <main>
-              {children}
-            </main>
-          </div>
+          {children}
           <Toaster position="top-center" richColors />
           <NoSSR>
+            <MobileBottomNav />
+            <FloatingContactButton />
             <PWAPrompt />
             <CookieConsent />
             {/* Google Analytics - Lazy loaded */}

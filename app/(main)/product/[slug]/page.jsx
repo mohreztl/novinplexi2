@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { 
   ShoppingCart, 
@@ -618,9 +619,245 @@ export default function ProductPage() {
                 </CardContent>
               </Card>
             )}
+
+            {/* Features & Benefits */}
+            <Card>
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">ویژگی‌ها و مزایا</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                      <CheckCircle className="w-4 h-4 text-green-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-gray-900">کیفیت بالا</h4>
+                      <p className="text-sm text-gray-600">ساخته شده از بهترین مواد اولیه</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <Shield className="w-4 h-4 text-blue-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-gray-900">گارانتی معتبر</h4>
+                      <p className="text-sm text-gray-600">۱۲ ماه گارانتی تعویض</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                      <Truck className="w-4 h-4 text-purple-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-gray-900">ارسال رایگان</h4>
+                      <p className="text-sm text-gray-600">برای خریدهای بالای ۵۰۰ هزار تومان</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+                      <Clock className="w-4 h-4 text-orange-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-gray-900">تحویل سریع</h4>
+                      <p className="text-sm text-gray-600">ارسال در کمترین زمان ممکن</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* FAQ Section */}
+            <Card>
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">پرسش‌های متداول</h3>
+                <div className="space-y-4">
+                  <details className="group">
+                    <summary className="flex justify-between items-center p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
+                      <span className="font-medium">آیا این محصول قابل شستشو است؟</span>
+                      <ChevronLeft className="w-5 h-5 text-gray-400 group-open:rotate-90 transition-transform" />
+                    </summary>
+                    <div className="p-4 text-gray-600">
+                      بله، این محصول با آب و مواد شوینده ملایم قابل شستشو می‌باشد. توصیه می‌کنیم از مواد شیمیایی قوی استفاده نکنید.
+                    </div>
+                  </details>
+                  
+                  <details className="group">
+                    <summary className="flex justify-between items-center p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
+                      <span className="font-medium">زمان تحویل چقدر است؟</span>
+                      <ChevronLeft className="w-5 h-5 text-gray-400 group-open:rotate-90 transition-transform" />
+                    </summary>
+                    <div className="p-4 text-gray-600">
+                      معمولاً ۲ تا ۵ روز کاری در تهران و ۳ تا ۷ روز کاری در سایر شهرها.
+                    </div>
+                  </details>
+                  
+                  <details className="group">
+                    <summary className="flex justify-between items-center p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
+                      <span className="font-medium">آیا امکان تعویض وجود دارد؟</span>
+                      <ChevronLeft className="w-5 h-5 text-gray-400 group-open:rotate-90 transition-transform" />
+                    </summary>
+                    <div className="p-4 text-gray-600">
+                      بله، تا ۷ روز پس از خرید با حفظ شرایط اولیه امکان تعویض وجود دارد.
+                    </div>
+                  </details>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Customer Reviews */}
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-lg font-semibold text-gray-900">نظرات کاربران</h3>
+                  <Button variant="outline" size="sm">
+                    ثبت نظر
+                  </Button>
+                </div>
+                
+                {/* Rating Summary */}
+                <div className="flex items-center gap-6 mb-6 p-4 bg-gray-50 rounded-lg">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-gray-900">{product.averageRating || 0}</div>
+                    <div className="flex items-center justify-center gap-1 mt-1">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className={`w-4 h-4 ${i < (product.averageRating || 0) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} />
+                      ))}
+                    </div>
+                    <div className="text-sm text-gray-600 mt-1">{product.numReviews || 0} نظر</div>
+                  </div>
+                  
+                  <div className="flex-1">
+                    {[5, 4, 3, 2, 1].map((rating) => (
+                      <div key={rating} className="flex items-center gap-2 mb-1">
+                        <span className="text-sm w-8">{rating}</span>
+                        <Star className="w-3 h-3 text-yellow-400 fill-current" />
+                        <div className="flex-1 bg-gray-200 rounded-full h-2">
+                          <div className="bg-yellow-400 h-2 rounded-full" style={{ width: '60%' }}></div>
+                        </div>
+                        <span className="text-xs text-gray-600 w-8">12</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Sample Reviews */}
+                <div className="space-y-4">
+                  <div className="border-b border-gray-100 pb-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-medium">
+                        ع
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="font-medium">علی محمدی</span>
+                          <div className="flex gap-1">
+                            {[...Array(5)].map((_, i) => (
+                              <Star key={i} className="w-3 h-3 text-yellow-400 fill-current" />
+                            ))}
+                          </div>
+                        </div>
+                        <p className="text-gray-600 text-sm">کیفیت عالی و ارسال سریع. کاملاً راضی هستم.</p>
+                        <span className="text-xs text-gray-400">۲ روز پیش</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </motion.div>
         </div>
+
+        {/* Related Products */}
+        <div className="container mx-auto px-4 py-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">محصولات مرتبط</h2>
+          <RelatedProducts category={product?.category} currentProductId={product?._id} />
+        </div>
       </div>
+    </div>
+  );
+}
+
+// Related Products Component
+function RelatedProducts({ category, currentProductId }) {
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRelatedProducts = async () => {
+      if (!category) return;
+      
+      try {
+        const response = await axios.get(`/api/products?category=${category}&limit=4`);
+        const products = response.data.products || [];
+        // فیلتر کردن محصول فعلی
+        const filtered = products.filter(p => p._id !== currentProductId);
+        setRelatedProducts(filtered.slice(0, 4));
+      } catch (error) {
+        console.error('Error fetching related products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRelatedProducts();
+  }, [category, currentProductId]);
+
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="animate-pulse">
+            <div className="bg-gray-200 aspect-square rounded-lg mb-3"></div>
+            <div className="bg-gray-200 h-4 rounded mb-2"></div>
+            <div className="bg-gray-200 h-4 rounded w-2/3"></div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (relatedProducts.length === 0) {
+    return <div className="text-center text-gray-500">محصول مرتبطی یافت نشد</div>;
+  }
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {relatedProducts.map((product) => (
+        <motion.div
+          key={product._id}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="group"
+        >
+          <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <div className="relative aspect-square overflow-hidden">
+              <Image
+                src={product.images?.[0] || '/placeholder.jpg'}
+                alt={product.title}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              {product.discount > 0 && (
+                <Badge className="absolute top-2 left-2 bg-red-500 text-white">
+                  {product.discount}% تخفیف
+                </Badge>
+              )}
+            </div>
+            <CardContent className="p-4">
+              <h3 className="font-medium text-gray-900 mb-2 line-clamp-2">{product.title}</h3>
+              <div className="flex items-center justify-between">
+                <div className="text-lg font-bold text-primary-600">
+                  {formatPrice(product.basePrice)}
+                </div>
+                <Button size="sm" asChild>
+                  <Link href={`/product/${product.slug}`}>
+                    مشاهده
+                  </Link>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      ))}
     </div>
   );
 }

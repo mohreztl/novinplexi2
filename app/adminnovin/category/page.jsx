@@ -134,12 +134,19 @@ export default function AdminCategoriesPage() {
   };
 
   const generateSlug = (title) => {
-    return title
-      .toLowerCase()
-      .replace(/[\u0600-\u06FF\s]/g, '') // حذف حروف فارسی و فاصله
-      .replace(/[^a-z0-9]/g, '-') // جایگزینی کاراکترهای غیرمجاز با خط تیره
-      .replace(/-+/g, '-') // حذف خط تیره‌های متوالی
-      .replace(/^-|-$/g, ''); // حذف خط تیره از ابتدا و انتها
+    try {
+      if (!title || typeof title !== 'string') return '';
+      
+      return title
+        .toLowerCase()
+        .replace(/[\u0600-\u06FF\s]/g, '') // حذف حروف فارسی و فاصله
+        .replace(/[^a-z0-9]/g, '-') // جایگزینی کاراکترهای غیرمجاز با خط تیره
+        .replace(/-+/g, '-') // حذف خط تیره‌های متوالی
+        .replace(/^-|-$/g, ''); // حذف خط تیره از ابتدا و انتها
+    } catch (error) {
+      console.error('Error generating slug:', error);
+      return '';
+    }
   };
 
   return (

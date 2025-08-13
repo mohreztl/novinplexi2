@@ -3,18 +3,35 @@ import Product from "@/models/Product";
 import { NextResponse } from "next/server";
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(req) {
   try {
     await connectToDB();
 
-    const foundProducts = await Product.find({})
-      .sort({ createdAt: -1 });
+    const { searchParams } = new URL(req.url);
+    const limit = parseInt(searchParams.get("limit") || 100);
+    const sort = searchParams.get("sort") || "createdAt";
+    const order = searchParams.get("order") || "desc";
 
-    return NextResponse.json(foundProducts);
+    const sortObject = {};
+    sortObject[sort] = order === "desc" ? -1 : 1;
+
+    console.log('Fetching products...'); // Debug log
+
+    const foundProducts = await Product.find({})
+      .sort(sortObject)
+      .limit(limit);
+
+    console.log('Found products count:', foundProducts.length); // Debug log
+    console.log('Sample product:', foundProducts[0]); // Debug log
+
+    return NextResponse.json({
+      products: foundProducts,
+      total: foundProducts.length
+    });
   } catch (error) {
     console.error('Error fetching products:', error);
     return NextResponse.json(
-      { error: 'خطا در دریافت محصولات' },
+      { error: 'خطا در دریافت محصولات', details: error.message },
       { status: 500 }
     );
   }
@@ -28,28 +45,38 @@ export async function POST(request) {
 
     const {
       title,
+      name,
       slug,
       description,
+      fullDescription,
       basePrice,
       images,
       category,
       variants,
       tags,
       featured,
-      published
+      published,
+      stock,
+      discountPrice,
+      seo
     } = body;
 
     const newProduct = await Product.create({
       title,
+      name: name || title, // اگر name ارسال نشد، از title استفاده کن
       slug,
       description,
+      fullDescription,
       basePrice,
       images,
       category,
       variants,
       tags,
       featured,
-      published
+      published,
+      stock,
+      discountPrice,
+      seo
     });
 
     return NextResponse.json({

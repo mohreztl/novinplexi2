@@ -100,7 +100,7 @@ export default function PrivacyPolicyPage() {
             <p className="mb-6">
               We may update our Privacy Policy from time to time. We will notify
               you of any changes by posting the new Privacy Policy on this page
-              and updating the "Last Updated" date.
+              and updating the &quot;Last Updated&quot; date.
             </p>
 
             <h2 className="text-2xl font-bold mb-4">9. Contact Us</h2>
@@ -135,7 +135,7 @@ export default function PrivacyPolicyPage() {
           </h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
             If you have any questions about our Privacy Policy or how we handle
-            your data, please don't hesitate to reach out to us.
+            your data, please don&apos;t hesitate to reach out to us.
           </p>
           <Link
             href="/contact"

@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import Order from "@/utils/models/Order";
 import mongoose from "mongoose";
-import { Product } from "@/utils/models/Product";
+import Product from "@/models/Product";
 import { authOptions } from "@/lib/auth";
 import { ReviewSchema } from "@/utils/validations/reviewSchema";
 

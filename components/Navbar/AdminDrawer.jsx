@@ -31,7 +31,7 @@ const AdminDrawer = ({ admin, category, setCategory }) => {
                       href={
                         cat === "Create Product"
                           ? "/create"
-                          : `/${cat.toLowerCase().replace(" ", "")}`
+                          : `/${cat && typeof cat === 'string' ? cat.toLowerCase().replace(" ", "") : ''}`
                       }
                       className="pl-2 text-lg"
                     >

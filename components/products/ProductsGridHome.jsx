@@ -48,11 +48,16 @@ export default function ProductsGridHome({
     if (brand === "All") {
       setProducts(initialProducts);
     } else {
-      router.push(
-        `/products/brand/${encodeURIComponent(
-          brand.toLowerCase().replace(/\s+/g, "")
-        )}`
-      );
+      try {
+        const brandPath = brand && typeof brand === 'string' 
+          ? brand.toLowerCase().replace(/\s+/g, "")
+          : '';
+        router.push(
+          `/products/brand/${encodeURIComponent(brandPath)}`
+        );
+      } catch (error) {
+        console.error('Error processing brand:', error);
+      }
     }
     setCurrentPage(1);
   };

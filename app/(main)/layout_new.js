@@ -1,8 +1,9 @@
-
 import "../globals.css";
 
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/home/Footer";
+import MobileBottomNav from "@/components/MobileBottomNav";
+import FloatingContactButton from "@/components/home/FloatingContactButton";
 
 export const metadata = {
  title: "فروش آنلاین ورق‌های پلکسی با کیفیت و قیمت مناسب | نوین پلکسی",
@@ -12,15 +13,16 @@ description: "ورق‌های آکریلیک پلکسی گلاس را با به�
     siteName: "نوین پلکسی",
   };
 
-
 export default function MainLayout({ children }) {
   return (
-    <div className="flex flex-col min-h-screen mobile-safe-area">
+    <div>
       <Navbar />
-      <main className="flex-1">
+      <main className="min-h-screen">
         {children}
       </main>
       <Footer />
+      <MobileBottomNav />
+      <FloatingContactButton />
     </div>
   );
 }

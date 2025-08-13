@@ -224,7 +224,7 @@ const LatestProducts = memo(() => {
 
                       {/* Action Buttons */}
                       <div className="flex gap-2">
-                        <Link href={`/products/${product.slug}`} className="flex-1">
+                        <Link href={`/product/${product.slug}`} className="flex-1">
                           <Button variant="outline" size="sm" className="w-full group-hover:border-blue-500 group-hover:text-blue-600">
                             <Eye className="w-4 h-4 ml-2" />
                             مشاهده

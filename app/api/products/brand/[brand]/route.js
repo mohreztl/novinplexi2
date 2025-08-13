@@ -1,5 +1,5 @@
 import dbConnect from "@/utils/config/dbConnection";
-import { Product } from "@/utils/models/Product";
+import Product from "@/models/Product";
 import { NextResponse } from "next/server";
 
 export async function GET(req, { params }) {

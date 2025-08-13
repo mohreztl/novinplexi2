@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { useDropzone } from 'react-dropzone';
 import { Button } from "@/components/ui/button";
@@ -49,13 +50,23 @@ const ImagesList = ({ onImageSelect, maxSelection = 1 }) => {
   }, []);
 
   // فیلتر کردن تصاویر بر اساس جستجو
-  const filteredObjects = objects.filter(file => 
-    file?.Key?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredObjects = objects.filter(file => {
+    try {
+      return file?.Key && typeof file.Key === 'string' && 
+             file.Key.toLowerCase().includes(searchTerm.toLowerCase());
+    } catch {
+      return false;
+    }
+  });
 
-  const filteredUploadedImages = uploadedImages.filter(url => 
-    url && typeof url === 'string' && url.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredUploadedImages = uploadedImages.filter(url => {
+    try {
+      return url && typeof url === 'string' && 
+             url.toLowerCase().includes(searchTerm.toLowerCase());
+    } catch {
+      return false;
+    }
+  });
 
   const toggleSelection = (image) => {
     if (maxSelection === 1) {
@@ -137,22 +148,69 @@ const ImagesList = ({ onImageSelect, maxSelection = 1 }) => {
   };
 
   const clearSelection = () => setSelectedFile([]);
+  
   return (
-    <div>
+    <div className="relative">
+      <div className="space-y-4">
+      {/* نمایش تصاویر انتخاب شده */}
+      {selectedFile.length > 0 && (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-medium text-green-800">
+              تصاویر انتخاب شده ({selectedFile.length})
+            </h3>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={clearSelection}
+              className="text-red-600 border-red-300 hover:bg-red-50"
+            >
+              <X className="w-4 h-4 mr-1" />
+              پاک کردن
+            </Button>
+          </div>
+          <div className="grid grid-cols-4 gap-2">
+            {selectedFile.slice(0, 4).map((url, index) => (
+              <div key={index} className="relative">
+                <Image
+                  src={url}
+                  alt={`انتخاب شده ${index + 1}`}
+                  width={60}
+                  height={60}
+                  className="w-15 h-15 object-cover rounded border"
+                />
+              </div>
+            ))}
+            {selectedFile.length > 4 && (
+              <div className="w-15 h-15 bg-gray-100 rounded border flex items-center justify-center text-xs text-gray-600">
+                +{selectedFile.length - 4}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* دکمه باز کردن مدال */}
       <Button 
         type="button" 
-        className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-lg transition-all duration-300 flex items-center gap-2" 
+        className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-lg transition-all duration-300 flex items-center justify-center gap-2 py-3" 
         onClick={openModal}
       >
-        <ImageIcon className="w-4 h-4" />
-        مدیریت تصاویر
+        <ImageIcon className="w-5 h-5" />
+        انتخاب تصاویر ({maxSelection > 1 ? `حداکثر ${maxSelection}` : '1'} تصویر)
       </Button>
       
       {/* مدال بهبود یافته */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-7xl w-full max-h-[95vh] overflow-hidden">
+      {isModalOpen && typeof window !== 'undefined' && createPortal(
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] p-4 h-full"
+          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9999 }}
+        >
+          <div 
+            className="bg-white rounded-2xl shadow-2xl max-w-7xl w-full max-h-[95vh] overflow-hidden relative z-[10000]"
+            style={{ position: 'relative', zIndex: 10000 }}
+          >
             
             {/* Header */}
             <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 text-white">
@@ -438,8 +496,10 @@ const ImagesList = ({ onImageSelect, maxSelection = 1 }) => {
               </div>
             </div>
           </div>
-        </div>
+        </div>, 
+        document.body
       )}
+      </div>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import connect from "@/utils/config/dbConnection";
 import Review from "@/utils/models/Review";
-import {Product} from "@/utils/models/Product";
+import Product from "@/models/Product";
 import { NextResponse } from "next/server";
 
 export async function GET(req) {
