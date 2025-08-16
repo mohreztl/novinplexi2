@@ -5,6 +5,7 @@ import { Toaster } from 'sonner';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { PWAPrompt } from '@/components/PWAPrompt';
 import { CookieConsent } from '@/components/CookieConsent';
+import ClientOnly from '@/components/ClientOnly';
 import { OrganizationSchema, WebsiteSchema } from '@/components/SEO/StructuredData';
 import NoSSR from '@/components/NoSSR';
 import FontPreloader from '@/components/FontPreloader';
@@ -138,12 +139,20 @@ export default function RootLayout({ children }) {
           {children}
           <Toaster position="top-center" richColors />
           <NoSSR>
-            <PWAPrompt />
-            <CookieConsent />
-            {/* Google Analytics - Lazy loaded */}
-            {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
-              <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
-            )}
+            {/* Don't show PWA prompt or cookie consent on admin routes */}
+            {/* usePathname is only available client-side via a small inline script wrapper in SSR layout, so we render them conditionally in a client wrapper below. */}
+            <ClientOnly>
+              {/* ClientOnly will mount on the client where window.location is available */}
+              {typeof window !== 'undefined' && !window.location.pathname.startsWith('/adminnovin') && (
+                <>
+                  <PWAPrompt />
+                  <CookieConsent />
+                  {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+                    <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+                  )}
+                </>
+              )}
+            </ClientOnly>
           </NoSSR>
         </AuthProvider>
         

@@ -12,8 +12,11 @@ const ReactQuill = dynamic(() => import('react-quill'), {
 // Import Quill styles
 import 'react-quill/dist/quill.snow.css'
 
-const RichTextEditor = ({ value, onChange, placeholder = "متن خود را وارد کنید..." }) => {
+const RichTextEditor = ({ value, content, onChange, placeholder = "متن خود را وارد کنید..." }) => {
   const quillRef = useRef(null)
+
+  // Support both `value` and legacy `content` prop names. Prefer explicit `value`.
+  const editorValue = typeof value !== 'undefined' ? value : content;
 
   // Custom toolbar configuration
   const modules = {
@@ -117,7 +120,7 @@ const RichTextEditor = ({ value, onChange, placeholder = "متن خود را و�
       <ReactQuill
         ref={quillRef}
         theme="snow"
-        value={value}
+        value={editorValue}
         onChange={onChange}
         modules={modules}
         formats={formats}
