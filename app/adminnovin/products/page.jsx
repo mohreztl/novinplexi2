@@ -192,7 +192,7 @@ const Page = () => {
       ) : (
         <>
           <div className="mb-6  ">
-            <div className="flex justify-around items-center mb-6 ml-6">
+            <div className="flex justify-around md:justify-between items-center mb-6 ml-6">
               <h1 className="text-2xl font-bold">مدیریت محصولات</h1>
               <Button
                 onClick={() => router.push("/adminnovin/products/create")}
