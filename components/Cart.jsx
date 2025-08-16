@@ -72,11 +72,11 @@ const Cart = () => {
                   className="flex items-center p-3 border border-gray-200 rounded-lg bg-gray-50"
                 >
                   <Image
-                    src={item?.images[0]}
+                    src={(item?.images && item.images.length > 0 && item.images[0]) || '/placeholder.webp'}
                     width={60}
                     height={60}
                     className="rounded-md object-cover mr-3"
-                    alt={item.name}
+                    alt={item.name || 'محصول'}
                     unoptimized
                   />
                   <div className="flex-grow sm:mr-12">

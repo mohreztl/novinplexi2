@@ -28,8 +28,8 @@ export async function generateMetadata({ params }) {
       other: {
         product_id: product._id,
         product_name: product.name,
-        product_price: product.price,
-        product_old_price: product.originalPrice || product.price,
+        product_price: product.basePrice || 0,
+        product_old_price: product.basePrice || 0,
         availability: "instock",
         guarantee: "12 ماه ضمانت کیفیت",
         image: product.images?.[0] || "https://novinplexi.ir/default-image.jpg",

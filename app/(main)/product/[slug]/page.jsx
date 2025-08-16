@@ -56,25 +56,12 @@ export default function ProductPage() {
         const productData = res.data;
         setProduct(productData);
         
-        // Set default selections based on variations
-        if (productData.variations?.length > 0) {
-          // رنگ پیش‌فرض
-          const colorVariation = productData.variations.find(v => v.type === "رنگ");
-          if (colorVariation?.options?.length > 0) {
-            setSelectedColor(colorVariation.options[0].name);
-          }
-          
-          // سایز پیش‌فرض
-          const sizeVariation = productData.variations.find(v => v.type === "اندازه");
-          if (sizeVariation?.options?.length > 0) {
-            setSelectedSize(sizeVariation.options[0].name);
-          }
-          
-          // ضخامت پیش‌فرض
-          const thicknessVariation = productData.variations.find(v => v.type === "ضخامت");
-          if (thicknessVariation?.options?.length > 0) {
-            setSelectedThickness(thicknessVariation.options[0].name);
-          }
+        // Set default selections based on new `variants` structure (model: variants.{colors,sizes,thicknesses})
+        if (productData.variants) {
+          const { colors = [], sizes = [], thicknesses = [] } = productData.variants;
+          if (colors.length > 0) setSelectedColor(colors[0].name);
+          if (sizes.length > 0) setSelectedSize(sizes[0].name);
+          if (thicknesses.length > 0) setSelectedThickness(thicknesses[0].name);
         }
       } catch (err) {
         console.error("Error fetching product:", err);
@@ -91,36 +78,35 @@ export default function ProductPage() {
 
   // Update selected variant when selections change
   useEffect(() => {
-    if (product && product.variations) {
-      // محاسبه قیمت نهایی بر اساس انتخاب‌ها
-      let totalPrice = parseInt(product.originalPrice) || 0;
-      
-      // اضافه کردن قیمت‌های متغیرها
-      product.variations.forEach(variation => {
-        let selectedOption = null;
-        
-        if (variation.type === "رنگ" && selectedColor) {
-          selectedOption = variation.options.find(opt => opt.name === selectedColor);
-        } else if (variation.type === "اندازه" && selectedSize) {
-          selectedOption = variation.options.find(opt => opt.name === selectedSize);
-        } else if (variation.type === "ضخامت" && selectedThickness) {
-          selectedOption = variation.options.find(opt => opt.name === selectedThickness);
-        }
-        
-        if (selectedOption && selectedOption.price) {
-          totalPrice += parseInt(selectedOption.price) || 0;
-        }
-      });
-      
-      setSelectedVariant({ price: totalPrice });
+    if (product && product.variants) {
+      // محاسبه قیمت نهایی بر اساس basePrice و extraPriceهای گزینه‌ها
+      let totalPrice = parseInt(product.basePrice) || 0;
+      let stock = product.stock || 0;
+
+      const { colors = [], sizes = [], thicknesses = [] } = product.variants;
+
+      if (selectedColor) {
+        const opt = colors.find(c => c.name === selectedColor);
+        if (opt) totalPrice += Number(opt.extraPrice) || 0;
+      }
+
+      if (selectedSize) {
+        const opt = sizes.find(s => s.name === selectedSize);
+        if (opt) totalPrice += Number(opt.extraPrice) || 0;
+      }
+
+      if (selectedThickness) {
+        const opt = thicknesses.find(t => t.name === selectedThickness);
+        if (opt) totalPrice += Number(opt.extraPrice) || 0;
+      }
+
+      setSelectedVariant({ price: totalPrice, stock });
     }
   }, [selectedColor, selectedSize, selectedThickness, product]);
 
   const getCurrentPrice = () => {
-    if (selectedVariant) {
-      return selectedVariant.price;
-    }
-    return parseInt(product?.originalPrice) || 0;
+  if (selectedVariant) return selectedVariant.price;
+  return parseInt(product?.basePrice) || 0;
   };
 
   const getDiscountedPrice = () => {
@@ -375,95 +361,133 @@ export default function ProductPage() {
               </CardContent>
             </Card>
 
-            {/* Product Variations - New System */}
-            {product.variations?.map((variation, index) => (
-              <div key={index} className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    {variation.type}:
-                  </h3>
-                  {((variation.type === "رنگ" && selectedColor) ||
-                    (variation.type === "اندازه" && selectedSize) ||
-                    (variation.type === "ضخامت" && selectedThickness)) && (
-                    <Badge variant="outline" className="text-sm">
-                      {variation.type === "رنگ" ? selectedColor :
-                       variation.type === "اندازه" ? selectedSize :
-                       selectedThickness}
-                    </Badge>
-                  )}
-                </div>
-                
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
-                  {variation.options?.map((option, optIndex) => {
-                    const isSelected = 
-                      (variation.type === "رنگ" && selectedColor === option.name) ||
-                      (variation.type === "اندازه" && selectedSize === option.name) ||
-                      (variation.type === "ضخامت" && selectedThickness === option.name);
-                    
-                    const handleSelect = () => {
-                      if (variation.type === "رنگ") {
-                        setSelectedColor(option.name);
-                      } else if (variation.type === "اندازه") {
-                        setSelectedSize(option.name);
-                      } else if (variation.type === "ضخامت") {
-                        setSelectedThickness(option.name);
-                      }
-                    };
-
-                    return (
-                      <motion.button
-                        key={optIndex}
-                        onClick={handleSelect}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className={`relative p-3 rounded-lg border-2 font-medium transition-all duration-200 ${
-                          isSelected
-                            ? 'border-primary-500 bg-primary-50 text-primary-700 shadow-md'
-                            : 'border-gray-300 hover:border-gray-400 bg-white text-gray-700'
-                        }`}
-                      >
-                        <div className="flex flex-col items-center gap-1">
-                          <span className="text-sm font-medium text-center">{option.name}</span>
-                          {option.price && parseInt(option.price) > 0 && (
-                            <span className="text-xs text-green-600 font-bold">
-                              +{formatPrice(parseInt(option.price))}
-                            </span>
-                          )}
-                        </div>
-                        {isSelected && (
-                          <motion.div 
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            className="absolute -top-1 -right-1 w-4 h-4 bg-primary-500 rounded-full flex items-center justify-center"
+            {/* Product Variants (colors / sizes / thicknesses) */}
+            {product.variants && (
+              <>
+                {/* Colors */}
+                {product.variants.colors?.length > 0 && (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold text-gray-900">رنگ:</h3>
+                      {selectedColor && (
+                        <Badge variant="outline" className="text-sm">{selectedColor}</Badge>
+                      )}
+                    </div>
+                    <div className="flex flex-wrap gap-3">
+                      {product.variants.colors.map((option, idx) => {
+                        const isSelected = selectedColor === option.name;
+                        return (
+                          <button
+                            key={idx}
+                            onClick={() => setSelectedColor(option.name)}
+                            className={`relative w-12 h-12 rounded-full border-4 transition-all duration-200 ${
+                              isSelected ? 'border-primary-500 shadow-lg scale-110' : 'border-gray-300 hover:border-gray-400'
+                            }`}
+                            title={option.name}
+                            style={{ backgroundColor: option.code || '#ddd' }}
                           >
-                            <CheckCircle className="w-3 h-3 text-white" />
-                          </motion.div>
-                        )}
-                      </motion.button>
-                    );
-                  })}
-                </div>
-                
-                {/* Price breakdown for this variation */}
-                {variation.options?.some(opt => opt.price && parseInt(opt.price) > 0) && (
-                  <div className="bg-gray-50 p-3 rounded-lg">
-                    <p className="text-xs text-gray-600 mb-2">قیمت‌های اضافی این {variation.type}:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {variation.options.map((opt, idx) => (
-                        opt.price && parseInt(opt.price) > 0 && (
-                          <span key={idx} className="text-xs bg-white px-2 py-1 rounded border">
-                            {opt.name}: +{formatPrice(parseInt(opt.price))}
-                          </span>
-                        )
-                      ))}
+                            {isSelected && (
+                              <CheckCircle className="absolute -top-1 -right-1 w-5 h-5 text-primary-500 bg-white rounded-full" />
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {product.variants.colors.some(c => c.extraPrice && c.extraPrice > 0) && (
+                      <div className="bg-gray-50 p-3 rounded-lg">
+                        <p className="text-xs text-gray-600 mb-2">قیمت‌های اضافی رنگ‌ها:</p>
+                        <div className="flex flex-wrap gap-2">
+                          {product.variants.colors.map((opt, i) => (
+                            opt.extraPrice > 0 && (
+                              <span key={i} className="text-xs bg-white px-2 py-1 rounded border">{opt.name}: +{formatPrice(opt.extraPrice)}</span>
+                            )
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Sizes */}
+                {product.variants.sizes?.length > 0 && (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold text-gray-900">سایز:</h3>
+                      {selectedSize && <Badge variant="outline" className="text-sm">{selectedSize}</Badge>}
+                    </div>
+                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
+                      {product.variants.sizes.map((option, idx) => {
+                        const isSelected = selectedSize === option.name;
+                        return (
+                          <motion.button
+                            key={idx}
+                            onClick={() => setSelectedSize(option.name)}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className={`relative p-3 rounded-lg border-2 font-medium transition-all duration-200 ${
+                              isSelected ? 'border-primary-500 bg-primary-50 text-primary-700 shadow-md' : 'border-gray-300 hover:border-gray-400 bg-white text-gray-700'
+                            }`}
+                          >
+                            <div className="flex flex-col items-center gap-1">
+                              <span className="text-sm font-medium text-center">{option.name}</span>
+                              {option.extraPrice > 0 && (
+                                <span className="text-xs text-green-600 font-bold">+{formatPrice(option.extraPrice)}</span>
+                              )}
+                            </div>
+                            {isSelected && (
+                              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute -top-1 -right-1 w-4 h-4 bg-primary-500 rounded-full flex items-center justify-center">
+                                <CheckCircle className="w-3 h-3 text-white" />
+                              </motion.div>
+                            )}
+                          </motion.button>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
-              </div>
-            ))}
+
+                {/* Thicknesses */}
+                {product.variants.thicknesses?.length > 0 && (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold text-gray-900">ضخامت:</h3>
+                      {selectedThickness && <Badge variant="outline" className="text-sm">{selectedThickness}</Badge>}
+                    </div>
+                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
+                      {product.variants.thicknesses.map((option, idx) => {
+                        const isSelected = selectedThickness === option.name;
+                        return (
+                          <motion.button
+                            key={idx}
+                            onClick={() => setSelectedThickness(option.name)}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className={`relative p-3 rounded-lg border-2 font-medium transition-all duration-200 ${
+                              isSelected ? 'border-primary-500 bg-primary-50 text-primary-700 shadow-md' : 'border-gray-300 hover:border-gray-400 bg-white text-gray-700'
+                            }`}
+                          >
+                            <div className="flex flex-col items-center gap-1">
+                              <span className="text-sm font-medium text-center">{option.name}</span>
+                              {option.extraPrice > 0 && (
+                                <span className="text-xs text-green-600 font-bold">+{formatPrice(option.extraPrice)}</span>
+                              )}
+                            </div>
+                            {isSelected && (
+                              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute -top-1 -right-1 w-4 h-4 bg-primary-500 rounded-full flex items-center justify-center">
+                                <CheckCircle className="w-3 h-3 text-white" />
+                              </motion.div>
+                            )}
+                          </motion.button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
 
             {/* Legacy Color Selection - fallback */}
-            {!product.variations?.find(v => v.type === "رنگ") && product.colors?.length > 0 && (
+            {!product.variants && product.colors?.length > 0 && (
               <div className="space-y-3">
                 <h3 className="text-lg font-semibold text-gray-900">رنگ:</h3>
                 <div className="flex flex-wrap gap-3">
@@ -494,7 +518,7 @@ export default function ProductPage() {
             )}
 
             {/* Legacy Size Selection - fallback */}
-            {!product.variations?.find(v => v.type === "اندازه") && product.sizes?.length > 0 && (
+            {!product.variants && product.sizes?.length > 0 && (
               <div className="space-y-3">
                 <h3 className="text-lg font-semibold text-gray-900">سایز:</h3>
                 <div className="flex flex-wrap gap-3">
@@ -516,7 +540,7 @@ export default function ProductPage() {
             )}
 
             {/* Legacy Thickness Selection - fallback */}
-            {!product.variations?.find(v => v.type === "ضخامت") && product.thicknesses?.length > 0 && (
+            {!product.variants && product.thicknesses?.length > 0 && (
               <div className="space-y-3">
                 <h3 className="text-lg font-semibold text-gray-900">ضخامت:</h3>
                 <div className="flex flex-wrap gap-3">

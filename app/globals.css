@@ -88,11 +88,11 @@
     aspect-ratio: attr(width) / attr(height);
   }
 
-  /* Animation performance */
-  * {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-  }
+  /* Animation performance
+     NOTE: avoid forcing hardware-acceleration on every element via a global transform.
+     A global `transform` on `*` creates a containing block which breaks `position: fixed`
+     (fixed elements become positioned relative to that ancestor). Use targeted
+     `will-change` or apply transforms only to the elements that need them. */
 
   /* Preload critical resources */
   link[rel="preload"] {

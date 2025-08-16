@@ -30,7 +30,7 @@ export async function GET(req, { params }) {
 
 export async function PUT(req, { params }) {
   try {
-    await connectToDB();
+  await dbConnect();
 
     const { slug } = params;
     const body = await req.json();
