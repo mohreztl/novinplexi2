@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import { motion } from 'framer-motion'
-
+import Image from "next/image";
 export default function NotFound() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-[#f8f9fa] to-[#e9ecef] text-center px-6">
@@ -43,7 +43,7 @@ export default function NotFound() {
         transition={{ delay: 0.6 }}
       >
         <Link href="/" passHref>
-          <Button className="bg-secondary text-primary hover:bg-yellow-400 text-lg px-6 py-2 rounded-2xl shadow-md">
+          <Button className="bg-secondary text-white hover:bg-primary-400 text-lg px-6 py-2 rounded-2xl shadow-md">
             <ArrowLeft className="ml-2" size={20} />
             بازگشت به صفحه اصلی
           </Button>
@@ -57,8 +57,10 @@ export default function NotFound() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.8 }}
       >
-        <img
+        <Image
           src="/logo1.svg"
+          width={80}
+          height={80}
           alt="تصویر صفحه 404 نوین پلکسی"
           className="w-80 max-w-full mx-auto"
         />
