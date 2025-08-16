@@ -8,8 +8,6 @@ import { CookieConsent } from '@/components/CookieConsent';
 import { OrganizationSchema, WebsiteSchema } from '@/components/SEO/StructuredData';
 import NoSSR from '@/components/NoSSR';
 import FontPreloader from '@/components/FontPreloader';
-import MobileBottomNav from "@/components/MobileBottomNav";
-import FloatingContactButton from "@/components/home/FloatingContactButton";
 
 export const metadata = {
   title: {
@@ -140,8 +138,6 @@ export default function RootLayout({ children }) {
           {children}
           <Toaster position="top-center" richColors />
           <NoSSR>
-            <MobileBottomNav />
-            <FloatingContactButton />
             <PWAPrompt />
             <CookieConsent />
             {/* Google Analytics - Lazy loaded */}

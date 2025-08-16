@@ -42,6 +42,7 @@ export async function POST(request) {
     await connectToDB();
 
     const body = await request.json();
+    console.log('POST /api/products - Received body:', JSON.stringify(body, null, 2));
 
     const {
       title,
@@ -61,6 +62,25 @@ export async function POST(request) {
       seo
     } = body;
 
+    console.log('POST /api/products - Variants before processing:', variants);
+
+    // پردازش variants
+    let processedVariants = { thicknesses: [], sizes: [], colors: [] };
+    if (variants) {
+      console.log('POST /api/products - Variants type:', typeof variants);
+      // تبدیل extraPrice از string به number
+      ['thicknesses', 'sizes', 'colors'].forEach(type => {
+        if (variants[type] && Array.isArray(variants[type])) {
+          processedVariants[type] = variants[type].map(item => ({
+            ...item,
+            extraPrice: Number(item.extraPrice) || 0
+          }));
+        }
+      });
+    }
+
+    console.log('POST /api/products - Processed variants:', processedVariants);
+
     const newProduct = await Product.create({
       title,
       name: name || title, // اگر name ارسال نشد، از title استفاده کن
@@ -70,7 +90,7 @@ export async function POST(request) {
       basePrice,
       images,
       category,
-      variants,
+      variants: processedVariants,
       tags,
       featured,
       published,

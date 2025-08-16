@@ -236,6 +236,9 @@ const EditProduct = ({ params }) => {
     try {
       setIsLoading(true);
       
+      console.log('Edit Product - Form data:', data);
+      console.log('Edit Product - Variants data:', data.variants);
+      
       const productData = {
         title: data.title,
         name: data.title, // اضافه کردن فیلد name
@@ -245,10 +248,12 @@ const EditProduct = ({ params }) => {
         basePrice: Number(data.basePrice),
         images: data.images,
         category: data.category,
-        variants: data.variants || {},
+        variants: data.variants || { thicknesses: [], sizes: [], colors: [] },
         isPublished: data.isPublished,
         seo: data.seo,
       };
+
+      console.log('Edit Product - Sending productData:', productData);
 
       const response = await axios.put(`/api/product/${slug}`, productData);
       

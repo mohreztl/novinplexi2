@@ -204,6 +204,9 @@ const CreateProduct = () => {
     try {
       setIsLoading(true);
       
+      console.log('Create Product - Form data:', data);
+      console.log('Create Product - Variants data:', data.variants);
+      
       const productData = {
         name: data.title,
         title: data.title,
@@ -213,11 +216,13 @@ const CreateProduct = () => {
         basePrice: Number(data.basePrice),
         images: data.images,
         category: data.category,
-        variants: data.variants || [],
+        variants: data.variants || { thicknesses: [], sizes: [], colors: [] },
         isPublished: data.isPublished,
         seo: data.seo,
         user: session?.user?._id,
       };
+
+      console.log('Create Product - Sending productData:', productData);
 
       const response = await axios.post("/api/products", productData);
       

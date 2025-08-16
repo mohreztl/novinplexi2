@@ -3,6 +3,9 @@ import "../globals.css";
 
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/home/Footer";
+import MobileBottomNav from "@/components/MobileBottomNav";
+import FloatingContactButton from "@/components/home/FloatingContactButton";
+import NoSSR from '@/components/NoSSR';
 
 export const metadata = {
  title: "فروش آنلاین ورق‌های پلکسی با کیفیت و قیمت مناسب | نوین پلکسی",
@@ -21,6 +24,10 @@ export default function MainLayout({ children }) {
         {children}
       </main>
       <Footer />
+      <NoSSR>
+        <MobileBottomNav />
+        <FloatingContactButton />
+      </NoSSR>
     </div>
   );
 }

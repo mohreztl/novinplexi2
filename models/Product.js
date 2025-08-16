@@ -1,27 +1,23 @@
 import mongoose from 'mongoose';
 
-const variantSchema = new mongoose.Schema({
-  size: {
+// schema برای گزینه‌های variant
+const variantOptionSchema = new mongoose.Schema({
+  name: {
     type: String,
     required: true
   },
-  color: {
-    type: String,
-    required: true
-  },
-  thickness: {
-    type: String,
-    required: true
-  },
-  price: {
-    type: Number,
-    required: true
-  },
-  stock: {
+  extraPrice: {
     type: Number,
     default: 0
   }
-});
+}, { _id: false });
+
+// schema برای variants
+const variantsSchema = new mongoose.Schema({
+  thicknesses: [variantOptionSchema],
+  sizes: [variantOptionSchema],
+  colors: [variantOptionSchema]
+}, { _id: false });
 
 const productSchema = new mongoose.Schema({
   title: {
@@ -55,23 +51,7 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  variants: [variantSchema],
-  colors: [{
-    name: {
-      type: String,
-      required: true
-    },
-    code: {
-      type: String,
-      required: true
-    }
-  }],
-  sizes: [{
-    type: String
-  }],
-  thicknesses: [{
-    type: String
-  }],
+  variants: variantsSchema,
   isNewProduct: {
     type: Boolean,
     default: false
