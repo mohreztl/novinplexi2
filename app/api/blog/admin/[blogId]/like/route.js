@@ -3,7 +3,7 @@
 import connect from "@/utils/config/dbConnection";
 import { NextResponse } from "next/server";
 import { verifyJwtToken } from "@/lib/jwt";
-import Blog from "@/utils/models/Blog";
+import Blog from "@/models/Blog";
 
 
 export async function PUT(req, { params }) {
