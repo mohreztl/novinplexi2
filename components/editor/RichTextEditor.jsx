@@ -24,10 +24,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import ImagesList from "@/components/ImagesList";
 
 const RichTextEditor = ({ value, onChange, placeholder = "محتوای مقاله خود را بنویسید..." }) => {
   const editorRef = useRef(null);
   const [showLinkDialog, setShowLinkDialog] = useState(false);
+  const [showImageDialog, setShowImageDialog] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
   const [linkText, setLinkText] = useState('');
 
@@ -50,40 +52,16 @@ const RichTextEditor = ({ value, onChange, placeholder = "محتوای مقال�
     }
   };
 
-  const insertImage = async () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.multiple = false;
-    
-    input.onchange = async (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      
-      try {
-        const formData = new FormData();
-        formData.append('files', file);
-        
-        const response = await fetch('/api/upload', {
-          method: 'POST',
-          body: formData
-        });
-        
-        const result = await response.json();
-        
-        if (result.success && result.urls && result.urls.length > 0) {
-          const imageUrl = result.urls[0];
-          execCommand('insertImage', imageUrl);
-        } else {
-          alert('خطا در آپلود تصویر');
-        }
-      } catch (error) {
-        console.error('خطا در آپلود تصویر:', error);
-        alert('خطا در آپلود تصویر');
-      }
-    };
-    
-    input.click();
+  const insertImage = () => {
+    setShowImageDialog(true);
+  };
+
+  const handleImageSelect = (selectedImages) => {
+    if (selectedImages && selectedImages.length > 0) {
+      const imageUrl = selectedImages[0];
+      execCommand('insertImage', imageUrl);
+      setShowImageDialog(false);
+    }
   };
 
   const insertLink = () => {
@@ -328,6 +306,28 @@ const RichTextEditor = ({ value, onChange, placeholder = "محتوای مقال�
                   درج لینک
                 </Button>
               </div>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Image Dialog */}
+      {showImageDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <Card className="w-full max-w-4xl max-h-[90vh] overflow-hidden m-4">
+            <div className="p-6 border-b flex justify-between items-center">
+              <h3 className="text-lg font-semibold">انتخاب تصویر</h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowImageDialog(false)}
+                className="p-2"
+              >
+                ✕
+              </Button>
+            </div>
+            <div className="p-6 max-h-[70vh] overflow-y-auto">
+              <ImagesList onImageSelect={handleImageSelect} maxSelection={1} />
             </div>
           </Card>
         </div>

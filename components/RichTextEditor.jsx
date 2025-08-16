@@ -1,7 +1,10 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState, useCallback } from 'react'
 import dynamic from 'next/dynamic'
+import ImagesList from '@/components/ImagesList'
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
 
 // Dynamically import ReactQuill to avoid SSR issues
 const ReactQuill = dynamic(() => import('react-quill'), { 
@@ -14,27 +17,48 @@ import 'react-quill/dist/quill.snow.css'
 
 const RichTextEditor = ({ value, content, onChange, placeholder = "متن خود را وارد کنید..." }) => {
   const quillRef = useRef(null)
+  const [showImageDialog, setShowImageDialog] = useState(false)
 
   // Support both `value` and legacy `content` prop names. Prefer explicit `value`.
   const editorValue = typeof value !== 'undefined' ? value : content;
 
+  // Custom image handler
+  const imageHandler = useCallback(() => {
+    setShowImageDialog(true)
+  }, [])
+
+  const handleImageSelect = useCallback((selectedImages) => {
+    if (selectedImages && selectedImages.length > 0 && quillRef.current) {
+      const quill = quillRef.current.getEditor()
+      const range = quill.getSelection(true)
+      quill.insertEmbed(range.index, 'image', selectedImages[0])
+      quill.setSelection(range.index + 1)
+      setShowImageDialog(false)
+    }
+  }, [])
+
   // Custom toolbar configuration
   const modules = {
-    toolbar: [
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-      [{ 'font': [] }],
-      [{ 'size': ['small', false, 'large', 'huge'] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'color': [] }, { 'background': [] }],
-      [{ 'script': 'sub'}, { 'script': 'super' }],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      [{ 'indent': '-1'}, { 'indent': '+1' }],
-      [{ 'direction': 'rtl' }],
-      [{ 'align': [] }],
-      ['link', 'image', 'video'],
-      ['blockquote', 'code-block'],
-      ['clean']
-    ],
+    toolbar: {
+      container: [
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        [{ 'font': [] }],
+        [{ 'size': ['small', false, 'large', 'huge'] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ 'color': [] }, { 'background': [] }],
+        [{ 'script': 'sub'}, { 'script': 'super' }],
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+        [{ 'indent': '-1'}, { 'indent': '+1' }],
+        [{ 'direction': 'rtl' }],
+        [{ 'align': [] }],
+        ['link', 'image', 'video'],
+        ['blockquote', 'code-block'],
+        ['clean']
+      ],
+      handlers: {
+        image: imageHandler
+      }
+    },
     clipboard: {
       // toggle to add extra line breaks when pasting HTML:
       matchVisual: false,
@@ -129,6 +153,28 @@ const RichTextEditor = ({ value, content, onChange, placeholder = "متن خود
           backgroundColor: 'white',
         }}
       />
+
+      {/* Image Dialog */}
+      {showImageDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <Card className="w-full max-w-4xl max-h-[90vh] overflow-hidden m-4">
+            <div className="p-6 border-b flex justify-between items-center">
+              <h3 className="text-lg font-semibold">انتخاب تصویر</h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowImageDialog(false)}
+                className="p-2"
+              >
+                ✕
+              </Button>
+            </div>
+            <div className="p-6 max-h-[70vh] overflow-y-auto">
+              <ImagesList onImageSelect={handleImageSelect} maxSelection={1} />
+            </div>
+          </Card>
+        </div>
+      )}
     </div>
   )
 }

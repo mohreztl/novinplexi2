@@ -1,10 +1,34 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Wrench, ChevronRight } from "lucide-react";
+import { X, Wrench, ChevronRight, Loader2 } from "lucide-react";
 import Link from "next/link";
+import axios from "axios";
 
-const ServiceDrawer = ({ isOpen, setIsOpen, services }) => {
+const ServiceDrawer = ({ isOpen, setIsOpen }) => {
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get("/api/categories?includeChildren=true");
+        // Filter only service type categories
+        const serviceCategories = res.data.categories?.filter(cat => cat.type === 'service') || [];
+        setServices(serviceCategories);
+      } catch (error) {
+        console.error("Error fetching services:", error);
+        setServices([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (isOpen) {
+      fetchServices();
+    }
+  }, [isOpen]);
   return (
     <AnimatePresence>
       {isOpen && (
@@ -45,7 +69,14 @@ const ServiceDrawer = ({ isOpen, setIsOpen, services }) => {
             {/* Services List */}
             <div className="overflow-y-auto h-[calc(100vh-80px)] p-6">
               <div className="space-y-3">
-                {services && services.length > 0 ? (
+                {loading ? (
+                  <div className="flex items-center justify-center py-12">
+                    <div className="flex flex-col items-center gap-3">
+                      <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+                      <p className="text-gray-500 text-sm">در حال بارگذاری...</p>
+                    </div>
+                  </div>
+                ) : services && services.length > 0 ? (
                   services.map((service) => (
                     <Link
                       key={service._id}

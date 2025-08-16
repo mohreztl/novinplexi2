@@ -325,7 +325,7 @@ const Navbar = () => {
                 </AnimatePresence>
               </div>
 
-              <NavbarLink href="/about">
+              <NavbarLink href="/blog">
                مقالات
               </NavbarLink>
               
