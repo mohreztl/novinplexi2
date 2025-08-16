@@ -180,7 +180,7 @@ const Page = () => {
   // All dialog handling is done through onOpenChange
 
   return (
-    <div className="p-6">
+    <div className="px-0 py-2">
       {/* اطمینان از اینکه در حالت loading هیچ عملیات خطرناکی انجام نمی‌شود */}
       {loading ? (
         <div className="flex justify-center items-center min-h-screen">
@@ -191,15 +191,17 @@ const Page = () => {
         </div>
       ) : (
         <>
-          <div className="mb-6">
-            <div className="flex justify-between items-center mb-6 ml-6">
+          <div className="mb-6  ">
+            <div className="flex justify-around items-center mb-6 ml-6">
               <h1 className="text-2xl font-bold">مدیریت محصولات</h1>
               <Button
                 onClick={() => router.push("/adminnovin/products/create")}
-                className="gap-2"
+                className="gap-2 justify self-center ml-8"
               >
-                <PlusCircle className="w-6 h-6" />
+                <PlusCircle className="w-10 h-10 md:w-6 md:h-6 ml-10" />
+                <span className="hidden md:block">
                 افزودن محصول جدید
+                </span>
               </Button>
             </div>
 

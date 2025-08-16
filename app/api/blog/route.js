@@ -70,6 +70,7 @@ export async function POST(request) {
       title,
       slug,
       description,
+      content,
       excerpt,
       category,
       tags,
@@ -78,11 +79,11 @@ export async function POST(request) {
       author,
       seo
     } = body;
-    
+
     // اعتبارسنجی داده‌های اصلی
-    if (!title || !description || !author) {
+    if (!title || !description || !content || !author) {
       return NextResponse.json(
-        { success: false, error: 'عنوان، محتوا و نویسنده الزامی هستند' },
+        { success: false, error: 'عنوان، توضیحات، محتوا و نویسنده الزامی هستند' },
         { status: 400 }
       );
     }
@@ -105,6 +106,7 @@ export async function POST(request) {
       title,
       slug: slug || title.toLowerCase().replace(/[^a-z0-9\u0600-\u06FF\s-]/g, '').replace(/\s+/g, '-'),
       description,
+      content,
       excerpt: excerpt || description.substring(0, 200) + '...',
       category,
       tags: tagsArray,

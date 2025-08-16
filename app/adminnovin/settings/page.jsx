@@ -55,7 +55,7 @@ export default function SiteSettings() {
     storeDescription: "فروشگاه محصولات دکوراسیون داخلی",
     email: "info@novinplexi.ir",
     phone: "021-12345678",
-    mobile: "09055669567",
+    mobile: "09369353765",
     address: "تهران، خیابان ولیعصر، ...",
     
     // شبکه‌های اجتماعی
