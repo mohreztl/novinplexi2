@@ -20,7 +20,8 @@ export default function MainLayout({ children }) {
   return (
     <div className="flex flex-col min-h-screen mobile-safe-area">
       <Navbar />
-      <main className="flex-1">
+      {/* add top padding to avoid content going under fixed navbar (mobile larger) */}
+      <main className="flex-1 pt-24 md:pt-20">
         {children}
       </main>
       <Footer />

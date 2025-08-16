@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -80,7 +81,7 @@ const productSchema = z.object({
 
 const EditProduct = ({ params }) => {
   const { slug } = params;
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -343,7 +344,7 @@ const EditProduct = ({ params }) => {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+  <form id="edit-product-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <Tabs defaultValue="basic" className="space-y-6">
           <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="basic" className="flex items-center gap-2">
@@ -515,9 +516,11 @@ const EditProduct = ({ params }) => {
                       {imagePath.map((imageUrl, index) => (
                         <div key={index} className="relative group">
                           <div className="aspect-square rounded-lg overflow-hidden border border-gray-200">
-                            <img
+                            <Image
                               src={imageUrl}
                               alt={`Product ${index + 1}`}
+                              width={480}
+                              height={480}
                               className="w-full h-full object-cover"
                             />
                           </div>

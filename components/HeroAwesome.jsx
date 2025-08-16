@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-
+import Link from 'next/link';
 const HeroAwesome = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -132,18 +132,23 @@ const HeroAwesome = () => {
               </div>
 
               {/* Action Buttons */}
+             
               <div className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up" style={{ animationDelay: '0.8s' }}>
-                <button className="group relative px-8 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-2xl shadow-2xl shadow-blue-500/25 overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-blue-500/40">
+                <Link 
+                href="/products"
+                className="group relative px-6 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-2xl shadow-2xl shadow-blue-500/25 overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-blue-500/40">
                   <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <span className="relative flex items-center gap-2">
                     مشاهده محصولات
                     <span className="text-lg group-hover:translate-x-1 transition-transform">←</span>
                   </span>
-                </button>
-
+                </Link>
+  <Link 
+                href="/contact">
                 <button className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-bold border-2 border-white/30 rounded-2xl hover:bg-white/20 hover:scale-105 transition-all duration-300">
                   مشاوره رایگان
                 </button>
+                </Link>
               </div>
             </div>
           </div>

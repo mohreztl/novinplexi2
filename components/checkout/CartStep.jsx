@@ -42,13 +42,27 @@ const CartStep = () => {
             >
               <div className="flex items-center space-x-4 w-full md:w-auto">
                 <div className="relative w-20 h-20">
-                  <Image
-                    src={item?.images[0]}
-                    fill
-                    className="rounded-md object-cover"
-                    alt={item.name}
-                    unoptimized
-                  />
+                  {(() => {
+                    var imageSrc = '/placeholder.webp';
+                    if (item) {
+                      if (typeof item.image === 'string' && item.image) {
+                        imageSrc = item.image;
+                      } else if (Array.isArray(item.images) && item.images.length > 0 && typeof item.images[0] === 'string') {
+                        imageSrc = item.images[0];
+                      } else if (typeof item.images === 'string' && item.images) {
+                        imageSrc = item.images;
+                      }
+                    }
+                    return (
+                      <Image
+                        src={imageSrc}
+                        fill
+                        className="rounded-md object-cover"
+                        alt={item && item.name}
+                        unoptimized
+                      />
+                    );
+                  })()}
                 </div>
                 <div className="flex flex-col w-full md:w-auto">
                   <h3 className="font-semibold text-lg text-primary-900">

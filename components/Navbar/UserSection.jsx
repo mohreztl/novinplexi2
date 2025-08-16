@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import ProfileWithLogout from "../ProfileWithLogout";
-import { User, LogIn, Sparkles, ChevronRight } from 'lucide-react';
+import { LogIn, Sparkles, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from "framer-motion";
 
 const UserSection = ({ session }) => {
@@ -18,13 +18,13 @@ const UserSection = ({ session }) => {
 
   return (
     <motion.div 
-      className="relative"
+      className="relative px-2"
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
       <AnimatePresence mode="wait">
-        {session ? (
+          {session ? (
           <motion.div
             key="profile"
             initial={{ opacity: 0, scale: 0.9 }}
@@ -34,7 +34,7 @@ const UserSection = ({ session }) => {
           >
             <ProfileWithLogout />
           </motion.div>
-        ) : (
+          ) : (
           <motion.div
             key="login"
             initial={{ opacity: 0, scale: 0.9 }}

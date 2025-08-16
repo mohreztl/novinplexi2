@@ -29,7 +29,10 @@ const ServiceDrawer = ({ isOpen, setIsOpen, services }) => {
             {/* Header */}
             <div className="sticky top-0 z-10 bg-white border-b border-gray-100 px-6 py-4">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-gray-900">خدمات ما</h2>
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900">خدمات ما</h2>
+                  <p className="text-sm text-gray-500 mt-1">نمایش بر اساس نوع: سرویس</p>
+                </div>
                 <button
                   onClick={() => setIsOpen(false)}
                   className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-red-100 hover:text-red-600"

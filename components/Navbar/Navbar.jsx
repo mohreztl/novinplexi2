@@ -1,9 +1,10 @@
 "use client";
-import React, { useState, useEffect, useCallback, memo } from "react";
+import React, { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+ 
 import Link from "next/link";
 import Image from "next/image";
 import { 
@@ -11,13 +12,10 @@ import {
   Menu, 
   X, 
   ChevronDown, 
-  ShoppingBag, 
-  User,
   Phone,
   Mail,
   MapPin,
   Clock,
-  Sparkles,
   Package,
   Wrench,
   ChevronRight
@@ -88,11 +86,19 @@ const NavbarLink = ({ href, children, hasDropdown, isOpen, onClick, icon: Icon }
 );
 
 // Products Mega Menu
-const ProductsMegaMenu = ({ categories, onClose }) => (
+const ProductsMegaMenu = ({ categories, onClose }) => {
+  const megaVariants = {
+    hidden: { opacity: 0, y: -8, scale: 0.995 },
+    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.22, staggerChildren: 0.02 } },
+    exit: { opacity: 0, y: -6, scale: 0.995, transition: { duration: 0.18 } },
+  };
+
+  return (
   <motion.div
-    initial={{ opacity: 0, y: -10 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -10 }}
+    variants={megaVariants}
+    initial="hidden"
+    animate="visible"
+    exit="exit"
     className="absolute right-0 top-full mt-2 w-[800px] overflow-hidden rounded-2xl bg-white shadow-2xl"
   >
     <div className="flex">
@@ -123,14 +129,23 @@ const ProductsMegaMenu = ({ categories, onClose }) => (
       <ContactSection />
     </div>
   </motion.div>
-);
+  );
+};
 
 // Services Mega Menu
-const ServicesMegaMenu = ({ services, onClose }) => (
+const ServicesMegaMenu = ({ services, onClose }) => {
+  const megaVariants = {
+    hidden: { opacity: 0, y: -8, scale: 0.995 },
+    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.22, staggerChildren: 0.02 } },
+    exit: { opacity: 0, y: -6, scale: 0.995, transition: { duration: 0.18 } },
+  };
+
+  return (
   <motion.div
-    initial={{ opacity: 0, y: -10 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -10 }}
+    variants={megaVariants}
+    initial="hidden"
+    animate="visible"
+    exit="exit"
     className="absolute right-0 top-full mt-2 w-[800px] overflow-hidden rounded-2xl bg-white shadow-2xl"
   >
     <div className="flex">
@@ -161,25 +176,25 @@ const ServicesMegaMenu = ({ services, onClose }) => (
       <ContactSection />
     </div>
   </motion.div>
-);
+  );
+};
 
 const Navbar = () => {
-  const router = useRouter();
+  // router not used in this component
   const { data: session } = useSession();
+  const pathname = usePathname();
   const [productOpen, setProductOpen] = useState(false);
   const [serviceOpen, setServiceOpen] = useState(false);
   const [admin, setAdmin] = useState(false);
-  const [adminPanelMob, setAdminPanelMob] = useState(false);
-  const [productModile, setProductModile] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [category, setCategory] = useState("");
+  const [category] = useState("");
   const [searchTerm, setSearchTerm] = useState({ search: "" });
-  const [resultArr, setResultArr] = useState([]);
+  const [resultArr] = useState([]);
   const { isOpen, openMenu, closeMenu } = useMobileMenuStore();
   const firstTwelveItems = resultArr.slice(0, 12);
-  const [isSearching, setIsSearching] = useState(false);
-  const [activeCategory, setActiveCategory] = useState(null);
+  const [isSearching] = useState(false);
+ 
   const user = session?.user;
   const [categories, setCategories] = useState([]);
   const [services, setServices] = useState([]);
@@ -203,14 +218,22 @@ const Navbar = () => {
     fetchData();
   }, []);
 
-  // Scroll effect
+  // Scroll effect: on non-home pages show background by default; on home make transparent until user scrolls
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
+
+    // If we're not on the homepage, show the navbar background immediately
+    if (pathname && pathname !== "/") {
+      setIsScrolled(true);
+    } else {
+      setIsScrolled(window.scrollY > 10);
+    }
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [pathname]);
 
   // Close menus when clicking outside
   useEffect(() => {
@@ -230,7 +253,7 @@ const Navbar = () => {
         className={`fixed top-0 z-50 w-full transition-all duration-500 ${
           isScrolled
             ? "bg-white/95 backdrop-blur-lg shadow-lg"
-            : "bg-gradient-to-b from-white/80 to-transparent backdrop-blur-sm"
+            : "bg-transparent"
         }`}
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import {
   ChevronDown,
   ChevronUp,
@@ -13,7 +13,7 @@ import {
   LogOut,
   LogIn,
   UserPlus,
-  User,
+  
   Home,
   Package,
   Wrench,
@@ -47,7 +47,7 @@ const MobileMenu = ({
 }) => {
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [expandedServices, setExpandedServices] = useState(false);
-  const { data: sessionData } = useSession();
+  // session used via props; avoid duplicate useSession hook here
 
   // Use provided handleChange or create local one
   const handleSearchChange = handleChange || ((e) => setSearchTerm({ search: e.target.value }));
@@ -245,7 +245,7 @@ const MobileMenu = ({
                   {categories.map((cat) => (
                     <li key={cat._id}>
                       <Link
-                        href={`/products/category/${cat.slug}/1`}
+                        href={`/products?category=${cat.slug}`}
                         onClick={closeMenu}
                         className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-primary hover:bg-blue-50 rounded-lg transition-all"
                       >

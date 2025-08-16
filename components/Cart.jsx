@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import useCartStore from "../store/cartStore";
 import Image from "next/image";
@@ -12,8 +14,7 @@ const Cart = () => {
     items,
     removeItem,
     clearCart,
-    getTotalPrice,
-    getTotalItems,
+  getTotalPrice,
     updateItemQuantity,
   } = useCartStore();
 
@@ -62,23 +63,29 @@ const Cart = () => {
         <>
           <div className="space-y-4 mb-6 max-h-96 overflow-y-auto">
             <AnimatePresence>
-              {items.map((item) => (
-                <motion.div
-                  key={item._id}
-                  layout
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  className="flex items-center p-3 border border-gray-200 rounded-lg bg-gray-50"
-                >
-                  <Image
-                    src={(item?.images && item.images.length > 0 && item.images[0]) || '/placeholder.webp'}
-                    width={60}
-                    height={60}
-                    className="rounded-md object-cover mr-3"
-                    alt={item.name || 'محصول'}
-                    unoptimized
-                  />
+              {items.filter(Boolean).map((item) => {
+                  const imageSrc = item?.image
+                    ?? (Array.isArray(item?.images) && item.images.length > 0 ? item.images[0] : undefined)
+                    ?? (typeof item?.images === 'string' ? item.images : undefined)
+                    ?? '/placeholder.webp';
+
+                  return (
+                  <motion.div
+                    key={item._id}
+                    layout
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="flex items-center p-3 border border-gray-200 rounded-lg bg-gray-50"
+                  >
+                    <Image
+                      src={imageSrc}
+                      width={60}
+                      height={60}
+                      className="rounded-md object-cover mr-3"
+                      alt={item.name || 'محصول'}
+                      unoptimized
+                    />
                   <div className="flex-grow sm:mr-12">
                     <h3 className="font-semibold text-sm text-gray-800 pr-2">
                       {item.name}
@@ -118,7 +125,8 @@ const Cart = () => {
                     </button>
                   </div>
                 </motion.div>
-              ))}
+                  );
+              })}
             </AnimatePresence>
           </div>
           <div className="border-t pt-4 mb-6">

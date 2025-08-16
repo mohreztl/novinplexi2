@@ -118,10 +118,13 @@ const ProductDrawer = ({ isOpen, setIsOpen }) => {
                 className="w-80 border-l border-gray-100"
               >
                 <div className="mb-4 px-4">
-                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-yellow-500" />
-                    دسته‌بندی‌های محصولات
-                  </h3>
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-yellow-500" />
+                      دسته‌بندی‌های محصولات
+                    </h3>
+                    <span className="text-xs text-gray-400">نمایش بر اساس نوع محصول</span>
+                  </div>
                 </div>
                 
                 <ul className="space-y-1">
@@ -170,6 +173,7 @@ const ProductDrawer = ({ isOpen, setIsOpen }) => {
                                 {category.children.length} زیردسته
                               </span>
                             )}
+                            <div className="mt-1 text-xs text-gray-400">نوع: محصول</div>
                           </div>
                         </div>
                         
@@ -259,7 +263,7 @@ const ProductDrawer = ({ isOpen, setIsOpen }) => {
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: index * 0.05 + 0.1 }}
                               >
-                                {subCategory.children.slice(0, 5).map((child, childIndex) => (
+                                {subCategory.children.slice(0, 5).map((child) => (
                                   <motion.li 
                                     key={child._id}
                                     whileHover={{ x: 5 }}
