@@ -153,7 +153,7 @@ const AboutPage = () => {
               </div>
             </div>
             <p className="text-lg italic">
-        واقعا طرح کاغذ دیواری خریداری شده را دوست داشتم و ثیمت ان فوق العاده مناسب بود"
+       کیفیت محصولات عالی بود
             </p>
             <div className="flex mt-4">
               {[...Array(5)].map((_, i) => (
