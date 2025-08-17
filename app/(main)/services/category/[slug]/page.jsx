@@ -3,10 +3,10 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import ProductCard from '@/components/products/ProductCard'
+import ServiceCard from '@/components/services/ServiceCard'
 import CategoryHeader from '@/components/CategoryHeader'
 
-export default function CategoryPage({ params }) {
+export default function ServiceCategoryPage({ params }) {
   const searchParams = useSearchParams()
   const page = parseInt(searchParams.get('page') || '1')
 
@@ -19,7 +19,7 @@ export default function CategoryPage({ params }) {
       setLoading(true)
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_URL}/api/categories/${params.slug}?page=${page}`,
+          `${process.env.NEXT_PUBLIC_URL}/api/categories/${params.slug}?page=${page}&type=service`,
           { cache: 'no-store' }
         )
         if (!res.ok) throw new Error('Failed to fetch')
@@ -42,19 +42,19 @@ export default function CategoryPage({ params }) {
   return (
     <>
       {/* Category Header */}
-      <CategoryHeader type="product" category={data} />
+      <CategoryHeader type="service" category={data} />
       
       <div className="mx-auto mt-10 px-4 max-w-screen-xl">
         <h1 className="text-xl font-bold mb-6 text-center text-primary">
-          محصولات دسته {data.title}
+          خدمات دسته {data.title}
         </h1>
 
-        {data.products.length === 0 ? (
-          <p className="text-center text-gray-500">محصولی در این دسته‌بندی موجود نیست.</p>
+        {data.services?.length === 0 || !data.services ? (
+          <p className="text-center text-gray-500">خدمتی در این دسته‌بندی موجود نیست.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {data.products.map((product) => (
-              <ProductCard key={product._id} product={product} />
+            {data.services.map((service) => (
+              <ServiceCard key={service._id} service={service} />
             ))}
           </div>
         )}
@@ -67,7 +67,7 @@ export default function CategoryPage({ params }) {
               return (
                 <Link
                   key={i}
-                  href={`/products/category/${params.slug}?page=${pageNum}`}
+                  href={`/services/category/${params.slug}?page=${pageNum}`}
                   className={`px-4 py-2 rounded-lg border transition-all duration-200 ${
                     data.currentPage === pageNum
                       ? 'bg-primary text-white'

@@ -5,6 +5,7 @@ import axios from "axios";
 import ProductCard from "@/components/products/ProductCard";
 import ClientOnly from "@/components/ClientOnly";
 import ProductsLoading from "@/components/ProductsLoading";
+import CategoryHeader from "@/components/CategoryHeader";
 import { useSearchParams } from "next/navigation";
 
 function ProductsContent() {
@@ -101,12 +102,16 @@ function ProductsContent() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">فروشگاه محصولات</h1>
-        <p className="text-gray-600">مجموعه کاملی از بهترین محصولات را بیابید</p>
-      </div>
+    <>
+      {/* Category Header */}
+      <CategoryHeader type="product" />
+      
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">فروشگاه محصولات</h1>
+          <p className="text-gray-600">مجموعه کاملی از بهترین محصولات را بیابید</p>
+        </div>
 
       {/* Filters */}
       <div className="mb-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -177,7 +182,8 @@ function ProductsContent() {
           ))}
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }
 
