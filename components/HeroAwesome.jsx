@@ -139,12 +139,7 @@ const HeroAwesome = () => {
                     <span className="text-lg group-hover:translate-x-1 transition-transform">←</span>
                   </span>
                 </Link>
-  <Link 
-                href="/contact">
-                <button className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-bold border-2 border-white/30 rounded-2xl hover:bg-white/20 hover:scale-105 transition-all duration-300">
-                  مشاوره رایگان
-                </button>
-                </Link>
+
               </div>
             </div>
           </div>

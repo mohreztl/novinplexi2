@@ -180,7 +180,7 @@ const Page = () => {
   // All dialog handling is done through onOpenChange
 
   return (
-    <div className="px-0 py-2">
+    <div className="px-2 md:px-4 py-2">
       {/* اطمینان از اینکه در حالت loading هیچ عملیات خطرناکی انجام نمی‌شود */}
       {loading ? (
         <div className="flex justify-center items-center min-h-screen">
@@ -192,65 +192,66 @@ const Page = () => {
       ) : (
         <>
           <div className="mb-6">
-            <div className="flex justify-around md:justify-between items-center mb-6 ml-6">
-              <h1 className="md:text-2xl text-lg font-bold">مدیریت محصولات</h1>
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+              <h1 className="text-xl md:text-2xl font-bold text-center sm:text-right">مدیریت محصولات</h1>
               <Button
                 onClick={() => router.push("/adminnovin/products/create")}
-                className="gap-2 justify-self-center ml-8"
+                className="flex items-center gap-2 px-4 py-2 w-full sm:w-auto"
+                size="default"
               >
-                <PlusCircle className="w-10 h-10 md:w-6 md:h-6 ml-10" />
-                <span className="hidden md:block">
-                افزودن محصول جدید
+                <PlusCircle className="w-5 h-5" />
+                <span className="text-sm sm:text-base">
+                  افزودن محصول جدید
                 </span>
               </Button>
             </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-gray-500">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 mb-6">
+          <Card className="p-2 md:p-4">
+            <CardHeader className="flex flex-row items-center justify-between pb-1 md:pb-2 px-0">
+              <CardTitle className="text-xs md:text-sm font-medium text-gray-500">
                 کل محصولات
               </CardTitle>
-              <Package className="w-4 h-4 text-gray-500" />
+              <Package className="w-3 h-3 md:w-4 md:h-4 text-gray-500" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.total}</div>
+            <CardContent className="px-0">
+              <div className="text-lg md:text-2xl font-bold">{stats.total}</div>
             </CardContent>
           </Card>
           
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-green-500">
+          <Card className="p-2 md:p-4">
+            <CardHeader className="flex flex-row items-center justify-between pb-1 md:pb-2 px-0">
+              <CardTitle className="text-xs md:text-sm font-medium text-green-500">
                 محصولات فعال
               </CardTitle>
-              <BadgeCheck className="w-4 h-4 text-green-500" />
+              <BadgeCheck className="w-3 h-3 md:w-4 md:h-4 text-green-500" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.active}</div>
+            <CardContent className="px-0">
+              <div className="text-lg md:text-2xl font-bold">{stats.active}</div>
             </CardContent>
           </Card>
           
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-red-500">
+          <Card className="p-2 md:p-4">
+            <CardHeader className="flex flex-row items-center justify-between pb-1 md:pb-2 px-0">
+              <CardTitle className="text-xs md:text-sm font-medium text-red-500">
                 ناموجود
               </CardTitle>
-              <XCircle className="w-4 h-4 text-red-500" />
+              <XCircle className="w-3 h-3 md:w-4 md:h-4 text-red-500" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.outOfStock}</div>
+            <CardContent className="px-0">
+              <div className="text-lg md:text-2xl font-bold">{stats.outOfStock}</div>
             </CardContent>
           </Card>
           
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-blue-500">
+          <Card className="p-2 md:p-4">
+            <CardHeader className="flex flex-row items-center justify-between pb-1 md:pb-2 px-0">
+              <CardTitle className="text-xs md:text-sm font-medium text-blue-500">
                 ارزش موجودی
               </CardTitle>
-              <DollarSign className="w-4 h-4 text-blue-500" />
+              <DollarSign className="w-3 h-3 md:w-4 md:h-4 text-blue-500" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
+            <CardContent className="px-0">
+              <div className="text-sm md:text-2xl font-bold">
                 {stats.totalValue.toLocaleString("fa-IR")} تومان
               </div>
             </CardContent>
@@ -258,9 +259,9 @@ const Page = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <div className="flex flex-col sm:grid sm:grid-cols-2 gap-3 sm:gap-4 mb-6">
         <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-          <SelectTrigger>
+          <SelectTrigger className="text-sm">
             <SelectValue placeholder="فیلتر دسته‌بندی" />
           </SelectTrigger>
           <SelectContent>
@@ -272,7 +273,7 @@ const Page = () => {
         </Select>
 
         <Select value={sortBy} onValueChange={setSortBy}>
-          <SelectTrigger>
+          <SelectTrigger className="text-sm">
             <SelectValue placeholder="مرتب‌سازی" />
           </SelectTrigger>
           <SelectContent>
@@ -289,24 +290,25 @@ const Page = () => {
           <Loader2 className="w-8 h-8 animate-spin" />
         </div>
       ) : (
-        <div className="bg-white rounded-lg border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>تصویر</TableHead>
-                <TableHead>
-                  <div className="flex items-center gap-2">
-                    نام محصول
-                    <ArrowUpDown className="w-4 h-4" />
-                  </div>
-                </TableHead>
-                <TableHead>دسته‌بندی</TableHead>
-                <TableHead>قیمت (تومان)</TableHead>
-                <TableHead>موجودی</TableHead>
-                <TableHead>وضعیت</TableHead>
-                <TableHead className="text-left">عملیات</TableHead>
-              </TableRow>
-            </TableHeader>
+        <div className="bg-white rounded-lg border overflow-hidden">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="whitespace-nowrap">تصویر</TableHead>
+                  <TableHead className="whitespace-nowrap">
+                    <div className="flex items-center gap-2">
+                      نام محصول
+                      <ArrowUpDown className="w-4 h-4" />
+                    </div>
+                  </TableHead>
+                  <TableHead className="whitespace-nowrap">دسته‌بندی</TableHead>
+                  <TableHead className="whitespace-nowrap">قیمت (تومان)</TableHead>
+                  <TableHead className="whitespace-nowrap">موجودی</TableHead>
+                  <TableHead className="whitespace-nowrap">وضعیت</TableHead>
+                  <TableHead className="text-left whitespace-nowrap">عملیات</TableHead>
+                </TableRow>
+              </TableHeader>
             <TableBody>
               {products && products.length > 0 ? (
                 products.map((product) => {
@@ -319,7 +321,7 @@ const Page = () => {
                     return (
                       <TableRow key={product._id}>
                         <TableCell>
-                          <div className="relative w-16 h-16 rounded-lg overflow-hidden">
+                          <div className="relative w-12 h-12 md:w-16 md:h-16 rounded-lg overflow-hidden">
                             <Image
                               src={product.images?.[0] || '/placeholder.jpg'}
                               alt={product.title || 'محصول'}
@@ -328,28 +330,34 @@ const Page = () => {
                             />
                           </div>
                         </TableCell>
-                        <TableCell className="font-medium">
-                          {product.title || 'بدون نام'}
+                        <TableCell className="font-medium min-w-[120px]">
+                          <div className="truncate max-w-[150px] md:max-w-none">
+                            {product.title || 'بدون نام'}
+                          </div>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="min-w-[100px]">
                           {product.category || 'بدون دسته‌بندی'}
                         </TableCell>
-                        <TableCell>
-                          {(product.basePrice || product.price || 0).toLocaleString("fa-IR")} تومان
+                        <TableCell className="min-w-[120px]">
+                          <div className="text-sm md:text-base">
+                            {(product.basePrice || product.price || 0).toLocaleString("fa-IR")} تومان
+                          </div>
                         </TableCell>
-                        <TableCell>
-                          {product.variants && (
-                            product.variants.thicknesses?.length > 0 || 
-                            product.variants.sizes?.length > 0 || 
-                            product.variants.colors?.length > 0
-                          ) 
-                            ? "متغیر دارد"
-                            : product.stock || 0
-                          }
+                        <TableCell className="min-w-[80px]">
+                          <div className="text-sm">
+                            {product.variants && (
+                              product.variants.thicknesses?.length > 0 || 
+                              product.variants.sizes?.length > 0 || 
+                              product.variants.colors?.length > 0
+                            ) 
+                              ? "متغیر دارد"
+                              : product.stock || 0
+                            }
+                          </div>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="min-w-[100px]">
                           <span
-                            className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            className={`px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
                               product.isPublished === true
                                 ? "bg-green-100 text-green-700"
                                 : "bg-red-100 text-red-700"
@@ -358,11 +366,11 @@ const Page = () => {
                             {product.isPublished === true ? "منتشر شده" : "پیش‌نویس"}
                           </span>
                         </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
+                        <TableCell className="min-w-[100px]">
+                          <div className="flex items-center gap-1 md:gap-2">
                             <Button
                               variant="ghost"
-                              size="icon"
+                              size="sm"
                               onClick={() => {
                                 try {
                                   const slug = product.slug || product._id;
@@ -376,7 +384,7 @@ const Page = () => {
                             </Button>
                             <Button
                               variant="ghost"
-                              size="icon"
+                              size="sm"
                               className="text-red-500 hover:text-red-700"
                               onClick={() => {
                                 try {
@@ -406,7 +414,8 @@ const Page = () => {
                 </TableRow>
               )}
             </TableBody>
-          </Table>
+            </Table>
+          </div>
         </div>
       )}
 
@@ -431,6 +440,17 @@ const Page = () => {
       </AlertDialog>
         </>
       )}
+      
+      {/* دکمه شناور برای موبایل */}
+      <div className="fixed bottom-20 left-4 md:hidden z-50">
+        <Button
+          onClick={() => router.push("/adminnovin/products/create")}
+          className="w-14 h-14 rounded-full shadow-lg bg-blue-600 hover:bg-blue-700"
+          size="icon"
+        >
+          <PlusCircle className="w-6 h-6" />
+        </Button>
+      </div>
     </div>
   );
 };
