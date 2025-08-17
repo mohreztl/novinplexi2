@@ -90,7 +90,13 @@ export async function DELETE(req, { params }) {
   const { slug } = params;
 
   try {
-    const deletedProduct = await Product.findOneAndDelete(slug);
+    // ابتدا بر اساس slug جستجو کنیم
+    let deletedProduct = await Product.findOneAndDelete({ slug });
+    
+    // اگر پیدا نشد، ممکن است ID باشد
+    if (!deletedProduct && slug.match(/^[0-9a-fA-F]{24}$/)) {
+      deletedProduct = await Product.findByIdAndDelete(slug);
+    }
 
     if (!deletedProduct) {
       return NextResponse.json({ error: "product not found" }, { status: 404 });

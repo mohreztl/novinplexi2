@@ -225,6 +225,8 @@ const EditProduct = ({ params }) => {
 
   // ارسال فرم
   const onSubmit = async (data) => {
+    console.log('Form submitted with data:', data);
+    
     if (!data.images || data.images.length === 0) {
       toast({
         title: "خطا",
@@ -236,6 +238,7 @@ const EditProduct = ({ params }) => {
     
     try {
       setIsLoading(true);
+      console.log('Starting product update...');
       
       console.log('Edit Product - Form data:', data);
       console.log('Edit Product - Variants data:', data.variants);
@@ -255,8 +258,11 @@ const EditProduct = ({ params }) => {
       };
 
       console.log('Edit Product - Sending productData:', productData);
+      console.log('Edit Product - Using slug:', slug);
 
       const response = await axios.put(`/api/product/${slug}`, productData);
+      
+      console.log('Edit Product - Response:', response);
       
       if (response.status === 200) {
         toast({
@@ -264,12 +270,15 @@ const EditProduct = ({ params }) => {
           description: "محصول با موفقیت بروزرسانی شد",
         });
         router.push("/adminnovin/products");
+      } else {
+        throw new Error(`Unexpected status: ${response.status}`);
       }
     } catch (error) {
       console.error("Error updating product:", error);
+      console.error("Error details:", error.response?.data);
       toast({
         title: "خطا",
-        description: "خطا در بروزرسانی محصول",
+        description: error.response?.data?.error || "خطا در بروزرسانی محصول",
         variant: "destructive",
       });
     } finally {

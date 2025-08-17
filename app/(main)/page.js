@@ -26,6 +26,14 @@ const LatestBlogPosts = dynamic(() => import("@/components/LatestBlogPosts"), {
   loading: () => <OptimizedLoading type="blog" height="h-96" />
 });
 
+const PlexiAccessories = dynamic(() => import("@/components/home/PlexiAccessories"), {
+  loading: () => <OptimizedLoading type="products" height="h-96" />
+});
+
+const AboutUs = dynamic(() => import("@/components/home/AboutUs"), {
+  loading: () => <OptimizedLoading type="about" height="h-96" />
+});
+
 export default function Home() {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
 
@@ -59,6 +67,14 @@ export default function Home() {
 
       <Suspense fallback={<OptimizedLoading type="products" height="h-96" />}>
         <LatestProducts />
+      </Suspense>
+
+      <Suspense fallback={<OptimizedLoading type="products" height="h-96" />}>
+        <PlexiAccessories />
+      </Suspense>
+
+      <Suspense fallback={<OptimizedLoading type="about" height="h-96" />}>
+        <AboutUs />
       </Suspense>
 
       <Suspense fallback={<OptimizedLoading type="blog" height="h-96" />}>

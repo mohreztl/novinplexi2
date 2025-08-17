@@ -5,29 +5,60 @@ import Category from "@/models/Category";
 export const dynamic = 'force-dynamic';
 
 // GET: دریافت همه دسته‌بندی‌ها
-export async function GET() {
+export async function GET(req) {
   try {
-    await connectToDB(); // اتصال به دیتابیس
+    await connectToDB();
     
-    const parents = await Category.find({ parent: null }).lean();
-    const categories = await Promise.all(
-      parents.map(async (parent) => {
-        const children = await Category.find({ parent: parent._id }).lean();
-        // Map fields for backward compatibility
-        return { 
-          ...parent, 
-          title: parent.name, // backward compatibility
-          icon: parent.image, // backward compatibility
-          children: children.map(child => ({
-            ...child,
-            title: child.name,
-            icon: child.image
-          }))
-        };
-      })
-    );
+    const { searchParams } = new URL(req.url);
+    const type = searchParams.get("type"); // product یا service
+    const active = searchParams.get("active"); // true/false
+    const flat = searchParams.get("flat"); // true برای لیست صاف
 
-    return NextResponse.json({ success: true, categories });
+    let query = {};
+    
+    if (type) {
+      query.type = type;
+    }
+    
+    if (active === 'true') {
+      query.isActive = true;
+    } else if (active === 'false') {
+      query.isActive = false;
+    }
+
+    console.log('Fetching categories with query:', query);
+
+    if (flat === 'true') {
+      // لیست صاف تمام دسته‌بندی‌ها
+      const categories = await Category.find(query)
+        .sort({ order: 1, createdAt: -1 })
+        .lean();
+
+      return NextResponse.json({
+        categories,
+        total: categories.length
+      });
+    } else {
+      // لیست سلسله مراتبی (کد قبلی)
+      const parents = await Category.find({ ...query, parent: null }).lean();
+      const categories = await Promise.all(
+        parents.map(async (parent) => {
+          const children = await Category.find({ parent: parent._id }).lean();
+          return { 
+            ...parent, 
+            title: parent.name,
+            icon: parent.image,
+            children: children.map(child => ({
+              ...child,
+              title: child.name,
+              icon: child.image
+            }))
+          };
+        })
+      );
+
+      return NextResponse.json({ success: true, categories });
+    }
   } catch (error) {
     console.error("GET Error:", error);
     return NextResponse.json(
@@ -43,49 +74,68 @@ export async function POST(req) {
     await connectToDB();
     
     const body = await req.json();
-    console.log('Received data:', body); // برای debugging
+    console.log('POST /api/categories - Received body:', JSON.stringify(body, null, 2));
     
-    // Map the incoming data to model fields
-    const { title, name, slug, icon, image, type, parent, description } = body;
-    
-    // Use title as name if name is not provided, or vice versa
+    const {
+      name,
+      slug,
+      description,
+      image,
+      isActive,
+      type,
+      order,
+      // backward compatibility
+      title,
+      icon
+    } = body;
+
     const categoryName = name || title;
-    const categoryType = type || 'product'; // default type
     const categoryImage = image || icon;
+    const categoryType = type || 'product';
     
     if (!categoryName) {
       return NextResponse.json({ 
         success: false, 
-        message: "نام دسته‌بندی الزامی است" 
+        error: "نام دسته‌بندی الزامی است" 
       }, { status: 400 });
     }
 
-    if (!categoryType) {
-      return NextResponse.json({ 
-        success: false, 
-        message: "نوع دسته‌بندی الزامی است" 
-      }, { status: 400 });
-    }
-
-    // Generate slug if not provided
+    // بررسی وجود slug تکراری
     const categorySlug = slug || categoryName.replace(/\s+/g, '-').toLowerCase();
+    const existingCategory = await Category.findOne({ slug: categorySlug });
+    if (existingCategory) {
+      return NextResponse.json(
+        { success: false, error: 'برچسب URL از قبل استفاده شده است' },
+        { status: 400 }
+      );
+    }
 
     const newCategory = await Category.create({
       name: categoryName,
       slug: categorySlug,
-      type: categoryType,
-      image: categoryImage,
       description: description || '',
-      parent: parent || null,
+      image: categoryImage,
+      isActive: isActive !== false,
+      type: categoryType,
+      order: order || 0,
+      parent: null // برای سادگی فعلاً parent null
     });
 
-    return NextResponse.json({ success: true, category: newCategory });
+    return NextResponse.json({
+      success: true,
+      message: "Category created successfully",
+      category: newCategory,
+    });
   } catch (error) {
-    console.error("POST Error:", error);
-    return NextResponse.json({ 
-      success: false, 
-      message: `خطا در ایجاد دسته‌بندی: ${error.message}` 
-    }, { status: 500 });
+    console.error('Error creating category:', error);
+    return NextResponse.json(
+      { 
+        success: false,
+        error: 'خطا در ایجاد دسته‌بندی',
+        details: error.message 
+      },
+      { status: 500 }
+    );
   }
 }
 

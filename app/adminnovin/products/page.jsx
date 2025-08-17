@@ -12,7 +12,9 @@ import {
   Package,
   BadgeCheck,
   XCircle,
-  DollarSign
+  DollarSign,
+  PackageCheck,
+  PackageX
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -102,7 +104,13 @@ const Page = () => {
         }).length,
         outOfStock: filteredProducts.filter((product) => {
           try {
-            return product && (product.stock || 0) === 0;
+            // محصولاتی که variants ندارند و موجودی صفر است
+            const hasVariants = product.variants && (
+              product.variants.thicknesses?.length > 0 || 
+              product.variants.sizes?.length > 0 || 
+              product.variants.colors?.length > 0
+            );
+            return product && !hasVariants && (product.stock || 0) === 0;
           } catch {
             return false;
           }
@@ -158,7 +166,9 @@ const Page = () => {
     }
 
     try {
-      await axios.delete(`/api/products/${productToDelete._id}`);
+      // استفاده از slug یا _id برای DELETE
+      const identifier = productToDelete.slug || productToDelete._id;
+      await axios.delete(`/api/product/${identifier}`);
       toast({
         title: "موفقیت",
         description: "محصول با موفقیت حذف شد",
@@ -174,6 +184,33 @@ const Page = () => {
     } finally {
       setDeleteDialogOpen(false);
       setProductToDelete(null);
+    }
+  };
+
+  // تغییر وضعیت موجودی محصول
+  const handleStockToggle = async (product) => {
+    try {
+      const identifier = product.slug || product._id;
+      const newStock = product.stock === 0 ? 1 : 0;
+      
+      await axios.put(`/api/product/${identifier}`, {
+        ...product,
+        stock: newStock
+      });
+      
+      toast({
+        title: "موفقیت",
+        description: `محصول ${newStock === 0 ? 'ناموجود' : 'موجود'} شد`,
+      });
+      
+      await fetchProducts();
+    } catch (error) {
+      console.error("Error toggling stock:", error);
+      toast({
+        title: "خطا",
+        description: "خطا در تغییر وضعیت موجودی",
+        variant: "destructive",
+      });
     }
   };
 
@@ -349,10 +386,32 @@ const Page = () => {
                               product.variants.thicknesses?.length > 0 || 
                               product.variants.sizes?.length > 0 || 
                               product.variants.colors?.length > 0
-                            ) 
-                              ? "متغیر دارد"
-                              : product.stock || 0
-                            }
+                            ) ? (
+                              <span className="text-blue-600">متغیر دارد</span>
+                            ) : (
+                              <div className="flex items-center gap-2">
+                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                  product.stock > 0 
+                                    ? 'bg-green-100 text-green-700' 
+                                    : 'bg-red-100 text-red-700'
+                                }`}>
+                                  {product.stock > 0 ? `موجود (${product.stock})` : 'ناموجود'}
+                                </span>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => handleStockToggle(product)}
+                                  className={`p-1 h-6 w-6 ${
+                                    product.stock > 0 
+                                      ? 'text-red-500 hover:text-red-700' 
+                                      : 'text-green-500 hover:text-green-700'
+                                  }`}
+                                  title={product.stock > 0 ? 'تبدیل به ناموجود' : 'تبدیل به موجود'}
+                                >
+                                  {product.stock > 0 ? <PackageX className="w-4 h-4" /> : <PackageCheck className="w-4 h-4" />}
+                                </Button>
+                              </div>
+                            )}
                           </div>
                         </TableCell>
                         <TableCell className="min-w-[100px]">
