@@ -105,11 +105,7 @@ const HeroAwesome = () => {
             {/* Content Section */}
             <div className="animate-fade-in-up opacity-0" style={{animationFillMode: 'forwards'}}>
               {/* Brand Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 backdrop-blur-sm border border-blue-300/30 rounded-full mb-6 animate-slide-down">
-                <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>
-                <span className="text-blue-300 text-sm font-medium">پیشرو در صنعت پلکسی</span>
-              </div>
-
+            
               {/* Main Title */}
               <h1 className="text-6xl lg:text-8xl font-black text-white mb-6 leading-tight animate-slide-up">
                 <span className="block">نوین</span>

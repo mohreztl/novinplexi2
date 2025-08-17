@@ -191,12 +191,12 @@ const Page = () => {
         </div>
       ) : (
         <>
-          <div className="mb-6  ">
+          <div className="mb-6">
             <div className="flex justify-around md:justify-between items-center mb-6 ml-6">
-              <h1 className="text-2xl font-bold">مدیریت محصولات</h1>
+              <h1 className="md:text-2xl text-lg font-bold">مدیریت محصولات</h1>
               <Button
                 onClick={() => router.push("/adminnovin/products/create")}
-                className="gap-2 justify self-center ml-8"
+                className="gap-2 justify-self-center ml-8"
               >
                 <PlusCircle className="w-10 h-10 md:w-6 md:h-6 ml-10" />
                 <span className="hidden md:block">
