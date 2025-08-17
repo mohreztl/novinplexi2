@@ -218,10 +218,13 @@ const EditProduct = ({ params }) => {
             </label>
             <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
             
-            </div>
             <div>
             <div className="w-full max-w-sm">
-              <ImagesList onImageSelect={setImagePath} />
+              <ImagesList 
+                images={imagePath}
+                onImagesChange={setImagePath} 
+                maxImages={10}
+              />
               {/* <ImageUpload onImageUpload={setImagePath} /> */}
             </div>
             <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">

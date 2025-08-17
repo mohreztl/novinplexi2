@@ -170,7 +170,11 @@ const RichTextEditor = ({ value, content, onChange, placeholder = "متن خود
               </Button>
             </div>
             <div className="p-6 max-h-[70vh] overflow-y-auto">
-              <ImagesList onImageSelect={handleImageSelect} maxSelection={1} />
+              <ImagesList 
+                images={[]}
+                onImagesChange={handleImageSelect} 
+                maxImages={1} 
+              />
             </div>
           </Card>
         </div>

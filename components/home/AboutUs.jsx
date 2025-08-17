@@ -125,7 +125,7 @@ const AboutUs = () => {
           <div className="relative">
             <div className="relative w-full h-80 md:h-96 rounded-2xl overflow-hidden shadow-2xl">
               <Image
-                src="/hero.webp"
+                src="/novinplexi4.webp"
                 alt="نوین پلکسی - کارخانه تولید"
                 fill
                 className="object-cover"

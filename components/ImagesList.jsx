@@ -19,17 +19,31 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
-const ImagesList = ({ onImageSelect, maxSelection = 1 }) => {
+const ImagesList = ({ 
+  onImageSelect, // deprecated - برای compatibility
+  onImagesChange, // جدید - برای compatibility با categories
+  images = [], // آرایه تصاویر انتخاب شده
+  maxSelection = 1,
+  maxImages = 1 // alias برای maxSelection
+}) => {
+  const maxSelect = maxImages || maxSelection;
   const [error, setError] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedImages, setUploadedImages] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedFile, setSelectedFile] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(images || []);
   const [objects, setObjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+  const [viewMode, setViewMode] = useState('grid');
   const [uploadProgress, setUploadProgress] = useState(0);
+
+  // همگام‌سازی selectedFile با images prop
+  useEffect(() => {
+    if (images && Array.isArray(images)) {
+      setSelectedFile(images);
+    }
+  }, [images]);
 
   useEffect(() => {
     const fetchObjects = async () => {
@@ -69,20 +83,25 @@ const ImagesList = ({ onImageSelect, maxSelection = 1 }) => {
   });
 
   const toggleSelection = (image) => {
-    if (maxSelection === 1) {
+    const callback = onImagesChange || onImageSelect;
+    
+    if ((maxImages || maxSelection) === 1) {
       // برای انتخاب تک تصویر
       setSelectedFile([image]);
-      if (onImageSelect) {
-        onImageSelect([image]); // همیشه آرایه پاس می‌دهیم
+      if (callback) {
+        callback([image]);
         closeModal();
       }
     } else {
       // برای انتخاب چند تصویر
-      setSelectedFile((prev) =>
-        prev.includes(image)
-          ? prev.filter((img) => img !== image)
-          : [...prev, image].slice(0, maxSelection)
-      );
+      const newSelection = selectedFile.includes(image)
+        ? selectedFile.filter((img) => img !== image)
+        : [...selectedFile, image].slice(0, (maxImages || maxSelection));
+      
+      setSelectedFile(newSelection);
+      if (callback) {
+        callback(newSelection);
+      }
     }
   };
 
@@ -136,18 +155,25 @@ const ImagesList = ({ onImageSelect, maxSelection = 1 }) => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
     setIsModalOpen(false);
-    setSelectedFile([]);
     setSearchTerm("");
   };
   
   const handleFileSelect = () => {
-    // اطمینان از آرایه بودن
-    const files = Array.isArray(selectedFile) ? selectedFile : [selectedFile].filter(Boolean);
-    onImageSelect(files);
+    const callback = onImagesChange || onImageSelect;
+    if (callback) {
+      const files = Array.isArray(selectedFile) ? selectedFile : [selectedFile].filter(Boolean);
+      callback(files);
+    }
     closeModal();
   };
 
-  const clearSelection = () => setSelectedFile([]);
+  const clearSelection = () => {
+    setSelectedFile([]);
+    const callback = onImagesChange || onImageSelect;
+    if (callback) {
+      callback([]);
+    }
+  };
   
   return (
     <div className="relative">
@@ -198,7 +224,7 @@ const ImagesList = ({ onImageSelect, maxSelection = 1 }) => {
         onClick={openModal}
       >
         <ImageIcon className="w-5 h-5" />
-        انتخاب تصاویر ({maxSelection > 1 ? `حداکثر ${maxSelection}` : '1'} تصویر)
+        انتخاب تصاویر ({(maxImages || maxSelection) > 1 ? `حداکثر ${maxImages || maxSelection}` : '1'} تصویر)
       </Button>
       
       {/* مدال بهبود یافته */}

@@ -1,23 +1,62 @@
 import { NextResponse } from "next/server";
 import connect from "@/utils/config/dbConnection";
 import Product from "@/models/Product";
-import Category from "@/utils/models/Category";
+import Service from "@/models/Service";
+import Category from "@/models/Category";
 
 export async function GET(req, { params }) {
   try {
     await connect();
+    const { searchParams } = new URL(req.url);
+    const page = parseInt(searchParams.get('page')) || 1;
+    const limit = parseInt(searchParams.get('limit')) || 12;
+    const type = searchParams.get('type'); // 'product' یا 'service'
 
     const category = await Category.findOne({ slug: params.slug });
     if (!category) {
       return NextResponse.json({ error: "Category not found" }, { status: 404 });
     }
-const title=category.title
-    const products = await Product.find({ categories: category._id }).limit(12); // صفحه اول
-    const total = await Product.countDocuments({ categories: category._id });
 
-    return NextResponse.json({ products, total,title });
+    let items = [];
+    let total = 0;
+    let itemsKey = '';
+
+    if (type === 'service' || category.type === 'service') {
+      // اگر service category باشد، services را دریافت کن
+      const skip = (page - 1) * limit;
+      items = await Service.find({ category: category._id })
+        .skip(skip)
+        .limit(limit)
+        .sort({ createdAt: -1 });
+      total = await Service.countDocuments({ category: category._id });
+      itemsKey = 'services';
+    } else {
+      // در غیر این صورت products را دریافت کن
+      const skip = (page - 1) * limit;
+      items = await Product.find({ category: category.slug })
+        .skip(skip)
+        .limit(limit)
+        .sort({ createdAt: -1 });
+      total = await Product.countDocuments({ category: category.slug });
+      itemsKey = 'products';
+    }
+
+    const totalPages = Math.ceil(total / limit);
+
+    return NextResponse.json({
+      ...category.toObject(), // کل اطلاعات category
+      [itemsKey]: items,
+      pagination: {
+        total,
+        totalPages,
+        currentPage: page,
+        limit,
+        hasNext: page < totalPages,
+        hasPrev: page > 1
+      }
+    });
   } catch (error) {
-    console.error("Category products API error:", error);
+    console.error("Category API error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

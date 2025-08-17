@@ -55,7 +55,7 @@ export default function AdminDashboard() {
     {
       title: "دسته‌بندی‌ها",
       icon: FiGrid,
-      link: "/adminnovin/category",
+      link: "/adminnovin/categories",
       stat: stats.totalCategories,
       color: "from-purple-600 to-purple-400"
     },

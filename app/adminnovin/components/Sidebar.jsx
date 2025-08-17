@@ -40,7 +40,7 @@ const itemList = [
       <ShoppingBagIcon className="w-10 h-10 md:h-5 md:w-5 border-4 border-primary rounded-full md:rounded-none md:border-none" />
     ),
     name: "دسته بندی ها",
-    link: "/adminnovin/category",
+    link: "/adminnovin/categories",
   },
   {
     icon: (

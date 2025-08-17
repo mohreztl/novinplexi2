@@ -394,11 +394,12 @@ const CreateProduct = () => {
               <div>
                 <div className="z-50">
                 <ImagesList 
-                  onImageSelect={(selectedImages) => {
+                  images={imagePath}
+                  onImagesChange={(selectedImages) => {
                     setValue('images', selectedImages);
                     setImagePath(selectedImages);
                   }}
-                  maxSelection={5}
+                  maxImages={5}
                 />
                 </div>
                 {imagePath.length > 0 && (

@@ -482,7 +482,11 @@ const CreateBlog = () => {
                   <h3 className="text-lg font-medium mb-4">
                     {selectedImage ? "تغییر تصویر" : "انتخاب تصویر"}
                   </h3>
-                  <ImagesList onImageSelect={handleImageSelect} maxSelection={1} />
+                  <ImagesList 
+                    images={selectedImage ? [selectedImage] : []}
+                    onImagesChange={handleImageSelect} 
+                    maxImages={1} 
+                  />
                 </div>
 
                 {errors.image && (

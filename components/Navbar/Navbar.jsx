@@ -340,7 +340,7 @@ const Navbar = () => {
               <div className="hidden lg:flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-full border border-blue-100">
                 <Phone className="h-4 w-4 text-blue-600" />
                 <a href="tel:+989369353765" className="text-sm font-medium text-blue-700 hover:text-blue-800 transition-colors">
-                  ۰۹05-566-9567
+                  021-36616971
                 </a>
               </div>
 

@@ -34,7 +34,7 @@ const Sidebar = () => {
     },
     {
       title: 'دسته‌بندی‌ها',
-      href: '/adminnovin/category',
+      href: '/adminnovin/categories',
       icon: Folder
     },
     {
