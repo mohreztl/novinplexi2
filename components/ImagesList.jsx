@@ -246,10 +246,14 @@ export default function ImagesList({
           <ImageIcon className="w-4 h-4" /> انتخاب تصاویر {max>1?`(حداکثر ${max})`:''}
         </Button>
 
-  {isModalOpen && (effectiveInline ? (
+        {isModalOpen && (effectiveInline ? (
           <div className="mt-3">{modalContent}</div>
-  ) : (typeof document !== 'undefined' ? createPortal(
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-60">{modalContent}</div>, document.body
+        ) : (typeof document !== 'undefined' ? createPortal(
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-60 backdrop-blur-sm">
+            <div className="max-w-6xl w-full max-h-[90vh]">
+              {modalContent}
+            </div>
+          </div>, document.body
         ) : null))}
       </div>
     </div>

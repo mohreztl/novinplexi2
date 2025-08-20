@@ -328,7 +328,8 @@ const Page = () => {
         </div>
       ) : (
         <div className="bg-white rounded-lg border overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Desktop Table */}
+          <div className="hidden md:block overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -346,7 +347,7 @@ const Page = () => {
                   <TableHead className="text-left whitespace-nowrap">عملیات</TableHead>
                 </TableRow>
               </TableHeader>
-            <TableBody>
+              <TableBody>
               {products && products.length > 0 ? (
                 products.map((product) => {
                   // اطمینان از وجود product و _id
@@ -474,6 +475,125 @@ const Page = () => {
               )}
             </TableBody>
             </Table>
+          </div>
+          
+          {/* Mobile Cards */}
+          <div className="md:hidden p-4 space-y-4">
+            {products && products.length > 0 ? (
+              products.map((product) => {
+                if (!product || !product._id) return null;
+                
+                try {
+                  return (
+                    <Card key={product._id} className="overflow-hidden">
+                      <CardContent className="p-4">
+                        <div className="flex gap-4">
+                          <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                            <Image
+                              src={product.images?.[0] || '/placeholder.jpg'}
+                              alt={product.title || 'محصول'}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                          
+                          <div className="flex-1 min-w-0">
+                            <div className="space-y-2">
+                              <div>
+                                <h3 className="font-medium text-gray-900 line-clamp-1 text-sm">
+                                  {product.title || 'بدون نام'}
+                                </h3>
+                                <p className="text-xs text-gray-500">
+                                  {product.category || 'بدون دسته‌بندی'}
+                                </p>
+                              </div>
+                              
+                              <div className="flex items-center justify-between">
+                                <div className="text-sm font-medium text-blue-600">
+                                  {(product.basePrice || product.price || 0).toLocaleString("fa-IR")} تومان
+                                </div>
+                                
+                                <div className="flex items-center gap-2">
+                                  <span
+                                    className={`px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
+                                      product.isPublished === true
+                                        ? "bg-green-100 text-green-700"
+                                        : "bg-red-100 text-red-700"
+                                    }`}
+                                  >
+                                    {product.isPublished === true ? "منتشر شده" : "پیش‌نویس"}
+                                  </span>
+                                </div>
+                              </div>
+                              
+                              <div className="flex items-center justify-between">
+                                <div className="text-xs text-gray-500">
+                                  {product.variants && (
+                                    product.variants.thicknesses?.length > 0 || 
+                                    product.variants.sizes?.length > 0 || 
+                                    product.variants.colors?.length > 0
+                                  ) ? (
+                                    <span className="text-blue-600">متغیر دارد</span>
+                                  ) : (
+                                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                      product.stock > 0 
+                                        ? 'bg-green-100 text-green-700' 
+                                        : 'bg-red-100 text-red-700'
+                                    }`}>
+                                      {product.stock > 0 ? `موجود (${product.stock})` : 'ناموجود'}
+                                    </span>
+                                  )}
+                                </div>
+                                
+                                <div className="flex items-center gap-1">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => {
+                                      try {
+                                        const slug = product.slug || product._id;
+                                        router.push(`/adminnovin/products/editProduct/${encodeURIComponent(slug)}`);
+                                      } catch (error) {
+                                        console.error('Error navigating to edit:', error);
+                                      }
+                                    }}
+                                    className="h-8 w-8 p-0"
+                                  >
+                                    <Edit2 className="w-4 h-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="text-red-500 hover:text-red-700 h-8 w-8 p-0"
+                                    onClick={() => {
+                                      try {
+                                        setProductToDelete(product);
+                                        setDeleteDialogOpen(true);
+                                      } catch (error) {
+                                        console.error('Error setting product to delete:', error);
+                                      }
+                                    }}
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                } catch (renderError) {
+                  console.error('Error rendering product card:', renderError, product);
+                  return null;
+                }
+              })
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                هیچ محصولی یافت نشد
+              </div>
+            )}
           </div>
         </div>
       )}

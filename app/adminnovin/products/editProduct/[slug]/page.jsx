@@ -36,6 +36,16 @@ import ImagesList from "@/components/ImagesList";
 import RichTextEditor from "@/components/RichTextEditor";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // اسکیمای اعتبارسنجی
@@ -87,6 +97,7 @@ const EditProduct = ({ params }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(true);
   const [imagePath, setImagePath] = useState([]);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const { toast } = useToast();
 
   // فرم و اعتبارسنجی
@@ -286,6 +297,26 @@ const EditProduct = ({ params }) => {
     }
   };
 
+  // حذف محصول
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`/api/product/${slug}`);
+      toast({
+        title: "موفقیت",
+        description: "محصول با موفقیت حذف شد",
+      });
+      router.push("/adminnovin/products");
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      toast({
+        title: "خطا",
+        description: "خطا در حذف محصول",
+        variant: "destructive",
+      });
+    }
+    setDeleteDialogOpen(false);
+  };
+
   // تولید slug از عنوان
   const generateSlug = (title) => {
     try {
@@ -325,55 +356,59 @@ const EditProduct = ({ params }) => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-2 md:px-4 py-4 md:py-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 md:mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">ویرایش محصول</h1>
-          <p className="text-gray-600 mt-1">اطلاعات محصول را ویرایش کنید</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">ویرایش محصول</h1>
+          <p className="text-gray-600 mt-1 text-sm md:text-base">اطلاعات محصول را ویرایش کنید</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-2 md:gap-3">
           <Button 
             variant="outline" 
             onClick={() => router.back()}
-            className="flex items-center gap-2"
+            className="flex items-center gap-1 md:gap-2 text-sm md:text-base"
+            size="sm"
           >
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
             بازگشت
           </Button>
           <Button 
             variant="outline"
             asChild
+            size="sm"
           >
-            <a href={`/product/${watch("slug")}`} target="_blank" className="flex items-center gap-2">
-              <Eye className="w-4 h-4" />
+            <a href={`/product/${watch("slug")}`} target="_blank" className="flex items-center gap-1 md:gap-2 text-sm md:text-base">
+              <Eye className="w-3 h-3 md:w-4 md:h-4" />
               پیش‌نمایش
             </a>
           </Button>
         </div>
       </div>
 
-  <form id="edit-product-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <Tabs defaultValue="basic" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="basic" className="flex items-center gap-2">
-              <Package className="w-4 h-4" />
-              اطلاعات پایه
+  <form id="edit-product-form" onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:space-y-6">
+        <Tabs defaultValue="basic" className="space-y-4 md:space-y-6">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 h-auto">
+            <TabsTrigger value="basic" className="flex items-center gap-1 md:gap-2 text-xs md:text-sm p-2 md:p-3">
+              <Package className="w-3 h-3 md:w-4 md:h-4" />
+              <span className="hidden sm:inline">اطلاعات پایه</span>
+              <span className="sm:hidden">پایه</span>
             </TabsTrigger>
-            <TabsTrigger value="images" className="flex items-center gap-2">
-              <ImageIcon className="w-4 h-4" />
+            <TabsTrigger value="images" className="flex items-center gap-1 md:gap-2 text-xs md:text-sm p-2 md:p-3">
+              <ImageIcon className="w-3 h-3 md:w-4 md:h-4" />
               تصاویر
             </TabsTrigger>
-            <TabsTrigger value="variants" className="flex items-center gap-2">
-              <Settings className="w-4 h-4" />
-              متغیرها
+            <TabsTrigger value="variants" className="flex items-center gap-1 md:gap-2 text-xs md:text-sm p-2 md:p-3 col-span-2 md:col-span-1">
+              <Settings className="w-3 h-3 md:w-4 md:h-4" />
+              <span className="hidden sm:inline">متغیرها</span>
+              <span className="sm:hidden">متغیر</span>
             </TabsTrigger>
-            <TabsTrigger value="seo" className="flex items-center gap-2">
-              <Eye className="w-4 h-4" />
+            <TabsTrigger value="seo" className="items-center gap-1 md:gap-2 text-xs md:text-sm p-2 md:p-3 hidden md:flex">
+              <Eye className="w-3 h-3 md:w-4 md:h-4" />
               SEO
             </TabsTrigger>
-            <TabsTrigger value="settings" className="flex items-center gap-2">
-              <Settings className="w-4 h-4" />
+            <TabsTrigger value="settings" className="items-center gap-1 md:gap-2 text-xs md:text-sm p-2 md:p-3 hidden md:flex">
+              <Settings className="w-3 h-3 md:w-4 md:h-4" />
               تنظیمات
             </TabsTrigger>
           </TabsList>
@@ -810,28 +845,61 @@ const EditProduct = ({ params }) => {
         </Tabs>
 
         {/* دکمه‌های عملیات */}
-        <div className="flex justify-end gap-4 pt-6 border-t">
+        <div className="flex justify-between items-center pt-6 border-t">
           <Button
             type="button"
-            variant="outline"
-            onClick={() => router.back()}
-          >
-            انصراف
-          </Button>
-          <Button
-            type="submit"
-            disabled={isLoading}
+            variant="destructive"
+            onClick={() => setDeleteDialogOpen(true)}
             className="flex items-center gap-2"
           >
-            {isLoading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <Save className="w-4 h-4" />
-            )}
-            بروزرسانی محصول
+            <Trash2 className="w-4 h-4" />
+            حذف محصول
           </Button>
+          
+          <div className="flex gap-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => router.back()}
+            >
+              انصراف
+            </Button>
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="flex items-center gap-2"
+            >
+              {isLoading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Save className="w-4 h-4" />
+              )}
+              بروزرسانی محصول
+            </Button>
+          </div>
         </div>
       </form>
+
+      {/* دیالوگ حذف محصول */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>آیا از حذف این محصول مطمئن هستید؟</AlertDialogTitle>
+            <AlertDialogDescription>
+              این عمل غیرقابل بازگشت است و محصول به طور کامل حذف خواهد شد.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>انصراف</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-500 hover:bg-red-600"
+              onClick={handleDelete}
+            >
+              حذف محصول
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

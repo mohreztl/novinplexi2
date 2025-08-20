@@ -345,7 +345,8 @@ const CategoriesPage = () => {
 
       {/* جدول دسته‌بندی‌ها */}
       <div className="bg-white rounded-lg border overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Desktop Table */}
+        <div className="hidden md:block overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
@@ -477,6 +478,128 @@ const CategoriesPage = () => {
               )}
             </TableBody>
           </Table>
+        </div>
+        
+        {/* Mobile Cards */}
+        <div className="md:hidden p-4 space-y-4">
+          {categories && categories.length > 0 ? (
+            categories.map((category) => {
+              if (!category || !category._id) return null;
+              
+              try {
+                return (
+                  <Card key={category._id} className="overflow-hidden">
+                    <CardContent className="p-4">
+                      <div className="flex gap-4">
+                        <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                          {category.image ? (
+                            <Image
+                              src={category.image}
+                              alt={category.name || 'دسته‌بندی'}
+                              fill
+                              className="object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <Grid3X3 className="w-6 h-6 text-gray-400" />
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="flex-1 min-w-0">
+                          <div className="space-y-2">
+                            <div>
+                              <h3 className="font-medium text-gray-900 line-clamp-1 text-sm">
+                                {category.name || 'بدون نام'}
+                              </h3>
+                              {category.slug && (
+                                <p className="text-xs text-gray-500 truncate">
+                                  /{category.slug}
+                                </p>
+                              )}
+                            </div>
+                            
+                            <div className="flex items-center gap-2">
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                category.type === 'service' 
+                                  ? 'bg-purple-100 text-purple-700' 
+                                  : 'bg-blue-100 text-blue-700'
+                              }`}>
+                                {category.type === 'service' ? 'خدمات' : 'محصولات'}
+                              </span>
+                              
+                              <span
+                                className={`px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
+                                  category.isActive !== false
+                                    ? "bg-green-100 text-green-700"
+                                    : "bg-red-100 text-red-700"
+                                }`}
+                              >
+                                {category.isActive !== false ? "فعال" : "غیرفعال"}
+                              </span>
+                              
+                              <span className="text-xs text-gray-500">
+                                ترتیب: {category.order || 0}
+                              </span>
+                            </div>
+                            
+                            <p className="text-xs text-gray-600 line-clamp-2">
+                              {category.description || 'بدون توضیحات'}
+                            </p>
+                            
+                            <div className="flex items-center justify-between">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleToggleStatus(category)}
+                                className={`p-1 h-6 w-6 ${
+                                  category.isActive !== false
+                                    ? 'text-red-500 hover:text-red-700' 
+                                    : 'text-green-500 hover:text-green-700'
+                                }`}
+                                title={category.isActive !== false ? 'غیرفعال کردن' : 'فعال کردن'}
+                              >
+                                {category.isActive !== false ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                              </Button>
+                              
+                              <div className="flex items-center gap-1">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => openEditDialog(category)}
+                                  className="h-8 w-8 p-0"
+                                >
+                                  <Edit2 className="w-4 h-4" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-red-500 hover:text-red-700 h-8 w-8 p-0"
+                                  onClick={() => {
+                                    setCategoryToDelete(category);
+                                    setDeleteDialogOpen(true);
+                                  }}
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              } catch (renderError) {
+                console.error('Error rendering category card:', renderError, category);
+                return null;
+              }
+            })
+          ) : (
+            <div className="text-center py-8 text-gray-500">
+              هیچ دسته‌بندی یافت نشد
+            </div>
+          )}
         </div>
       </div>
 

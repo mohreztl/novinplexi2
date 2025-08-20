@@ -137,16 +137,16 @@ export default function AdminBlogListPage() {
 
   return (
     <ClientOnly fallback={<div className="p-6">در حال بارگذاری...</div>}>
-      <div className="space-y-6">
+      <div className="px-2 md:px-4 py-4 md:py-6 space-y-4 md:space-y-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">مدیریت مقالات</h1>
-          <p className="text-gray-600">مدیریت و ویرایش مقالات وبسایت</p>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900">مدیریت مقالات</h1>
+          <p className="text-gray-600 text-sm md:text-base">مدیریت و ویرایش مقالات وبسایت</p>
         </div>
         
         <Link href="/adminnovin/blog/create">
-          <Button className="gap-2">
+          <Button className="gap-2 w-full md:w-auto">
             <Plus className="w-4 h-4" />
             مقاله جدید
           </Button>
@@ -154,44 +154,44 @@ export default function AdminBlogListPage() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">کل مقالات</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6">
+            <CardTitle className="text-xs md:text-sm font-medium">کل مقالات</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalBlogs}</div>
+          <CardContent className="p-3 md:p-6 pt-0">
+            <div className="text-lg md:text-2xl font-bold">{totalBlogs}</div>
           </CardContent>
         </Card>
         
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">منتشر شده</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6">
+            <CardTitle className="text-xs md:text-sm font-medium">منتشر شده</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+          <CardContent className="p-3 md:p-6 pt-0">
+            <div className="text-lg md:text-2xl font-bold text-green-600">
               {blogs.filter(b => b.status === 'published').length}
             </div>
           </CardContent>
         </Card>
         
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">پیش‌نویس</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6">
+            <CardTitle className="text-xs md:text-sm font-medium">پیش‌نویس</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">
+          <CardContent className="p-3 md:p-6 pt-0">
+            <div className="text-lg md:text-2xl font-bold text-yellow-600">
               {blogs.filter(b => b.status === 'draft').length}
             </div>
           </CardContent>
         </Card>
         
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">آرشیو شده</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6">
+            <CardTitle className="text-xs md:text-sm font-medium">آرشیو شده</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-red-600">
+          <CardContent className="p-3 md:p-6 pt-0">
+            <div className="text-lg md:text-2xl font-bold text-red-600">
               {blogs.filter(b => b.status === 'archived').length}
             </div>
           </CardContent>
@@ -200,11 +200,11 @@ export default function AdminBlogListPage() {
 
       {/* Filters */}
       <Card>
-        <CardHeader>
-          <CardTitle>فیلتر و جستجو</CardTitle>
+        <CardHeader className="p-3 md:p-6">
+          <CardTitle className="text-lg md:text-xl">فیلتر و جستجو</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex flex-col md:flex-row gap-4">
+        <CardContent className="p-3 md:p-6 pt-0">
+          <div className="flex flex-col gap-3 md:flex-row md:gap-4">
             <div className="relative flex-1">
               <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
@@ -212,7 +212,7 @@ export default function AdminBlogListPage() {
                 placeholder="جستجو در مقالات..."
                 value={searchTerm}
                 onChange={handleSearch}
-                className="pr-10"
+                className="pr-10 text-sm"
               />
             </div>
             
@@ -249,31 +249,114 @@ export default function AdminBlogListPage() {
 
       {/* Blog Table */}
       <Card>
-        <CardHeader>
-          <CardTitle>فهرست مقالات</CardTitle>
+        <CardHeader className="p-3 md:p-6">
+          <CardTitle className="text-lg md:text-xl">فهرست مقالات</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-3 md:p-6 pt-0">
           {loading ? (
             <BlogTableSkeleton />
           ) : (
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>تصویر</TableHead>
-                    <TableHead>عنوان</TableHead>
-                    <TableHead>دسته‌بندی</TableHead>
-                    <TableHead>وضعیت</TableHead>
-                    <TableHead>تاریخ</TableHead>
-                    <TableHead>بازدید</TableHead>
-                    <TableHead>عملیات</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {blogs.map((blog) => (
-                    <TableRow key={blog._id}>
-                      <TableCell>
-                        <div className="relative w-16 h-12 rounded overflow-hidden">
+            <>
+              {/* Desktop Table */}
+              <div className="hidden md:block overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="whitespace-nowrap">تصویر</TableHead>
+                      <TableHead className="whitespace-nowrap">عنوان</TableHead>
+                      <TableHead className="whitespace-nowrap">دسته‌بندی</TableHead>
+                      <TableHead className="whitespace-nowrap">وضعیت</TableHead>
+                      <TableHead className="whitespace-nowrap">تاریخ</TableHead>
+                      <TableHead className="whitespace-nowrap">بازدید</TableHead>
+                      <TableHead className="whitespace-nowrap">عملیات</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {blogs.map((blog) => (
+                      <TableRow key={blog._id}>
+                        <TableCell>
+                          <div className="relative w-16 h-12 rounded overflow-hidden bg-gray-100">
+                            <Image
+                              src={blog.featuredImage || '/placeholder.webp'}
+                              alt={blog.title}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        </TableCell>
+                        
+                        <TableCell>
+                          <div>
+                            <div className="font-medium line-clamp-1 max-w-xs">
+                              {blog.title}
+                            </div>
+                            <div className="text-sm text-gray-500 line-clamp-1 max-w-xs">
+                              {blog.excerpt}
+                            </div>
+                          </div>
+                        </TableCell>
+                        
+                        <TableCell>
+                          <Badge variant="secondary">
+                            {blog.category}
+                          </Badge>
+                        </TableCell>
+                        
+                        <TableCell>
+                          {getStatusBadge(blog.status)}
+                        </TableCell>
+                        
+                        <TableCell className="whitespace-nowrap text-sm">
+                          <div className="flex items-center gap-2">
+                            <Calendar className="w-4 h-4 text-gray-400" />
+                            {formatDate(blog.createdAt)}
+                          </div>
+                        </TableCell>
+                        
+                        <TableCell className="text-center">
+                          <div className="flex items-center justify-center gap-1">
+                            <Eye className="w-4 h-4 text-gray-400" />
+                            <span className="text-sm">{blog.views || 0}</span>
+                          </div>
+                        </TableCell>
+                        
+                        <TableCell>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" className="h-8 w-8 p-0">
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem asChild>
+                                <Link href={`/adminnovin/blog/edit/${blog._id}`}>
+                                  <Edit className="mr-2 h-4 w-4" />
+                                  ویرایش
+                                </Link>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => setDeleteDialog({ open: true, blog })}
+                                className="text-red-600"
+                              >
+                                <Trash2 className="mr-2 h-4 w-4" />
+                                حذف
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+
+              {/* Mobile Cards */}
+              <div className="md:hidden space-y-4">
+                {blogs.map((blog) => (
+                  <Card key={blog._id} className="overflow-hidden">
+                    <CardContent className="p-4">
+                      <div className="flex gap-4">
+                        <div className="relative w-20 h-16 rounded overflow-hidden bg-gray-100 flex-shrink-0">
                           <Image
                             src={blog.featuredImage || '/placeholder.webp'}
                             alt={blog.title}
@@ -281,78 +364,68 @@ export default function AdminBlogListPage() {
                             className="object-cover"
                           />
                         </div>
-                      </TableCell>
-                      
-                      <TableCell>
-                        <div>
-                          <div className="font-medium line-clamp-1">
-                            {blog.title}
+                        
+                        <div className="flex-1 min-w-0">
+                          <div className="space-y-2">
+                            <div>
+                              <h3 className="font-medium text-gray-900 line-clamp-2 text-sm">
+                                {blog.title}
+                              </h3>
+                              <p className="text-xs text-gray-500 line-clamp-1">
+                                {blog.excerpt}
+                              </p>
+                            </div>
+                            
+                            <div className="flex items-center gap-2 text-xs">
+                              <Badge variant="secondary" className="text-xs">
+                                {blog.category}
+                              </Badge>
+                              {getStatusBadge(blog.status)}
+                            </div>
+                            
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-4 text-xs text-gray-500">
+                                <div className="flex items-center gap-1">
+                                  <Calendar className="w-3 h-3" />
+                                  {formatDate(blog.createdAt)}
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <Eye className="w-3 h-3" />
+                                  {blog.views || 0}
+                                </div>
+                              </div>
+                              
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                                    <MoreHorizontal className="h-3 w-3" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem asChild>
+                                    <Link href={`/adminnovin/blog/edit/${blog._id}`}>
+                                      <Edit className="mr-2 h-4 w-4" />
+                                      ویرایش
+                                    </Link>
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    onClick={() => setDeleteDialog({ open: true, blog })}
+                                    className="text-red-600"
+                                  >
+                                    <Trash2 className="mr-2 h-4 w-4" />
+                                    حذف
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </div>
                           </div>
-                          <div className="text-sm text-gray-500 line-clamp-1">
-                            {blog.excerpt}
-                          </div>
                         </div>
-                      </TableCell>
-                      
-                      <TableCell>
-                        <Badge variant="secondary">
-                          {blog.category}
-                        </Badge>
-                      </TableCell>
-                      
-                      <TableCell>
-                        {getStatusBadge(blog.status)}
-                      </TableCell>
-                      
-                      <TableCell>
-                        <div className="flex items-center gap-1 text-sm text-gray-500">
-                          <Calendar className="w-4 h-4" />
-                          {formatDate(blog.publishedAt || blog.createdAt)}
-                        </div>
-                      </TableCell>
-                      
-                      <TableCell>
-                        <div className="flex items-center gap-1 text-sm">
-                          <Eye className="w-4 h-4" />
-                          {blog.views || 0}
-                        </div>
-                      </TableCell>
-                      
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <MoreHorizontal className="w-4 h-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem asChild>
-                              <Link href={`/blog/${blog.slug}`} target="_blank">
-                                <Eye className="w-4 h-4 ml-2" />
-                                مشاهده
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                              <Link href={`/adminnovin/blog/edit/${blog.slug}`}>
-                                <Edit className="w-4 h-4 ml-2" />
-                                ویرایش
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => setDeleteDialog({ open: true, blog })}
-                              className="text-red-600"
-                            >
-                              <Trash2 className="w-4 h-4 ml-2" />
-                              حذف
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </>
           )}
         </CardContent>
       </Card>
@@ -360,28 +433,44 @@ export default function AdminBlogListPage() {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex justify-center">
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             <Button
               variant="outline"
+              size="sm"
               disabled={currentPage === 1}
               onClick={() => setCurrentPage(currentPage - 1)}
             >
               قبلی
             </Button>
             
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <Button
-                key={page}
-                variant={currentPage === page ? 'default' : 'outline'}
-                onClick={() => setCurrentPage(page)}
-                className="min-w-[40px]"
-              >
-                {page}
-              </Button>
-            ))}
+            {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+              let page;
+              if (totalPages <= 5) {
+                page = i + 1;
+              } else if (currentPage <= 3) {
+                page = i + 1;
+              } else if (currentPage >= totalPages - 2) {
+                page = totalPages - 4 + i;
+              } else {
+                page = currentPage - 2 + i;
+              }
+              
+              return (
+                <Button
+                  key={page}
+                  variant={currentPage === page ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setCurrentPage(page)}
+                  className="min-w-[40px]"
+                >
+                  {page}
+                </Button>
+              );
+            })}
             
             <Button
               variant="outline"
+              size="sm"
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage(currentPage + 1)}
             >
