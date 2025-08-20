@@ -74,7 +74,7 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-4 sm:p-6 bg-gray-100 min-h-screen">
       {/* Welcome Section */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-2">
@@ -84,51 +84,50 @@ export default function AdminDashboard() {
       </div>
 
       {/* Quick Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        {menuItems.map((item, index) => (
-          <div
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
+  {menuItems.map((item) => (
+          <article
             key={item.title}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
+            className="w-full"
+            aria-label={item.title}
           >
             <Link href={item.link}>
-              <div className="bg-white rounded-lg shadow-lg p-6 cursor-pointer transform transition-transform hover:scale-105">
-                <div className={`rounded-full w-12 h-12 mb-4 flex items-center justify-center bg-gradient-to-r ${item.color}`}>
-                  <item.icon className="w-6 h-6 text-white" />
+              <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 cursor-pointer transform transition-transform hover:scale-105 h-full flex flex-col">
+                <div className={`rounded-full w-10 h-10 sm:w-12 sm:h-12 mb-3 sm:mb-4 flex items-center justify-center bg-gradient-to-r ${item.color}`}>
+                  <item.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">{item.title}</h3>
+                <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-1">{item.title}</h3>
                 {item.stat !== undefined && (
-                  <p className="text-2xl font-bold text-gray-900">{item.stat}</p>
+                  <p className="text-xl sm:text-2xl font-bold text-gray-900">{item.stat}</p>
                 )}
-                <div className="mt-4">
+                <div className="mt-auto pt-4">
                   <span className="text-sm text-blue-600 hover:text-blue-800">
                     مشاهده بیشتر →
                   </span>
                 </div>
               </div>
             </Link>
-          </div>
+          </article>
         ))}
       </div>
 
       {/* Recent Activity Section */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">آخرین فعالیت‌ها</h2>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-            <div className="flex items-center">
-              <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+      <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">آخرین فعالیت‌ها</h2>
+        <div className="space-y-3">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 bg-gray-50 rounded-lg">
+            <div className="flex items-center mb-2 sm:mb-0">
+              <span className="w-2 h-2 bg-green-500 rounded-full ml-3 sm:ml-0 mr-3"></span>
               <span className="text-gray-600">محصول جدید اضافه شد</span>
             </div>
-            <span className="text-sm text-gray-500">چند دقیقه پیش</span>
+            <span className="text-sm text-gray-500 mt-2 sm:mt-0">چند دقیقه پیش</span>
           </div>
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-            <div className="flex items-center">
-              <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 bg-gray-50 rounded-lg">
+            <div className="flex items-center mb-2 sm:mb-0">
+              <span className="w-2 h-2 bg-blue-500 rounded-full ml-3 sm:ml-0 mr-3"></span>
               <span className="text-gray-600">سفارش جدید ثبت شد</span>
             </div>
-            <span className="text-sm text-gray-500">۱ ساعت پیش</span>
+            <span className="text-sm text-gray-500 mt-2 sm:mt-0">۱ ساعت پیش</span>
           </div>
         </div>
       </div>

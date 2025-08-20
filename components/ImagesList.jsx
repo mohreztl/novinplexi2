@@ -1,533 +1,258 @@
-'use client'
+ 'use client'
 
-import React, { useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
-import Image from 'next/image';
-import { useDropzone } from 'react-dropzone';
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { 
-  Upload, 
-  Image as ImageIcon, 
-  Check, 
-  X, 
+import React, { useState, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
+import Image from 'next/image'
+import { useDropzone } from 'react-dropzone'
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import {
+  Upload,
+  Image as ImageIcon,
+  X,
   Loader2,
   Search,
   Grid,
   List
-} from "lucide-react";
-import { Input } from "@/components/ui/input";
+} from "lucide-react"
+import { Input } from "@/components/ui/input"
 
-const ImagesList = ({ 
-  onImageSelect, // deprecated - برای compatibility
-  onImagesChange, // جدید - برای compatibility با categories
-  images = [], // آرایه تصاویر انتخاب شده
+export default function ImagesList({
+  onImageSelect,
+  onImagesChange,
+  images = [],
   maxSelection = 1,
-  maxImages = 1 // alias برای maxSelection
-}) => {
-  const maxSelect = maxImages || maxSelection;
-  const [error, setError] = useState(null);
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadedImages, setUploadedImages] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(images || []);
-  const [objects, setObjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [viewMode, setViewMode] = useState('grid');
-  const [uploadProgress, setUploadProgress] = useState(0);
+  maxImages = 1,
+  inline = false,
+  disablePortal = false,
+}) {
+  const max = maxImages || maxSelection || 1
+  const [error, setError] = useState(null)
+  const [isUploading, setIsUploading] = useState(false)
+  const [uploadedImages, setUploadedImages] = useState([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedFile, setSelectedFile] = useState(Array.isArray(images) ? images : (images ? [images] : []))
+  const [objects, setObjects] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [viewMode, setViewMode] = useState('grid')
+  const instanceId = useRef(`imageslist_${Math.random().toString(36).slice(2)}`)
+  const effectiveInline = !!(inline || disablePortal)
 
-  // همگام‌سازی selectedFile با images prop
   useEffect(() => {
-    if (images && Array.isArray(images)) {
-      setSelectedFile(images);
+    if (Array.isArray(images)) setSelectedFile(images)
+  }, [images])
+
+  useEffect(() => {
+    const onOpen = (e) => {
+      const other = e?.detail?.id
+      if (other && other !== instanceId.current) setIsModalOpen(false)
     }
-  }, [images]);
+    window.addEventListener('imageslist:open', onOpen)
+    return () => window.removeEventListener('imageslist:open', onOpen)
+  }, [])
 
   useEffect(() => {
+    let mounted = true
     const fetchObjects = async () => {
       try {
-        setLoading(true);
-        const response = await fetch("/api/file");
-        const data = await response.json();
-        setObjects(data);
+        setLoading(true)
+        const res = await fetch('/api/file')
+        const data = await res.json()
+        if (mounted) setObjects(data)
       } catch (err) {
-        console.error("Error fetching objects:", err);
-        setError("خطا در بارگذاری تصاویر");
+        console.error(err)
+        setError('خطا در بارگذاری تصاویر')
       } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchObjects();
-  }, []);
-
-  // فیلتر کردن تصاویر بر اساس جستجو
-  const filteredObjects = objects.filter(file => {
-    try {
-      return file?.Key && typeof file.Key === 'string' && 
-             file.Key.toLowerCase().includes(searchTerm.toLowerCase());
-    } catch {
-      return false;
-    }
-  });
-
-  const filteredUploadedImages = uploadedImages.filter(url => {
-    try {
-      return url && typeof url === 'string' && 
-             url.toLowerCase().includes(searchTerm.toLowerCase());
-    } catch {
-      return false;
-    }
-  });
-
-  const toggleSelection = (image) => {
-    const callback = onImagesChange || onImageSelect;
-    
-    if ((maxImages || maxSelection) === 1) {
-      // برای انتخاب تک تصویر
-      setSelectedFile([image]);
-      if (callback) {
-        callback([image]);
-        closeModal();
-      }
-    } else {
-      // برای انتخاب چند تصویر
-      const newSelection = selectedFile.includes(image)
-        ? selectedFile.filter((img) => img !== image)
-        : [...selectedFile, image].slice(0, (maxImages || maxSelection));
-      
-      setSelectedFile(newSelection);
-      if (callback) {
-        callback(newSelection);
+        if (mounted) setLoading(false)
       }
     }
-  };
+    fetchObjects()
+    return () => { mounted = false }
+  }, [])
 
-  const onDrop = async (acceptedFiles) => {
+  const filteredObjects = objects.filter(f => (f?.Key || '').toLowerCase().includes(searchTerm.toLowerCase()))
+  const filteredUploadedImages = uploadedImages.filter(u => (u || '').toLowerCase().includes(searchTerm.toLowerCase()))
+
+  const toggleSelection = (url) => {
+    const cb = onImagesChange || onImageSelect
+    if (max === 1) {
+      setSelectedFile([url])
+      if (cb) cb([url])
+      setIsModalOpen(false)
+      return
+    }
+    const next = selectedFile.includes(url) ? selectedFile.filter(u => u !== url) : [...selectedFile, url].slice(0, max)
+    setSelectedFile(next)
+    if (cb) cb(next)
+  }
+
+  const onDrop = async (accepted) => {
+    if (!accepted || accepted.length === 0) return
+    setIsUploading(true)
     try {
-      setIsUploading(true);
-      setUploadProgress(0);
-      
-      // آپلود فایل‌ها یکی یکی چون API تک فایل می‌پذیرد
-      const uploadPromises = acceptedFiles.map(async (file) => {
-        const formData = new FormData();
-        formData.append("file", file);
-        
-        const response = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        });
-        
-        const data = await response.json();
-        if (!data.success) {
-          throw new Error(data.error || 'خطا در آپلود');
-        }
-        return data.url;
-      });
-      
-      const uploadedUrls = await Promise.all(uploadPromises);
-      // فیلتر کردن URL های معتبر
-      const validUrls = uploadedUrls.filter(url => url && typeof url === 'string');
-      setUploadedImages((prev) => [...prev, ...validUrls]);
-      setUploadProgress(100);
-      setTimeout(() => {
-        setUploadProgress(0);
-        setIsUploading(false);
-        }, 1000);
-    } catch (error) {
-      setIsUploading(false);
-      setUploadProgress(0);
-      setError("خطا در آپلود تصویر: " + (error.message || 'نامشخص'));
-      console.error('Error uploading file:', error);
+      const promises = accepted.map(async (file) => {
+        const fd = new FormData()
+        fd.append('file', file)
+        const res = await fetch('/api/upload', { method: 'POST', body: fd })
+        const data = await res.json()
+        if (!data || !data.url) throw new Error(data?.error || 'upload failed')
+        return data.url
+      })
+      const urls = await Promise.all(promises)
+      setUploadedImages(prev => [...prev, ...urls])
+    } catch (err) {
+      console.error(err)
+      setError('خطا در آپلود تصویر')
+    } finally {
+      setIsUploading(false)
     }
-  };
+  }
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: {
-      'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.webp']
-    },
-    multiple: true
-  });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, accept: { 'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.webp'] }, multiple: true })
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSearchTerm("");
-  };
-  
-  const handleFileSelect = () => {
-    const callback = onImagesChange || onImageSelect;
-    if (callback) {
-      const files = Array.isArray(selectedFile) ? selectedFile : [selectedFile].filter(Boolean);
-      callback(files);
-    }
-    closeModal();
-  };
+  const openModal = () => {
+    try { window.dispatchEvent(new CustomEvent('imageslist:open', { detail: { id: instanceId.current } })) } catch {}
+    setIsModalOpen(true)
+  }
+  const closeModal = () => { setIsModalOpen(false); setSearchTerm('') }
+  const clearSelection = () => { setSelectedFile([]); const cb = onImagesChange || onImageSelect; if (cb) cb([]) }
+  const confirmSelection = () => { const cb = onImagesChange || onImageSelect; if (cb) cb(selectedFile); closeModal() }
 
-  const clearSelection = () => {
-    setSelectedFile([]);
-    const callback = onImagesChange || onImageSelect;
-    if (callback) {
-      callback([]);
-    }
-  };
-  
-  return (
-    <div className="relative">
-      <div className="space-y-4">
-      {/* نمایش تصاویر انتخاب شده */}
-      {selectedFile.length > 0 && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-medium text-green-800">
-              تصاویر انتخاب شده ({selectedFile.length})
-            </h3>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={clearSelection}
-              className="text-red-600 border-red-300 hover:bg-red-50"
-            >
-              <X className="w-4 h-4 mr-1" />
-              پاک کردن
-            </Button>
+  const modalContent = (
+    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl overflow-hidden">
+      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-4 text-white">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <ImageIcon className="w-8 h-8" />
+            <div>
+              <h3 className="text-lg font-semibold">مدیریت تصاویر</h3>
+              <p className="text-xs text-indigo-100">{selectedFile.length > 0 ? `${selectedFile.length} تصویر انتخاب شده` : 'تصاویر خود را مدیریت کنید'}</p>
+            </div>
           </div>
-          <div className="grid grid-cols-4 gap-2">
-            {selectedFile.slice(0, 4).map((url, index) => (
-              <div key={index} className="relative">
-                <Image
-                  src={url}
-                  alt={`انتخاب شده ${index + 1}`}
-                  width={60}
-                  height={60}
-                  className="w-15 h-15 object-cover rounded border"
-                />
-              </div>
-            ))}
-            {selectedFile.length > 4 && (
-              <div className="w-15 h-15 bg-gray-100 rounded border flex items-center justify-center text-xs text-gray-600">
-                +{selectedFile.length - 4}
+          <button onClick={closeModal} className="p-2 rounded-full hover:bg-white hover:bg-opacity-20">
+            <X className="w-5 h-5 text-white" />
+          </button>
+        </div>
+      </div>
+
+      <div className="p-4 max-h-[70vh] overflow-y-auto">
+        <Card className="mb-4">
+          <CardContent>
+            <div {...getRootProps()} className={`text-center py-6 px-4 rounded-lg transition cursor-pointer ${isDragActive ? 'bg-indigo-50 border-indigo-300' : 'bg-gray-50 hover:bg-gray-100'}`}>
+              <input {...getInputProps()} />
+              <Upload className="w-10 h-10 mx-auto mb-2 text-gray-400" />
+              <div className="text-sm font-medium">آپلود تصاویر جدید</div>
+              <div className="text-xs text-gray-500">فرمت‌های مجاز: JPG, PNG, GIF, WebP</div>
+            </div>
+
+            {isUploading && (
+              <div className="mt-3">
+                <div className="flex items-center gap-2 text-sm text-gray-600"><Loader2 className="w-4 h-4 animate-spin"/> در حال آپلود...</div>
               </div>
             )}
+            {error && (
+              <div className="text-red-600 text-sm mt-3">{error}</div>
+            )}
+          </CardContent>
+        </Card>
+
+        <div className="flex gap-2 mb-3">
+          <div className="flex-1 relative">
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Input value={searchTerm} onChange={e=>setSearchTerm(e.target.value)} className="pl-10" placeholder="جستجو در تصاویر..." />
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant={viewMode === 'grid' ? 'default' : 'outline'} size="sm" onClick={()=>setViewMode('grid')}><Grid className="w-4 h-4"/></Button>
+            <Button variant={viewMode === 'list' ? 'default' : 'outline'} size="sm" onClick={()=>setViewMode('list')}><List className="w-4 h-4"/></Button>
           </div>
         </div>
-      )}
 
-      {/* دکمه باز کردن مدال */}
-      <Button 
-        type="button" 
-        className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-lg transition-all duration-300 flex items-center justify-center gap-2 py-3" 
-        onClick={openModal}
-      >
-        <ImageIcon className="w-5 h-5" />
-        انتخاب تصاویر ({(maxImages || maxSelection) > 1 ? `حداکثر ${maxImages || maxSelection}` : '1'} تصویر)
-      </Button>
-      
-      {/* مدال بهبود یافته */}
-      {isModalOpen && typeof window !== 'undefined' && createPortal(
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] p-4 h-full"
-          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9999 }}
-        >
-          <div 
-            className="bg-white rounded-2xl shadow-2xl max-w-7xl w-full max-h-[95vh] overflow-hidden relative z-[10000]"
-            style={{ position: 'relative', zIndex: 10000 }}
-          >
-            
-            {/* Header */}
-            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 text-white">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <ImageIcon className="w-8 h-8" />
-                  <div>
-                    <h2 className="text-2xl font-bold">مدیریت تصاویر</h2>
-                    <p className="text-indigo-100 text-sm">
-                      {selectedFile.length > 0 ? `${selectedFile.length} تصویر انتخاب شده` : 'تصاویر خود را مدیریت کنید'}
-                    </p>
+        {filteredUploadedImages.length > 0 && (
+          <Card className="mb-4">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2"><Upload className="w-4 h-4 text-green-600"/> تصاویر جدید <Badge variant="secondary">{filteredUploadedImages.length}</Badge></CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className={viewMode === 'grid' ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3' : 'space-y-2'}>
+                {filteredUploadedImages.map((u,i)=>(
+                  <div key={i} className={`cursor-pointer rounded overflow-hidden ${selectedFile.includes(u)?'ring-4 ring-green-400':'hover:scale-105'}`} onClick={()=>toggleSelection(u)}>
+                    <div className="aspect-square relative bg-gray-100">
+                      <Image src={u} alt={`uploaded-${i}`} fill className="object-cover" />
+                    </div>
                   </div>
-                </div>
-                <button
-                  className="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-2 transition-all"
-                  onClick={closeModal}
-                >
-                  <X className="w-6 h-6" />
-                </button>
+                ))}
               </div>
-            </div>
+            </CardContent>
+          </Card>
+        )}
 
-            {/* Content */}
-            <div className="p-6 overflow-y-auto max-h-[calc(95vh-200px)]">
-              
-              {/* Upload Section */}
-              <Card className="mb-6 border-2 border-dashed border-gray-300 hover:border-indigo-400 transition-colors">
-                <CardContent className="p-6">
-                  <div 
-                    {...getRootProps()} 
-                    className={`text-center py-8 px-4 rounded-lg transition-all cursor-pointer ${
-                      isDragActive 
-                        ? 'bg-indigo-50 border-indigo-400' 
-                        : 'bg-gray-50 hover:bg-gray-100'
-                    }`}
-                  >
-                    <input {...getInputProps()} />
-                    <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                      {isDragActive ? 'فایل‌ها را اینجا رها کنید' : 'آپلود تصاویر جدید'}
-                    </h3>
-                    <p className="text-gray-500">
-                      تصاویر را اینجا بکشید یا کلیک کنید تا انتخاب کنید
-                    </p>
-                    <p className="text-xs text-gray-400 mt-2">
-                      فرمت‌های پشتیبانی شده: JPG, PNG, GIF, WebP
-                    </p>
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2"><ImageIcon className="w-4 h-4 text-blue-600"/> تصاویر موجود <Badge variant="secondary">{filteredObjects.length}</Badge></CardTitle>
+          </CardHeader>
+          <CardContent>
+            {loading ? (
+              <div className="py-8 text-center"><Loader2 className="w-6 h-6 animate-spin text-indigo-600"/></div>
+            ) : filteredObjects.length === 0 ? (
+              <div className="py-8 text-center text-sm text-gray-500">تصویری یافت نشد</div>
+            ) : (
+              <div className={viewMode === 'grid' ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3' : 'space-y-2'}>
+                {filteredObjects.map((f)=>(
+                  <div key={f.Key} className={`cursor-pointer rounded overflow-hidden ${selectedFile.includes(f.url)?'ring-4 ring-blue-400':'hover:scale-105'}`} onClick={()=>toggleSelection(f.url)}>
+                    <div className="aspect-square relative bg-gray-100">
+                      <Image src={f.url} alt={f.Key} fill className="object-cover" />
+                    </div>
+                    <div className="text-xs text-gray-600 mt-1 truncate">{f.Key}</div>
                   </div>
-                  
-                  {isUploading && (
-                    <div className="mt-4">
-                      <div className="flex items-center gap-3">
-                        <Loader2 className="w-5 h-5 animate-spin text-indigo-600" />
-                        <span className="text-sm text-gray-600">در حال آپلود...</span>
-                      </div>
-                      {uploadProgress > 0 && (
-                        <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-                          <div 
-                            className="bg-indigo-600 h-2 rounded-full transition-all duration-300" 
-                            style={{ width: `${uploadProgress}%` }}
-                          ></div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Search and Controls */}
-              <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                <div className="flex-1 relative">
-                  <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                  <Input
-                    placeholder="جستجو در تصاویر..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-                <div className="flex gap-2">
-                  <Button
-                    variant={viewMode === 'grid' ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setViewMode('grid')}
-                  >
-                    <Grid className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    variant={viewMode === 'list' ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setViewMode('list')}
-                  >
-                    <List className="w-4 h-4" />
-                  </Button>
-                  {selectedFile.length > 0 && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={clearSelection}
-                      className="text-red-600 hover:text-red-700"
-                    >
-                      <X className="w-4 h-4 mr-1" />
-                      پاک کردن انتخاب
-                    </Button>
-                  )}
-                </div>
+                ))}
               </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
 
-              {/* تصاویر آپلود شده جدید */}
-              {filteredUploadedImages.length > 0 && (
-                <Card className="mb-6">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Upload className="w-5 h-5 text-green-600" />
-                      تصاویر آپلود شده جدید
-                      <Badge variant="secondary">{filteredUploadedImages.length}</Badge>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className={viewMode === 'grid' ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4' : 'space-y-2'}>
-                      {filteredUploadedImages.map((file, index) => (
-                        <div
-                          key={index}
-                          className={`relative group cursor-pointer transition-all ${
-                            selectedFile.includes(file) 
-                              ? 'ring-4 ring-green-500 ring-opacity-50' 
-                              : 'hover:scale-105'
-                          }`}
-                          onClick={() => toggleSelection(file)}
-                        >
-                          {viewMode === 'grid' ? (
-                            <>
-                              <div className="aspect-square relative rounded-lg overflow-hidden bg-gray-100">
-                                <Image
-                                  src={file}
-                                  alt="تصویر آپلود شده"
-                                  fill
-                                  className="object-cover"
-                                />
-                                {selectedFile.includes(file) && (
-                                  <div className="absolute inset-0 bg-green-500 bg-opacity-20 flex items-center justify-center">
-                                    <Check className="w-8 h-8 text-green-600 bg-white rounded-full p-1" />
-                                  </div>
-                                )}
-                              </div>
-                            </>
-                          ) : (
-                            <div className="flex items-center gap-3 p-3 rounded-lg border hover:bg-gray-50">
-                              <div className="w-16 h-16 relative rounded overflow-hidden bg-gray-100">
-                                <Image
-                                  src={file}
-                                  alt="تصویر آپلود شده"
-                                  fill
-                                  className="object-cover"
-                                />
-                              </div>
-                              <div className="flex-1">
-                                <p className="text-sm font-medium truncate">تصویر جدید {index + 1}</p>
-                                <p className="text-xs text-gray-500">آپلود شده</p>
-                              </div>
-                              {selectedFile.includes(file) && (
-                                <Check className="w-5 h-5 text-green-600" />
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* تصاویر موجود */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <ImageIcon className="w-5 h-5 text-blue-600" />
-                    تصاویر موجود
-                    <Badge variant="secondary">{filteredObjects.length}</Badge>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {loading ? (
-                    <div className="flex items-center justify-center py-12">
-                      <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
-                      <span className="ml-3 text-gray-600">در حال بارگذاری...</span>
-                    </div>
-                  ) : error ? (
-                    <div className="text-center py-12 text-red-600">
-                      <X className="w-12 h-12 mx-auto mb-4" />
-                      <p>{error}</p>
-                    </div>
-                  ) : filteredObjects.length === 0 ? (
-                    <div className="text-center py-12 text-gray-500">
-                      <ImageIcon className="w-12 h-12 mx-auto mb-4" />
-                      <p>تصویری یافت نشد</p>
-                    </div>
-                  ) : (
-                    <div className={viewMode === 'grid' ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4' : 'space-y-2'}>
-                      {filteredObjects.map((file) => (
-                        <div
-                          key={file.Key}
-                          className={`relative group cursor-pointer transition-all ${
-                            selectedFile.includes(file.url) 
-                              ? 'ring-4 ring-blue-500 ring-opacity-50' 
-                              : 'hover:scale-105'
-                          }`}
-                          onClick={() => toggleSelection(file.url)}
-                        >
-                          {viewMode === 'grid' ? (
-                            <>
-                              <div className="aspect-square relative rounded-lg overflow-hidden bg-gray-100">
-                                <Image
-                                  src={file.url}
-                                  alt={file.Key || "تصویر"}
-                                  fill
-                                  className="object-cover"
-                                />
-                                {selectedFile.includes(file.url) && (
-                                  <div className="absolute inset-0 bg-blue-500 bg-opacity-20 flex items-center justify-center">
-                                    <Check className="w-8 h-8 text-blue-600 bg-white rounded-full p-1" />
-                                  </div>
-                                )}
-                              </div>
-                              <p className="text-xs text-gray-600 mt-2 truncate" title={file.Key}>
-                                {file.Key}
-                              </p>
-                            </>
-                          ) : (
-                            <div className="flex items-center gap-3 p-3 rounded-lg border hover:bg-gray-50">
-                              <div className="w-16 h-16 relative rounded overflow-hidden bg-gray-100">
-                                <Image
-                                  src={file.url}
-                                  alt={file.Key || "تصویر"}
-                                  fill
-                                  className="object-cover"
-                                />
-                              </div>
-                              <div className="flex-1">
-                                <p className="text-sm font-medium truncate" title={file.Key}>
-                                  {file.Key}
-                                </p>
-                                <p className="text-xs text-gray-500">فایل موجود</p>
-                              </div>
-                              {selectedFile.includes(file.url) && (
-                                <Check className="w-5 h-5 text-blue-600" />
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Footer */}
-            <div className="bg-gray-50 px-6 py-4 flex flex-col sm:flex-row gap-3 justify-between items-center">
-              <div className="text-sm text-gray-600">
-                {selectedFile.length > 0 
-                  ? `${selectedFile.length} تصویر انتخاب شده` 
-                  : 'هیچ تصویری انتخاب نشده'
-                }
-              </div>
-              <div className="flex gap-3">
-                <Button 
-                  variant="outline" 
-                  onClick={closeModal}
-                  className="flex items-center gap-2"
-                >
-                  <X className="w-4 h-4" />
-                  انصراف
-                </Button>
-                <Button 
-                  onClick={handleFileSelect} 
-                  disabled={selectedFile.length === 0}
-                  className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 flex items-center gap-2"
-                >
-                  <Check className="w-4 h-4" />
-                  انتخاب ({selectedFile.length})
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>, 
-        document.body
-      )}
+      <div className="p-3 bg-gray-50 flex items-center justify-between gap-3">
+        <div className="text-sm text-gray-600">{selectedFile.length>0?`${selectedFile.length} تصویر انتخاب شده`:'هیچ تصویری انتخاب نشده'}</div>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={closeModal}>انصراف</Button>
+          <Button onClick={confirmSelection} disabled={selectedFile.length===0} className="bg-gradient-to-r from-indigo-600 to-purple-600">انتخاب ({selectedFile.length})</Button>
+        </div>
       </div>
     </div>
-  );
-};
+  )
 
-export default ImagesList;
+  return (
+    <div>
+      <div className="space-y-3">
+        {selectedFile.length>0 && (
+          <div className="p-3 bg-green-50 border border-green-200 rounded">
+            <div className="flex items-center justify-between mb-2">
+              <div className="text-sm font-medium text-green-800">تصاویر انتخاب شده ({selectedFile.length})</div>
+              <Button variant="ghost" size="sm" onClick={clearSelection}><X className="w-4 h-4"/></Button>
+            </div>
+            <div className="flex gap-2">
+              {selectedFile.slice(0,4).map((u,i)=>(
+                <div key={i} className="w-12 h-12 relative rounded overflow-hidden">
+                  <Image src={u} alt={`sel-${i}`} fill className="object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <Button onClick={openModal} className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
+          <ImageIcon className="w-4 h-4" /> انتخاب تصاویر {max>1?`(حداکثر ${max})`:''}
+        </Button>
+
+  {isModalOpen && (effectiveInline ? (
+          <div className="mt-3">{modalContent}</div>
+  ) : (typeof document !== 'undefined' ? createPortal(
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-60">{modalContent}</div>, document.body
+        ) : null))}
+      </div>
+    </div>
+  )
+}
+

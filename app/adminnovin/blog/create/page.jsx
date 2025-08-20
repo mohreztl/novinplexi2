@@ -485,7 +485,8 @@ const CreateBlog = () => {
                   <ImagesList 
                     images={selectedImage ? [selectedImage] : []}
                     onImagesChange={handleImageSelect} 
-                    maxImages={1} 
+                    maxImages={1}
+                    inline={true}
                   />
                 </div>
 

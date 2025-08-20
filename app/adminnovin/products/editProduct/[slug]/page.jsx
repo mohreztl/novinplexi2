@@ -556,7 +556,8 @@ const EditProduct = ({ params }) => {
                 {/* انتخاب تصاویر جدید */}
                 <div>
                   <h3 className="text-lg font-medium mb-4">انتخاب تصاویر جدید</h3>
-                  <ImagesList 
+                    <ImagesList 
+                      inline={true}
                     images={watch('images') || []}
                     onImagesChange={handleImageSelect} 
                     maxImages={10} 

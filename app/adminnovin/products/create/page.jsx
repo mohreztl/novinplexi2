@@ -400,6 +400,7 @@ const CreateProduct = () => {
                     setImagePath(selectedImages);
                   }}
                   maxImages={5}
+                  inline={true}
                 />
                 </div>
                 {imagePath.length > 0 && (

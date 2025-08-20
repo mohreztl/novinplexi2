@@ -330,7 +330,8 @@ const RichTextEditor = ({ value, onChange, placeholder = "محتوای مقال�
               <ImagesList 
                 images={[]}
                 onImagesChange={handleImageSelect} 
-                maxImages={1} 
+                maxImages={1}
+                inline={true}
               />
             </div>
           </Card>

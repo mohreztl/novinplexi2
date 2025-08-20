@@ -584,6 +584,7 @@ const CategoriesPage = () => {
                     image: images[0] || '' 
                   }))}
                   maxImages={1}
+                  inline={true}
                 />
               </div>
             </div>
