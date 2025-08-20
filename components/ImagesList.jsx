@@ -121,8 +121,8 @@ export default function ImagesList({
   const confirmSelection = () => { const cb = onImagesChange || onImageSelect; if (cb) cb(selectedFile); closeModal() }
 
   const modalContent = (
-    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl overflow-hidden">
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-4 text-white">
+    <div className="bg-white w-full h-full md:rounded-2xl md:shadow-2xl md:w-full md:max-w-6xl overflow-hidden flex flex-col">
+      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-4 text-white flex-shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <ImageIcon className="w-8 h-8" />
@@ -137,7 +137,7 @@ export default function ImagesList({
         </div>
       </div>
 
-      <div className="p-4 max-h-[70vh] overflow-y-auto">
+      <div className="flex-1 p-4 overflow-y-auto">
         <Card className="mb-4">
           <CardContent>
             <div {...getRootProps()} className={`text-center py-6 px-4 rounded-lg transition cursor-pointer ${isDragActive ? 'bg-indigo-50 border-indigo-300' : 'bg-gray-50 hover:bg-gray-100'}`}>
@@ -213,7 +213,7 @@ export default function ImagesList({
         </Card>
       </div>
 
-      <div className="p-3 bg-gray-50 flex items-center justify-between gap-3">
+      <div className="p-3 bg-gray-50 flex items-center justify-between gap-3 flex-shrink-0">
         <div className="text-sm text-gray-600">{selectedFile.length>0?`${selectedFile.length} تصویر انتخاب شده`:'هیچ تصویری انتخاب نشده'}</div>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={closeModal}>انصراف</Button>
@@ -249,9 +249,11 @@ export default function ImagesList({
         {isModalOpen && (effectiveInline ? (
           <div className="mt-3">{modalContent}</div>
         ) : (typeof document !== 'undefined' ? createPortal(
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-60 backdrop-blur-sm">
-            <div className="max-w-6xl w-full max-h-[90vh]">
-              {modalContent}
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm">
+            <div className="w-full h-full md:w-auto md:h-auto md:max-w-6xl md:max-h-[90vh] md:m-4">
+              <div className="w-full h-full md:rounded-2xl overflow-hidden">
+                {modalContent}
+              </div>
             </div>
           </div>, document.body
         ) : null))}
