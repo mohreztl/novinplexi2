@@ -2,7 +2,7 @@
 
 import connect from "@/utils/config/dbConnection";
 import Category from '@/models/Category';
-import Brand from '@/models/Brand';
+
 
 export async function GET(req) {
   try {
@@ -10,11 +10,11 @@ export async function GET(req) {
     
     // دریافت دسته‌بندی‌ها و برندها از دیتابیس
     const categories = await Category.find({});
-    const brands = await Brand.find({});
+  
     
     // بازگشت داده‌ها به کلاینت
     return new Response(
-      JSON.stringify({ categories, brands }),
+      JSON.stringify({ categories}),
       { status: 200 }
     );
   } catch (error) {
