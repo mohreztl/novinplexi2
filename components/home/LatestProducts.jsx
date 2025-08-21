@@ -115,10 +115,10 @@ const LatestProducts = () => {
                 <Link href={`/products/category/${category.slug}`}>
                   <Card className="h-full bg-white hover:shadow-xl transition-all duration-300 border-0 shadow-lg group-hover:shadow-blue-200">
                     <CardContent className="p-6 text-center">
-                      {category.icon ? (
+                      {category.image || category.icon ? (
                         <Image
-                          src={category.icon}
-                          alt={category.title}
+                          src={category.image || category.icon}
+                          alt={category.name || category.title}
                           width={48}
                           height={48}
                           className="w-12 h-12 mx-auto mb-3 rounded-lg object-cover"
@@ -129,7 +129,7 @@ const LatestProducts = () => {
                         </div>
                       )}
                       <h4 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                        {category.title}
+                        {category.name || category.title}
                       </h4>
                     </CardContent>
                   </Card>

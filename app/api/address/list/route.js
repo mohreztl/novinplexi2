@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
 import { NextResponse } from "next/server";
 import connect from "@/utils/config/dbConnection";
-import Address from "@/utils/models/Address";
+import Address from "@/models/Address";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 

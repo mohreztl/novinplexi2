@@ -1,8 +1,8 @@
 import connect from "@/utils/config/dbConnection";
-import Review from "@/utils/models/Review";
+import Review from "@/models/Review";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import Order from "@/utils/models/Order";
+import Order from "@/models/Order";
 import mongoose from "mongoose";
 import Product from "@/models/Product";
 import { authOptions } from "@/lib/auth";
@@ -86,6 +86,7 @@ export async function POST(req) {
       { status: 201 }
     );
   } catch (error) {
+  console.error("review POST error:", error);
     return NextResponse.json(
       { error: "internal server error at the review api route main" },
       { status: 500 }
@@ -130,6 +131,7 @@ export async function PUT(req) {
 
     return NextResponse.json({ message: "Review updated" }, { status: 200 });
   } catch (error) {
+  console.error("review PUT error:", error);
     return NextResponse.json(
       { error: "internal server error at the review api route main" },
       { status: 500 }
@@ -162,6 +164,7 @@ export async function GET(req) {
 
     return NextResponse.json({ reviews, hasMore }, { status: 200 });
   } catch (error) {
+    console.error("review GET error:", error);
     return NextResponse.json(
       { error: "internal server error at the review api route main" },
       { status: 500 }
@@ -215,6 +218,7 @@ export async function DELETE(req) {
       { status: 200 }
     );
   } catch (error) {
+    console.error("review DELETE error:", error);
     return NextResponse.json(
       { error: "internal server error at the review api route main" },
       { status: 500 }

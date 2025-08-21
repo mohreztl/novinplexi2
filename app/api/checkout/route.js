@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import connect from "@/utils/config/dbConnection";
-import Order from "@/utils/models/Order";
+import Order from "@/models/Order";
 import Product from "@/models/Product";
 import moment from "moment-jalaali";
 import { z } from "zod";

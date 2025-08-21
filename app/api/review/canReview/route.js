@@ -1,9 +1,9 @@
 import connect from "@/utils/config/dbConnection";
-import Review from "@/utils/models/Review";
+import Review from "@/models/Review";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth";
-import Order from "@/utils/models/Order";
+import Order from "@/models/Order";
 import mongoose from "mongoose";
 
 export async function GET(req) {
@@ -52,6 +52,7 @@ export async function GET(req) {
     });
     return NextResponse.json({ canReview: !hasReviewd }, { status: 200 });
   } catch (error) {
+  console.error("review canReview error:", error);
     return NextResponse.json(
       { error: "internal server error at the review api route can review" },
       { status: 500 }

@@ -42,11 +42,11 @@ const ProductCard = ({ product }) => {
         )}
         
         {/* وضعیت موجودی */}
-        {product.stock === 0 && (
+        {/* {product.stock === 0 && (
           <span className="absolute top-2 left-2 bg-gray-500 text-white px-2 py-1 rounded text-xs">
             ناموجود
           </span>
-        )}
+        )} */}
       </div>
 
       <div className="p-4">

@@ -503,8 +503,8 @@ const EditProduct = ({ params }) => {
                           </SelectTrigger>
                           <SelectContent>
                             {categories.map((category) => (
-                              <SelectItem key={category._id} value={category.title}>
-                                {category.title}
+                              <SelectItem key={category._id} value={category.name || category.title}>
+                                {category.name || category.title}
                               </SelectItem>
                             ))}
                           </SelectContent>

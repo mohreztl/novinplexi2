@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
@@ -51,6 +51,25 @@ const MobileMenu = ({
 
   // Use provided handleChange or create local one
   const handleSearchChange = handleChange || ((e) => setSearchTerm({ search: e.target.value }));
+  const [localQuery, setLocalQuery] = useState(searchTerm?.search || "");
+  const debounceRef = useRef(null);
+
+  useEffect(() => {
+    // sync external changes
+    setLocalQuery(searchTerm?.search || "");
+  }, [searchTerm?.search]);
+
+  // debounce local input -> call handleSearchChange
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      handleSearchChange({ target: { name: 'search', value: localQuery } });
+    }, 300);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [localQuery]);
   
   // Use provided handleSearchClose or create local one
   const handleCloseSearch = handleSearchClose || (() => setSearchOpen(false));
@@ -94,14 +113,17 @@ const MobileMenu = ({
       <div className="p-4 border-b bg-gray-50">
         <div className="relative">
           <Input
-            value={searchTerm?.search || ""}
-            onChange={handleSearchChange}
+            value={localQuery}
+            onChange={(e) => setLocalQuery(e.target.value)}
             placeholder="جستجوی محصولات..."
             className="pl-10 pr-4 h-12 bg-white border-2 border-gray-200 rounded-full focus:border-blue-600 focus:shadow-md transition-all"
             onClick={() => setSearchOpen(true)}
             type="text"
             name="search"
-            id="search"
+            id="mobile-search-input"
+            role="combobox"
+            aria-controls="mobile-search-results"
+            aria-expanded={searchOpen}
           />
           <Search className="absolute left-3 top-3.5 h-5 w-5 text-blue-600/70" />
         </div>
@@ -123,8 +145,8 @@ const MobileMenu = ({
 
           <div className="overflow-y-auto px-4 py-2 flex-1">
             {firstTwelveItems?.length > 0 ? (
-              <div className="grid grid-cols-1 gap-3 py-2">
-                {firstTwelveItems.map((prod) => (
+              <div className="grid grid-cols-1 gap-3 py-2" role="listbox" id="mobile-search-results">
+                {firstTwelveItems.map((prod, idx) => (
                   <Link
                     key={prod._id}
                     href={`/product/${prod.slug}`}
@@ -132,24 +154,24 @@ const MobileMenu = ({
                       handleCloseSearch();
                       closeMenu();
                     }}
-                    className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:border-primary/20 transition-all group"
+                    className="block"
                   >
-                    <div className="w-20 h-20 relative flex-shrink-0 rounded-lg overflow-hidden">
-                      <Image
-                        src={prod.images?.[0] || "/placeholder.jpg"}
-                        alt={prod.name}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform"
-                      />
+                    <div role="option" id={`mobile-search-result-${idx}`} aria-selected={false} className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:border-primary/20 transition-all group">
+                      <div className="w-20 h-20 relative flex-shrink-0 rounded-lg overflow-hidden">
+                        <Image
+                          src={prod.images?.[0] || "/placeholder.jpg"}
+                          alt={prod.title || prod.name || 'محصول'}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-medium text-gray-800 line-clamp-1">{prod.title || prod.name}</h3>
+                        <p className="text-xs text-gray-500 mt-1">{prod.brand}</p>
+                        <p className="mt-2 font-bold text-primary">{new Intl.NumberFormat('fa-IR').format(prod.basePrice || prod.price || 0)} تومان</p>
+                      </div>
+                      <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-primary transition-colors" />
                     </div>
-                    <div className="flex-1">
-                      <h3 className="font-medium text-gray-800 line-clamp-1">{prod.name}</h3>
-                      <p className="text-xs text-gray-500 mt-1">{prod.brand}</p>
-                      <p className="mt-2 font-bold text-primary">
-                        {new Intl.NumberFormat('fa-IR').format(prod.price)} تومان
-                      </p>
-                    </div>
-                    <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-primary transition-colors" />
                   </Link>
                 ))}
               </div>

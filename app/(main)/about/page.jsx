@@ -1,186 +1,203 @@
 import React from "react";
-import { Clock, Star, TrendingUp, Users } from "lucide-react";
 import Image from "next/image";
-
-import ReviewImg from "@/public/profile.jpg";
 import Link from "next/link";
+import { Clock, Star, TrendingUp, Users } from "lucide-react";
+import ReviewImg from "@/public/profile.jpg";
 
 const AboutPage = () => {
-  const categories = [
-    { name: "Luxury", image: "/gallery8.webp", link: "/products/brand/rolex" },
-    { name: "Sports", image:"/gallery7.webp", link: "/products/brand/patekphilipe" },
-    { name: "Classic", image: "/gallery6.webp", link: "/products/brand/audemarspiguet" },
+  const gallery = [
+    "/novinplexi1.webp",
+    "/novinplexi2.webp",
+    "/novinplexi4.webp",
+    "/novinplexi5.webp",
+   
   ];
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      {/* Hero Section */}
-      <header className="bg-primary text-white">
-        <div className="container mx-auto px-4 py-16 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
-          درباره نوین پلکسی
-          </h1>
-          <p className="text-xl md:text-2xl mb-8">
-        نوین پلکسی نوین پلکسی
-          </p>
-          <Image
-            width={450}
-            height={450}
-            src="/blog2.webp"
-            alt="EcommWatch storefront"
-            className="rounded-lg shadow-lg mx-auto"
-          />
+    <div className="bg-gray-50 text-slate-800">
+      {/* HERO */}
+      <header className="relative overflow-hidden">
+        <div className="bg-gradient-to-r from-[#0ea5a4] to-[#2563eb] text-white">
+          <div className="container mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-8">
+            <div className="md:w-1/2">
+              <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
+                نوین پلکسی — تولید و عرضه ورق‌های آکریلیک (پلکسی)
+              </h1>
+              <p className="mt-4 text-lg md:text-xl text-white/90">
+                تامین‌کنندهٔ تخصصی ورق آکریلیک و پلکسی برای تابلو، دکور، صنعتی و
+                کاربردهای هنری — برش‌خورده، پولیش‌خورده و آمادهٔ اجرا.
+              </p>
+
+              <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                <Link href="/products" className="inline-block bg-white text-[#0b72a8] font-semibold px-6 py-3 rounded-lg shadow hover:scale-[1.02] transition">
+                  مشاهده محصولات
+                </Link>
+                <Link href="/contact" className="inline-block border border-white/30 text-white px-6 py-3 rounded-lg hover:bg-white/10 transition">
+                  درخواست نمونه و مشاوره
+                </Link>
+              </div>
+            </div>
+
+            <div className="md:w-1/2 flex justify-center">
+              <div className="w-[360px] h-[360px] rounded-2xl overflow-hidden shadow-2xl bg-white/10 backdrop-blur-sm">
+                <Image src="/novinplexi1.webp" alt="ورق پلکسی نوین" width={720} height={720} className="object-cover w-full h-full" />
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 
-      {/* Our Story Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-8">
-            داستان ما
-          </h2>
-          <div className="flex flex-col md:flex-row items-center">
-            <div className="md:w-1/2 mb-8 md:mb-0">
-              <Image
-                width={400}
-                height={400}
-                src="/blog2.jpg"
-                alt="Founder's image"
-                className="rounded-lg shadow-lg object-cover"
-              />
-            </div>
-            <div className="md:w-1/2 md:pl-8">
-              <p className="text-lg mb-4">
-    نوین پلکسی در راستای خدمت به شما مردمان عزیز و ارائه بهترین محصولات با کمترین هزینه به شما مردمان عزیز ایران میباشد
-              </p>
-              <p className="text-lg">
-              نوین پلکسی در راستای خدمت به شما مردمان عزیز و ارائه بهترین محصولات با کمترین هزینه به شما مردمان عزیز ایران میباشد
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* WHY CHOOSE US */}
+      <section className="container mx-auto px-6 py-16">
+        <h2 className="text-2xl md:text-3xl font-bold text-center">چرا نوین پلکسی؟</h2>
+        <p className="mt-3 text-center text-slate-600 max-w-3xl mx-auto">
+          تجربه، کیفیت مواد اولیه، برش دقیق CNC و خدمات پس از فروش تخصصی — ما
+          همراه شما از نمونه تا اجرا هستیم.
+        </p>
 
-      {/* Our Values Section */}
-      <section className="bg-white py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-  ارزش های ما
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <Clock className="w-16 h-16 mx-auto mb-4 text-primary" />
-              <h3 className="text-xl font-semibold mb-2">بهترین کیفیت</h3>
-              <p>
-               نوین پلکسی در تلاش است بهترین کیفیت محصولات موجود را ارائه دهد
-              </p>
-            </div>
-            <div className="text-center">
-              <Users className="w-16 h-16 mx-auto mb-4 text-primary" />
-              <h3 className="text-xl font-semibold mb-2">Customer First</h3>
-              <p>
-              نوین پلکسی در تلاش است بهترین کیفیت محصولات موجود را ارائه دهد
-              </p>
-            </div>
-            <div className="text-center">
-              <TrendingUp className="w-16 h-16 mx-auto mb-4 text-primary" />
-              <h3 className="text-xl font-semibold mb-2">
-         بهترین قیمت
-              </h3>
-              <p>
-              نوین پلکسی در تلاش است بهترین قیمت محصولات موجود را ارائه دهد
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Our Collection Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-       موجودی کامل
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {categories.map((category, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-lg shadow-lg overflow-hidden"
-              >
-                <Link href={category.link}>
-                  <Image
-                    src={category.image}
-                    alt={`${category.name} watches`}
-                    className="w-full h-48 object-cover"
-                    width={500}
-                    height={500}
-                  />
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold mb-2">
-                      {category.name} کاغذ دیواری
-                    </h3>
-                    {/* <p className="text-gray-600">
-                      Discover our exquisite range of{" "}
-                      {category.name.toLowerCase()} timepieces, crafted for the
-                      discerning collector.
-                    </p> */}
-                  </div>
-                </Link>
+        <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-white rounded-xl p-6 shadow">
+            <div className="flex items-center gap-4">
+              <div className="bg-blue-50 p-3 rounded-lg">
+                <Clock className="w-6 h-6 text-[#0b72a8]" />
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonial Section */}
-      <section className="bg-blue-100 py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-           مشتریان ما چه میگویند
-          </h2>
-          <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-8">
-            <div className="flex items-center mb-4">
-              <Image
-                width={500}
-                height={500}
-                src={ReviewImg}
-                alt="Customer"
-                className="w-16 h-16 rounded-full mr-4"
-              />
               <div>
-                <h4 className="text-xl font-semibold">سعیده تهرانی</h4>
-                <p className="text-gray-600">طرح مدرن و عالی</p>
+                <h3 className="font-semibold">تحویل سریع</h3>
+                <p className="text-sm text-slate-500 mt-1">برش و ارسال در کمترین زمان ممکن</p>
               </div>
             </div>
-            <p className="text-lg italic">
-       کیفیت محصولات عالی بود
-            </p>
-            <div className="flex mt-4">
+          </div>
+
+          <div className="bg-white rounded-xl p-6 shadow">
+            <div className="flex items-center gap-4">
+              <div className="bg-blue-50 p-3 rounded-lg">
+                <Users className="w-6 h-6 text-[#0b72a8]" />
+              </div>
+              <div>
+                <h3 className="font-semibold">پشتیبانی فنی</h3>
+                <p className="text-sm text-slate-500 mt-1">راهنمای انتخاب ضخامت، رنگ و فرآیند پرداخت</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl p-6 shadow">
+            <div className="flex items-center gap-4">
+              <div className="bg-blue-50 p-3 rounded-lg">
+                <TrendingUp className="w-6 h-6 text-[#0b72a8]" />
+              </div>
+              <div>
+                <h3 className="font-semibold">کیفیت تضمین‌شده</h3>
+                <p className="text-sm text-slate-500 mt-1">ورق‌های با شفافیت بالا، مقاوم در برابر زردشدگی</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* APPLICATIONS */}
+      <section className="bg-white py-12">
+        <div className="container mx-auto px-6">
+          <h3 className="text-xl font-bold text-center">کاربردها</h3>
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="p-6 rounded-xl border">
+              <h4 className="font-semibold">تابلو و تبلیغات</h4>
+              <p className="text-sm text-slate-500 mt-2">رنگ‌پذیری عالی و نورپذیری مناسب برای تابلوهای نورانی</p>
+            </div>
+            <div className="p-6 rounded-xl border">
+              <h4 className="font-semibold">دکوراسیون داخلی</h4>
+              <p className="text-sm text-slate-500 mt-2">پنل‌ها، پارتیشن و المان‌های دکوراتیو با ظاهری مدرن</p>
+            </div>
+            <div className="p-6 rounded-xl border">
+              <h4 className="font-semibold">صنعتی و حفاظتی</h4>
+              <p className="text-sm text-slate-500 mt-2">محافظ محافظت از تجهیزات، پنل‌های شفاف و جزئیات صنعتی</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* GALLERY */}
+      <section className="container mx-auto px-6 py-12">
+        <h3 className="text-xl font-bold text-center">نمونه‌های اجرا شده</h3>
+        <div className="mt-6 grid grid-cols-2 md:grid-cols-3 gap-4">
+          {gallery.map((src, i) => (
+            <div key={i} className="rounded-lg overflow-hidden shadow-lg bg-white">
+              <Image src={src} alt={`نمونه ${i + 1}`} width={800} height={600} className="object-cover w-full h-44 md:h-56" />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* STATS & TESTIMONIAL */}
+      <section className="bg-gradient-to-r from-[#eff6ff] to-white py-12">
+        <div className="container mx-auto px-6 flex flex-col md:flex-row items-center gap-8">
+          <div className="md:w-1/2">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-white rounded-xl p-6 text-center shadow">
+                <h4 className="text-2xl font-bold">+10</h4>
+                <p className="text-sm text-slate-500">سال تجربه در تولید پلکسی</p>
+              </div>
+              <div className="bg-white rounded-xl p-6 text-center shadow">
+                <h4 className="text-2xl font-bold">+2000</h4>
+                <p className="text-sm text-slate-500">پروژه اجرا شده</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="md:w-1/2 bg-white rounded-xl p-6 shadow">
+            <div className="flex items-center gap-4">
+              <Image src={ReviewImg} alt="نظرات مشتری" width={72} height={72} className="rounded-full object-cover" />
+              <div>
+                <h4 className="font-semibold">رضایت مشتریان</h4>
+                <p className="text-sm text-slate-500">کیفیت، پاسخگویی و تحویل سریع از نقاط قوت ماست.</p>
+              </div>
+            </div>
+
+            <blockquote className="mt-4 text-slate-700 italic">“محصولات با دقت و کیفیت بالا ارسال شد، پشتیبانی عالی.”</blockquote>
+
+            <div className="mt-4 flex items-center gap-2">
               {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className="w-6 h-6 text-yellow-400 fill-current"
-                />
+                <Star key={i} className="w-5 h-5 text-yellow-400" />
               ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Call to Action */}
-      <section className="bg-primary text-white py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          به خانواده نوین پلکسی بپیوندید
-          </h2>
-          <p className="text-xl mb-8">
-خونتو به سلیقه خودت با کمک نوین پلکسی زیبا کن 
-          </p>
-          <button className="bg-white text-primary font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-100 transition duration-300">
-            <Link href={"/products/brand/rolex"}>مشاهده محصولات</Link>
-          </button>
+      {/* FAQ & CTA */}
+      <section className="container mx-auto px-6 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h4 className="text-lg font-bold">سوالات متداول</h4>
+            <div className="mt-4 space-y-3">
+              <div className="p-4 border rounded-lg">
+                <h5 className="font-medium">حداقل تیراژ سفارش چقدر است؟</h5>
+                <p className="text-sm text-slate-500 mt-1">ما انعطاف‌پذیری بالایی داریم؛ برای برش‌های اختصاصی تماس بگیرید.</p>
+              </div>
+
+              <div className="p-4 border rounded-lg">
+                <h5 className="font-medium">آیا امکان برش CNC وجود دارد؟</h5>
+                <p className="text-sm text-slate-500 mt-1">بله، خدمات برش دقیق و فرز ارائه می‌شود.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-[#0b72a8] text-white rounded-xl p-6 flex flex-col justify-between">
+            <div>
+              <h4 className="text-2xl font-bold">آماده‌اید پروژه‌تان را شروع کنید؟</h4>
+              <p className="mt-2 text-white/90">از نمونه رایگان تا سفارشات بزرگ، ما همراه شما هستیم.</p>
+            </div>
+            <div className="mt-6">
+              <Link href="/contact" className="inline-block bg-white text-[#0b72a8] px-5 py-3 rounded-lg font-semibold">درخواست مشاوره</Link>
+            </div>
+          </div>
         </div>
       </section>
+
+      <footer className="bg-slate-900 text-white py-8">
+        <div className="container mx-auto px-6 text-center text-sm">
+          © {new Date().getFullYear()} نوین پلکسی — کلیه حقوق محفوظ است.
+        </div>
+      </footer>
     </div>
   );
 };

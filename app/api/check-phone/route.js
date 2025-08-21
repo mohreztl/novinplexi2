@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-import User from "@/utils/models/User";
-import Verify from "@/utils/models/Verify";
+import User from "@/models/User";
+import Verify from "@/models/Verify";
 import axios from "axios";
 import connect from "@/utils/config/dbConnection";
 

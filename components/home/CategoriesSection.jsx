@@ -130,7 +130,7 @@ const CategoriesSection = () => {
               {/* محتوای اصلی */}
               <div className="relative p-8">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-2xl font-bold text-white">{category.title}</h3>
+                  <h3 className="text-2xl font-bold text-white">{category.name || category.title}</h3>
                   <span className="text-white/80">{category.count} محصول</span>
                 </div>
                 <p className="text-white/90 mb-6">{category.description}</p>

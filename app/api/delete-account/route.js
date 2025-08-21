@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth/next";
 import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth";
 import connect from "@/utils/config/dbConnection";
-import User from "@/utils/models/User";
+import User from "@/models/User";
 
 export async function DELETE() {
   const session = await getServerSession(authOptions);
@@ -30,6 +30,7 @@ export async function DELETE() {
 
     return NextResponse.json({ message: "Account deleted successfully" });
   } catch (error) {
+  console.error("delete-account error:", error);
     return NextResponse.json(
       { error: "Error deleting user account" },
       { status: 500 }

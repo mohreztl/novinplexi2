@@ -1,6 +1,6 @@
 import connect from "@/utils/config/dbConnection";
 import { NextResponse } from "next/server";
-import User from "@/utils/models/User";
+import User from "@/models/User";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
@@ -23,6 +23,7 @@ export async function GET() {
     }
     return NextResponse.json(user);
   } catch (error) {
+  console.error("user-data route error:", error);
     return NextResponse.json(
       { error: "internal server error at the user data route" },
       { status: 500 }

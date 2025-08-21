@@ -1,6 +1,6 @@
 
 import connect from "@/utils/config/dbConnection";
-import Verify from "@/utils/models/Verify"
+import Verify from "@/models/Verify"
 export async function POST(req) {
   const { phoneNumber, verificationCode } = await req.json();
 

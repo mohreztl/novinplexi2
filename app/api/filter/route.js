@@ -1,8 +1,8 @@
 // pages/api/filters.js
 
 import connect from "@/utils/config/dbConnection";
-import Category from '@/utils/models/Category';
-import Brand from '@/utils/models/Brand';
+import Category from '@/models/Category';
+import Brand from '@/models/Brand';
 
 export async function GET(req) {
   try {

@@ -4,36 +4,31 @@ import { NextResponse } from "next/server";
 
 export async function GET(req, { params }) {
   await dbConnect();
-  const searchTerm = params?.search;
+  const searchTerm = String(params?.search || "").trim();
 
-  // Function to convert search term to a more flexible regex pattern
-  function createFlexibleSearchRegex(searchTerm) {
-    // Escape special regex characters to avoid errors and unintended behavior
-    const escapedSearchTerm = searchTerm.replace(
-      /[-\/\\^$*+?.()|[\]{}]/g,
-      "\\$&"
-    );
-    // Insert optional whitespace between each character
-    const regexPattern = escapedSearchTerm.split("").join("\\s*");
-    return new RegExp(regexPattern, "i"); // Case insensitive regex
+  if (!searchTerm) {
+    return NextResponse.json([], { status: 200 });
   }
 
-  const searchTermRegex = createFlexibleSearchRegex(searchTerm);
+  // escape user input for regex
+  const escaped = searchTerm.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+  const regex = new RegExp(escaped, "i");
 
+  // search across multiple meaningful fields
   const foundProducts = await Product.find({
     $or: [
-      { name: { $regex: searchTermRegex } },
-      { shortDescription: { $regex: searchTermRegex } },
+      { title: { $regex: regex } },
+      { name: { $regex: regex } },
+      { description: { $regex: regex } },
+      { fullDescription: { $regex: regex } },
+      { tags: { $in: [new RegExp(escaped, "i")] } },
+      { brand: { $regex: regex } },
+      { category: { $regex: regex } },
     ],
   })
-    .populate("user")
-    .sort({ createdAt: -1 });
+    .select("title name slug images basePrice discount stock category averageRating")
+    .sort({ createdAt: -1 })
+    .limit(200);
 
-  if (foundProducts) {
-    return NextResponse.json(foundProducts);
-  } else {
-    return new NextResponse("Cant fetch products, something went wrong", {
-      status: 500,
-    });
-  }
+  return NextResponse.json(foundProducts || []);
 }

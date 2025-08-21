@@ -177,7 +177,7 @@ const ProductCategories = () => {
                   <div className="space-y-4">
                     <div>
                       <h3 className="text-xl font-black text-gray-900 mb-2">
-                        {category.title}
+                        {category.name || category.title}
                       </h3>
                       <p className={`text-sm font-semibold bg-gradient-to-r ${category.color} bg-clip-text text-transparent`}>
                         {category.subtitle}

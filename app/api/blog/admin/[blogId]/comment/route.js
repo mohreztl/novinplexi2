@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 import { verifyJwtToken } from "@/lib/jwt";
 import Blog from "@/models/Blog";
 
-import User from "@/utils/models/User";
+import User from "@/models/User";
 
 
 export async function POST(req, { params }) {
@@ -39,6 +39,7 @@ export async function POST(req, { params }) {
 
     return NextResponse.json(blog, { status: 201 });
   } catch (error) {
+    console.error("blog comment POST error:", error);
     return NextResponse.json({ message: "POST error" });
   }
 }

@@ -2,7 +2,7 @@ import connect from "@/utils/config/dbConnection";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth";
-import User from "@/utils/models/User";
+import User from "@/models/User";
 
 export async function POST(req) {
   await connect();

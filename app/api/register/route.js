@@ -1,8 +1,8 @@
 import connect from "@/utils/config/dbConnection";
-import User from '@/utils/models/User';
+import User from '@/models/User';
 
 import {NextResponse, NextRequest} from "next/server";
-import Verify from '@/utils/models/Verify';
+import Verify from '@/models/Verify';
 const DEFAULT_PROFILE_IMAGE =
   "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
 
@@ -56,7 +56,7 @@ export async function POST(request){
                 user: savedUser,
               });
         } catch (error) {
-            console.error("Error saving user:", error);
+              console.error("Error saving user:", error);
             return NextResponse.json({ error: "خطا در ذخیره اطلاعات کاربر." }, { status: 500 });
         }
       
@@ -65,7 +65,7 @@ export async function POST(request){
       
       } catch (error) {
         // هندل کردن خطاهای غیرمنتظره
-        console.error("Error during user registration:", error.message);
+    console.error("Error during user registration:", error);
         return NextResponse.json(
           { error: "خطای سرور رخ داده است." },
           { status: 500 }
