@@ -62,13 +62,28 @@ export default function ImagesList({
         const data = await res.json()
         if (mounted) setObjects(data)
       } catch (err) {
-        console.error(err)
+        console.error('Fetch objects error:', err)
         setError('خطا در بارگذاری تصاویر')
       } finally {
         if (mounted) setLoading(false)
       }
     }
+
+    // Test upload API availability on mount
+    const testUploadAPI = async () => {
+      try {
+        const res = await fetch('/api/upload')
+        const data = await res.json()
+        if (!data.success) {
+          console.warn('Upload API not configured properly:', data)
+        }
+      } catch (err) {
+        console.warn('Upload API test failed:', err)
+      }
+    }
+
     fetchObjects()
+    testUploadAPI()
     return () => { mounted = false }
   }, [])
 
@@ -91,20 +106,31 @@ export default function ImagesList({
   const onDrop = async (accepted) => {
     if (!accepted || accepted.length === 0) return
     setIsUploading(true)
+    setError(null) // Clear previous errors
     try {
       const promises = accepted.map(async (file) => {
         const fd = new FormData()
         fd.append('file', file)
         const res = await fetch('/api/upload', { method: 'POST', body: fd })
         const data = await res.json()
-        if (!data || !data.url) throw new Error(data?.error || 'upload failed')
-        return data.url
+        
+        // Check if response has error
+        if (!res.ok || !data.success) {
+          throw new Error(data?.error || `HTTP Error: ${res.status}`)
+        }
+        
+        // Extract URL from the new API response format
+        if (!data.data || !data.data.url) {
+          throw new Error('Invalid API response: missing URL')
+        }
+        
+        return data.data.url
       })
       const urls = await Promise.all(promises)
       setUploadedImages(prev => [...prev, ...urls])
     } catch (err) {
-      console.error(err)
-      setError('خطا در آپلود تصویر')
+      console.error('Upload error:', err)
+      setError(err.message || 'خطا در آپلود تصویر')
     } finally {
       setIsUploading(false)
     }
@@ -149,11 +175,25 @@ export default function ImagesList({
 
             {isUploading && (
               <div className="mt-3">
-                <div className="flex items-center gap-2 text-sm text-gray-600"><Loader2 className="w-4 h-4 animate-spin"/> در حال آپلود...</div>
+                <div className="flex items-center gap-2 text-sm text-blue-600">
+                  <Loader2 className="w-4 h-4 animate-spin"/> در حال آپلود...
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+                  <div className="bg-blue-600 h-1.5 rounded-full animate-pulse" style={{width: '60%'}}></div>
+                </div>
               </div>
             )}
             {error && (
-              <div className="text-red-600 text-sm mt-3">{error}</div>
+              <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <div className="text-red-600 text-sm font-medium">خطا در آپلود</div>
+                <div className="text-red-500 text-xs mt-1">{error}</div>
+                <button 
+                  onClick={() => setError(null)} 
+                  className="text-red-600 text-xs underline mt-2 hover:text-red-800"
+                >
+                  بستن
+                </button>
+              </div>
             )}
           </CardContent>
         </Card>
