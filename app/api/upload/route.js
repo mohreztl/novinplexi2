@@ -141,7 +141,7 @@ export async function POST(request) {
         ContentType: file.type,
         ACL: 'public-read',
         Metadata: {
-          originalName: file.name,
+          originalName: encodeURIComponent(file.name.replace(/[^\x00-\x7F]/g, "_")),
           uploadedAt: new Date().toISOString(),
           fileSize: file.size.toString()
         }
