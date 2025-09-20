@@ -12,6 +12,15 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
 
+// Helper function to convert English category values to Persian labels
+const getCategoryLabel = (category) => {
+  const categoryMap = {
+    'tutorial': 'آموزش',
+    'article': 'مقاله'
+  };
+  return categoryMap[category] || category;
+};
+
 export default function BlogDetailPage() {
   const { slug } = useParams();
   const router = useRouter();
@@ -133,7 +142,7 @@ export default function BlogDetailPage() {
             className="mb-8"
           >
             <Badge variant="secondary" className="mb-4">
-              {blog.category}
+              {getCategoryLabel(blog.category)}
             </Badge>
             
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">
@@ -266,7 +275,7 @@ export default function BlogDetailPage() {
                       </div>
                       <CardContent className="p-4">
                         <Badge variant="secondary" className="mb-2 text-xs">
-                          {relatedBlog.category}
+                          {getCategoryLabel(relatedBlog.category)}
                         </Badge>
                         <h4 className="font-semibold text-sm line-clamp-2 mb-2">
                           {relatedBlog.title}

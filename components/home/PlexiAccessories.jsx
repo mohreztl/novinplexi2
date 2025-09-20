@@ -13,39 +13,53 @@ const PlexiAccessories = () => {
     const fetchAccessories = async () => {
       try {
         setLoading(true);
-        // ابتدا دسته‌بندی اکسسوری پلکسی را پیدا کنیم
-        const categoryResponse = await axios.get('/api/categories?flat=true&type=product');
-        const categories = categoryResponse.data.categories || [];
         
-        const accessoryCategory = categories.find(cat => 
-          cat.slug === 'plexi-accessories' ||
-          cat.slug.includes('accessory') || 
-          cat.slug.includes('اکسسوری') ||
-          cat.name.includes('اکسسوری') ||
-          cat.name.includes('لوازم') ||
-          cat.name.includes('اکسسوری‌های') ||
-          cat.slug.includes('accessories')
-        );
-
-        if (accessoryCategory) {
-          // محصولات این دسته‌بندی را دریافت کنیم
-          const productsResponse = await axios.get(`/api/categories/${accessoryCategory.slug}`);
-          const products = productsResponse.data.products || [];
+        // ابتدا سعی کنیم محصولات دسته‌بندی اکسسوری‌های پلکسی را دریافت کنیم
+        try {
+          const response = await axios.get('/api/categories/plexi-accessories');
           
-          // فقط محصولات منتشر شده و موجود را نمایش دهیم
-          const publishedProducts = products
-            .filter(product => product.isPublished !== false)
+          if (response.data && response.data.products && response.data.products.length > 0) {
+            // فقط محصولات منتشر شده و موجود را نمایش دهیم
+            const publishedProducts = response.data.products
+              .filter(product => product.isPublished !== false)
+              .slice(0, 8);
+            
+            setAccessories(publishedProducts);
+            return;
+          }
+        } catch (categoryError) {
+          console.log('Category API error:', categoryError.response?.status);
+        }
+        
+        // اگر دسته‌بندی خالی بود یا خطا داشت، همه محصولات را دریافت کنیم
+        const allProductsResponse = await axios.get('/api/products?limit=50');
+        
+        if (allProductsResponse.data && allProductsResponse.data.products) {
+          // محصولاتی که احتمالاً اکسسوری هستند را فیلتر کنیم
+          const accessoryKeywords = ['پایه', 'نگهدارنده', 'قفسه', 'جعبه', 'اورگانایزر', 'استند', 'اکسسوری'];
+          
+          const filteredProducts = allProductsResponse.data.products
+            .filter(product => {
+              if (product.isPublished === false) return false;
+              
+              const title = product.title?.toLowerCase() || '';
+              const description = product.description?.toLowerCase() || '';
+              const fullText = title + ' ' + description;
+              
+              return accessoryKeywords.some(keyword => fullText.includes(keyword));
+            })
             .slice(0, 8);
           
-          setAccessories(publishedProducts);
+          setAccessories(filteredProducts);
         } else {
-          // اگر دسته‌بندی وجود نداشت، سعی کنیم آن را ایجاد کنیم
+          // اگر هیچ محصولی پیدا نشد، سعی کنیم دسته‌بندی را ایجاد کنیم
           try {
             await axios.post('/api/categories/setup');
-            console.log('Default accessory category created');
+            console.log('Category setup completed');
           } catch (setupError) {
-            console.log('Setup category error (might already exist):', setupError.response?.data?.message);
+            console.log('Setup error:', setupError.response?.data?.message);
           }
+          setAccessories([]);
         }
       } catch (error) {
         console.error('Error fetching accessories:', error);
@@ -149,7 +163,7 @@ const PlexiAccessories = () => {
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex gap-2">
                     <Link
-                      href={`/products/${accessory.slug || accessory._id}`}
+                      href={`/product/${accessory.slug || accessory._id}`}
                       className="bg-white text-gray-800 p-2 rounded-full hover:bg-blue-600 hover:text-white transition-colors"
                     >
                       <Eye className="w-4 h-4" />
@@ -161,9 +175,9 @@ const PlexiAccessories = () => {
                 </div>
 
                 {/* بج تخفیف (اگر وجود داشت) */}
-                {accessory.discountPrice && accessory.basePrice > accessory.discountPrice && (
+                {accessory.discount > 0 && (
                   <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                    {Math.round(((accessory.basePrice - accessory.discountPrice) / accessory.basePrice) * 100)}% تخفیف
+                    {accessory.discount}% تخفیف
                   </div>
                 )}
 
@@ -178,7 +192,7 @@ const PlexiAccessories = () => {
               {/* اطلاعات محصول */}
               <div className="p-4">
                 <h3 className="font-semibold text-gray-800 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
-                  {accessory.title}
+                  {accessory.title || accessory.name}
                 </h3>
                 
                 {accessory.description && (
@@ -190,13 +204,13 @@ const PlexiAccessories = () => {
                 {/* قیمت */}
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col">
-                    {accessory.discountPrice && accessory.basePrice > accessory.discountPrice ? (
+                    {accessory.discount > 0 ? (
                       <>
                         <span className="text-lg font-bold text-red-600">
-                          {accessory.discountPrice.toLocaleString('fa-IR')} تومان
+                          {Math.round(accessory.basePrice * (1 - accessory.discount / 100)).toLocaleString('fa-IR')} تومان
                         </span>
                         <span className="text-sm text-gray-500 line-through">
-                          {accessory.basePrice.toLocaleString('fa-IR')}
+                          {(accessory.basePrice || 0).toLocaleString('fa-IR')}
                         </span>
                       </>
                     ) : (
@@ -227,10 +241,10 @@ const PlexiAccessories = () => {
         {/* دکمه مشاهده همه */}
         <div className="text-center">
           <Link
-            href="/products"
+            href="/products?category=plexi-accessories"
             className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors group"
           >
-            <span>مشاهده همه محصولات</span>
+            <span>مشاهده همه اکسسوری‌ها</span>
             <ArrowLeft className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>

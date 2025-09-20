@@ -66,6 +66,8 @@ export async function POST(request) {
     await connectToDB();
     
     const body = await request.json();
+    console.log('Received body:', JSON.stringify(body, null, 2));
+    
     const {
       title,
       slug,
@@ -80,13 +82,43 @@ export async function POST(request) {
       seo
     } = body;
 
+    console.log('Extracted fields:', {
+      title,
+      slug,
+      description,
+      content,
+      excerpt,
+      category,
+      tags,
+      featuredImage,
+      status,
+      author,
+      seo
+    });
+
     // اعتبارسنجی داده‌های اصلی
-    if (!title || !description || !content || !author) {
+    const finalContent = content || description || '';
+    
+    if (!title || !finalContent) {
+      console.log('Validation failed:', { title: !!title, content: !!content, description: !!description, finalContent: !!finalContent });
       return NextResponse.json(
-        { success: false, error: 'عنوان، توضیحات، محتوا و نویسنده الزامی هستند' },
+        { success: false, error: 'عنوان و محتوا الزامی هستند' },
         { status: 400 }
       );
     }
+    
+    // اگر author وجود ندارد، مقدار پیش‌فرض تنظیم کنیم
+    const finalAuthor = author || {
+      name: 'نوین پلکسی',
+      avatar: '/default-avatar.png',
+      bio: 'نویسنده مقالات نوین پلکسی'
+    };
+    
+    // اگر excerpt وجود ندارد، از محتوا بسازیم
+    const finalExcerpt = excerpt || (finalContent ? finalContent.substring(0, 200) + '...' : 'خلاصه مقاله');
+    
+    // اگر featuredImage وجود ندارد، تصویر پیش‌فرض تنظیم کنیم
+    const finalFeaturedImage = featuredImage || '/placeholder.webp';
     
     // بررسی یکتا بودن slug
     if (slug) {
@@ -105,24 +137,27 @@ export async function POST(request) {
     const blogData = {
       title,
       slug: slug || title.toLowerCase().replace(/[^a-z0-9\u0600-\u06FF\s-]/g, '').replace(/\s+/g, '-'),
-      description,
-      content,
-      excerpt: excerpt || description.substring(0, 200) + '...',
+      description: description || finalContent,
+      content: finalContent,
+      excerpt: finalExcerpt,
       category,
       tags: tagsArray,
-      featuredImage,
+      featuredImage: finalFeaturedImage,
       status,
       author: {
-        name: author.name || 'نوین پلکسی',
-        avatar: author.avatar || '/default-avatar.png',
-        bio: author.bio || 'نویسنده مقالات نوین پلکسی'
+        name: finalAuthor.name || 'نوین پلکسی',
+        avatar: finalAuthor.avatar || '/default-avatar.png',
+        bio: finalAuthor.bio || 'نویسنده مقالات نوین پلکسی'
       },
       seo: seo || {},
       publishedAt: status === 'published' ? new Date() : null
     };
     
     const newBlog = new Blog(blogData);
+    console.log('Created blog instance:', newBlog);
+    
     const savedBlog = await newBlog.save();
+    console.log('Blog saved successfully:', savedBlog._id);
 
     return NextResponse.json(
       { 
@@ -134,7 +169,9 @@ export async function POST(request) {
     );
     
   } catch (error) {
-    console.error('Error creating blog:', error);
+    console.error('Error creating blog - Full error:', error);
+    console.error('Error message:', error.message);
+    console.error('Error stack:', error.stack);
     
     if (error.code === 11000) {
       return NextResponse.json(
@@ -143,8 +180,17 @@ export async function POST(request) {
       );
     }
     
+    if (error.name === 'ValidationError') {
+      const validationErrors = Object.values(error.errors).map(err => err.message);
+      console.log('Validation errors:', validationErrors);
+      return NextResponse.json(
+        { success: false, error: `خطای اعتبارسنجی: ${validationErrors.join(', ')}` },
+        { status: 400 }
+      );
+    }
+    
     return NextResponse.json(
-      { success: false, error: 'خطا در ایجاد مقاله' },
+      { success: false, error: 'خطا در ایجاد مقاله', details: error.message },
       { status: 500 }
     );
   }

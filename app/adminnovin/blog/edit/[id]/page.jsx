@@ -40,9 +40,9 @@ const blogSchema = z.object({
   title: z.string().min(4, "عنوان باید حداقل ۴ کاراکتر باشد"),
   slug: z.string().min(3, "برچسب باید حداقل ۳ کاراکتر باشد"),
   category: z.string().min(1, "انتخاب دسته‌بندی الزامی است"),
-  excerpt: z.string().min(10, "خلاصه باید حداقل ۱۰ کاراکتر باشد"),
+  excerpt: z.string().optional(),
   description: z.string().min(20, "محتوا باید حداقل ۲۰ کاراکتر باشد"),
-  image: z.string().min(1, "انتخاب تصویر الزامی است"),
+  image: z.string().optional(),
   tags: z.array(z.string()).optional(),
   isPublished: z.boolean(),
   seo: z.object({
@@ -57,13 +57,8 @@ const EditBlog = () => {
   const { status } = useSession();
   const router = useRouter();
   const [categories] = useState([
-    "تکنولوژی",
-    "طراحی",
-    "مهندسی",
-    "معماری",
-    "دکوراسیون",
-    "صنعت",
-    "آموزش"
+    { value: "tutorial", label: "آموزش" },
+    { value: "article", label: "مقاله" }
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(true);
@@ -98,33 +93,47 @@ const EditBlog = () => {
   // بارگذاری اطلاعات بلاگ
   useEffect(() => {
     const fetchBlogData = async () => {
-      if (!slug) return;
+      if (!slug) {
+        console.log('No slug provided');
+        return;
+      }
+      
+      console.log('Fetching blog data for slug:', slug);
       
       try {
         setLoadingData(true);
         const response = await fetch(`/api/blog/${slug}`);
+        const result = await response.json();
         
-        if (response.status === 200) {
-          const blogData = await response.json();
+        console.log('API Response status:', response.status);
+        console.log('API Response:', result); // برای دیباگ
+        
+        if (response.ok && result.success) {
+          const blogData = result.blog; // استخراج داده‌های بلاگ از response
+          
+          console.log('Loaded blog data:', blogData); // برای دیباگ
           
           // تنظیم مقادیر فرم
-          reset({
+          const formData = {
             title: blogData.title || "",
             slug: blogData.slug || "",
             category: blogData.category || "",
             excerpt: blogData.excerpt || "",
-            description: blogData.description || "",
-            image: blogData.image || "",
+            description: blogData.content || blogData.description || blogData.fullDescription || "",
+            image: blogData.featuredImage || blogData.image || "",
             tags: blogData.tags || [],
-            isPublished: blogData.isPublished !== false,
+            isPublished: blogData.status === 'published' || blogData.isPublished === true,
             seo: {
               metaTitle: blogData.seo?.metaTitle || "",
               metaDescription: blogData.seo?.metaDescription || "",
               focusKeyword: blogData.seo?.focusKeyword || "",
             },
-          });
+          };
+          
+          console.log('Form data to set:', formData);
+          reset(formData);
 
-          setSelectedImage(blogData.image || "");
+          setSelectedImage(blogData.featuredImage || blogData.image || "");
           
         } else {
           toast({
@@ -188,12 +197,18 @@ const EditBlog = () => {
         title: data.title,
         slug: data.slug,
         category: data.category,
-        excerpt: data.excerpt,
-        description: data.description,
-        image: data.image,
+        excerpt: data.excerpt || data.description?.substring(0, 200) + '...' || 'خلاصه مقاله',
+        description: data.description || 'توضیحات مقاله',
+        content: data.description || data.content || 'محتوای مقاله', // اطمینان از وجود content
+        featuredImage: data.image || '/placeholder.webp',
         tags: data.tags || [],
-        isPublished: data.isPublished,
-        seo: data.seo,
+        status: data.isPublished ? 'published' : 'draft',
+        author: {
+          name: 'نوین پلکسی',
+          avatar: '/profile.jpg',
+          bio: 'تیم نوین پلکسی'
+        },
+        seo: data.seo || {},
       };
 
       const response = await fetch(`/api/blog/${slug}`, {
@@ -374,8 +389,8 @@ const EditBlog = () => {
                           </SelectTrigger>
                           <SelectContent>
                             {categories.map((category) => (
-                              <SelectItem key={category} value={category}>
-                                {category}
+                              <SelectItem key={category.value} value={category.value}>
+                                {category.label}
                               </SelectItem>
                             ))}
                           </SelectContent>

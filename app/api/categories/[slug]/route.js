@@ -33,11 +33,20 @@ export async function GET(req, { params }) {
     } else {
       // در غیر این صورت products را دریافت کن
       const skip = (page - 1) * limit;
-      items = await Product.find({ category: category.slug })
+      
+      // جستجو هم با slug و هم با ObjectId برای سازگاری با داده‌های قدیمی
+      const query = {
+        $or: [
+          { category: category.slug },
+          { category: category._id.toString() }
+        ]
+      };
+      
+      items = await Product.find(query)
         .skip(skip)
         .limit(limit)
         .sort({ createdAt: -1 });
-      total = await Product.countDocuments({ category: category.slug });
+      total = await Product.countDocuments(query);
       itemsKey = 'products';
     }
 

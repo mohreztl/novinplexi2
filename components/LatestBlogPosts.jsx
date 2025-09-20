@@ -5,6 +5,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import axios from 'axios';
 
+// تابع برای نمایش دسته‌بندی‌ها
+const getCategoryLabel = (category) => {
+  const categoryMap = {
+    'tutorial': 'آموزش',
+    'article': 'مقاله'
+  };
+  return categoryMap[category] || category;
+};
+
 const LatestBlogPosts = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -126,7 +135,7 @@ const LatestBlogPosts = () => {
                 <div className="p-8 lg:p-12 flex flex-col justify-center">
                   <div className="flex items-center gap-4 mb-6">
                     <span className={`px-3 py-1 ${featuredPost.categoryColor || 'bg-blue-500'} text-white text-sm font-semibold rounded-full`}>
-                      {featuredPost.category || 'مقاله'}
+                      {getCategoryLabel(featuredPost.category) || 'مقاله'}
                     </span>
                     <span className="text-gray-500 text-sm">{featuredPost.readTime || '5 دقیقه'} مطالعه</span>
                   </div>
@@ -183,7 +192,7 @@ const LatestBlogPosts = () => {
                 
                 <div className="absolute top-3 right-3">
                   <span className={`px-3 py-1 ${post.categoryColor || 'bg-blue-500'} text-white text-xs font-semibold rounded-full shadow-md`}>
-                    {post.category || 'مقاله'}
+                    {getCategoryLabel(post.category) || 'مقاله'}
                   </span>
                 </div>
 

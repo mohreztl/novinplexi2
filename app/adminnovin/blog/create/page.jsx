@@ -40,7 +40,7 @@ const blogSchema = z.object({
   title: z.string().min(4, "عنوان باید حداقل ۴ کاراکتر باشد"),
   slug: z.string().min(3, "برچسب باید حداقل ۳ کاراکتر باشد"),
   category: z.string().min(1, "انتخاب دسته‌بندی الزامی است"),
-  excerpt: z.string().min(10, "خلاصه باید حداقل ۱۰ کاراکتر باشد"),
+  excerpt: z.string().min(10, "خلاصه باید حداقل ۱۰ کاراکتر باشد").max(300, "خلاصه باید حداکثر ۳۰۰ کاراکتر باشد"),
   description: z.string().min(20, "محتوا باید حداقل ۲۰ کاراکتر باشد"),
   image: z.string().min(1, "انتخاب تصویر الزامی است"),
   tags: z.array(z.string()).optional(),
@@ -56,13 +56,8 @@ const CreateBlog = () => {
   const { status } = useSession();
   const router = useRouter();
   const [categories] = useState([
-    "تکنولوژی",
-    "طراحی",
-    "مهندسی",
-    "معماری",
-    "دکوراسیون",
-    "صنعت",
-    "آموزش"
+    { value: "tutorial", label: "آموزش" },
+    { value: "article", label: "مقاله" }
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
@@ -131,13 +126,21 @@ const CreateBlog = () => {
         title: data.title,
         slug: data.slug,
         category: data.category,
-        excerpt: data.excerpt,
-        description: data.description,
-        image: data.image,
+        excerpt: data.excerpt || data.description?.substring(0, 200) + '...' || 'خلاصه مقاله',
+        description: data.description || 'توضیحات مقاله',
+        content: data.description || data.content || 'محتوای مقاله', // اطمینان از وجود content
+        featuredImage: data.image || '/placeholder.webp',
         tags: data.tags || [],
-        isPublished: data.isPublished,
-        seo: data.seo,
+        status: data.isPublished ? 'published' : 'draft',
+        author: {
+          name: 'نوین پلکسی',
+          avatar: '/profile.jpg',
+          bio: 'تیم نوین پلکسی'
+        },
+        seo: data.seo || {},
       };
+
+      console.log('Sending blog data:', blogData); // برای دیباگ
 
       const response = await fetch("/api/blog", {
         method: "POST",
@@ -147,20 +150,23 @@ const CreateBlog = () => {
         body: JSON.stringify(blogData),
       });
       
-      if (response.status === 201) {
+      const result = await response.json();
+      console.log('API Response:', result); // برای دیباگ
+      
+      if (response.ok && result.success) {
         toast({
           title: "موفقیت",
           description: "مقاله با موفقیت ایجاد شد",
         });
         router.push("/adminnovin/blog");
       } else {
-        throw new Error("خطا در ایجاد مقاله");
+        throw new Error(result.error || "خطا در ایجاد مقاله");
       }
     } catch (error) {
       console.error("Error creating blog:", error);
       toast({
         title: "خطا",
-        description: "خطا در ایجاد مقاله",
+        description: error.message || "خطا در ایجاد مقاله",
         variant: "destructive",
       });
     } finally {
@@ -319,8 +325,8 @@ const CreateBlog = () => {
                           </SelectTrigger>
                           <SelectContent>
                             {categories.map((category) => (
-                              <SelectItem key={category} value={category}>
-                                {category}
+                              <SelectItem key={category.value} value={category.value}>
+                                {category.label}
                               </SelectItem>
                             ))}
                           </SelectContent>

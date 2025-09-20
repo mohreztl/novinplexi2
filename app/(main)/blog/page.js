@@ -15,6 +15,15 @@ const CATEGORIES = [
   'دکوراسیون', 'کاغذ دیواری', 'موکت', 'کفپوش', 'راهنمای خرید', 'ترندها', 'آموزشی'
 ];
 
+// Helper function to convert English category values to Persian labels
+const getCategoryLabel = (category) => {
+  const categoryMap = {
+    'tutorial': 'آموزش',
+    'article': 'مقاله'
+  };
+  return categoryMap[category] || category;
+};
+
 export default function BlogPage() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -106,7 +115,7 @@ export default function BlogPage() {
           <div className="absolute top-4 right-4">
             <Badge className="bg-white/90 text-gray-900 hover:bg-white border-0 shadow-lg">
               <Tag className="w-3 h-3 mr-1" />
-              {blog.category || 'عمومی'}
+              {getCategoryLabel(blog.category) || 'عمومی'}
             </Badge>
           </div>
           

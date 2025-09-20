@@ -15,7 +15,8 @@ const blogSchema = new mongoose.Schema({
   excerpt: {
     type: String,
     required: true,
-    maxLength: 300
+    maxLength: 300,
+    default: 'خلاصه مقاله'
   },
   content: {
     type: String,
@@ -23,7 +24,8 @@ const blogSchema = new mongoose.Schema({
   },
   featuredImage: {
     type: String,
-    required: true
+    required: false,
+    default: '/placeholder.webp'
   },
   images: [{
     type: String
@@ -46,7 +48,7 @@ const blogSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-    enum: ['دکوراسیون', 'کاغذ دیواری', 'موکت', 'کفپوش', 'راهنمای خرید', 'ترندها', 'آموزشی']
+    enum: ['tutorial', 'article']
   },
   tags: [{
     type: String,

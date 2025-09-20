@@ -26,6 +26,15 @@ const STATUS_OPTIONS = [
   { value: 'archived', label: 'آرشیو شده', color: 'bg-red-100 text-red-800' }
 ];
 
+// Helper function to convert English category values to Persian labels
+const getCategoryLabel = (category) => {
+  const categoryMap = {
+    'tutorial': 'آموزش',
+    'article': 'مقاله'
+  };
+  return categoryMap[category] || category;
+};
+
 export default function AdminBlogListPage() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -298,7 +307,7 @@ export default function AdminBlogListPage() {
                         
                         <TableCell>
                           <Badge variant="secondary">
-                            {blog.category}
+                            {getCategoryLabel(blog.category)}
                           </Badge>
                         </TableCell>
                         
@@ -378,7 +387,7 @@ export default function AdminBlogListPage() {
                             
                             <div className="flex items-center gap-2 text-xs">
                               <Badge variant="secondary" className="text-xs">
-                                {blog.category}
+                                {getCategoryLabel(blog.category)}
                               </Badge>
                               {getStatusBadge(blog.status)}
                             </div>
